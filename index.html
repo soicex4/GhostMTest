@@ -104,7 +104,6 @@
         .section-title {
             background-color: #141619; padding: 5px 8px; font-size: 13px; color: #ff3838;
             font-weight: bold; margin-top: 12px; margin-bottom: 8px; border-left: 4px solid #ff3838;
-            display: flex; justify-content: space-between; align-items: center;
         }
         .control-row {
             display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;
@@ -145,11 +144,22 @@
         .m-group { background: #141619; padding: 12px; border-radius: 6px; border: 1px solid #485460; }
         .full-width-group { grid-column: span 2; }
         .m-group label { display: block; font-size: 13px; color: #ff3838; margin-bottom: 8px; font-weight: bold; }
-        .m-group input { width: 100%; background: #282c34; border: 1px solid #485460; color: #fff; padding: 6px; border-radius: 4px; font-size: 13px; font-weight: bold; }
+        
+        /* CSS ปรับปรุงกล่องใน DNA เพื่อใส่ปุ่มเครื่องคิดเลข */
+        .dna-input-wrap { display: flex; align-items: center; gap: 4px; }
+        .dna-input-wrap input { width: 100%; background: #282c34; border: 1px solid #485460; color: #fff; padding: 6px; border-radius: 4px; font-size: 13px; font-weight: bold; }
+        .btn-calc { background: #34495e; border: 1px solid #485460; color: #f1c40f; padding: 0 6px; height: 100%; border-radius: 4px; cursor: pointer; font-size: 12px; }
+        .btn-calc:hover { background: #f1c40f; color: #000; border-color: #f1c40f; }
+
         .m-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
         .m-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
         .pct-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; }
         .btn-confirm-modal { background: #ff3838; color: #fff; width: 100%; padding: 12px; border: none; border-radius: 5px; margin-top: 20px; font-weight: bold; cursor: pointer; font-size: 15px; box-shadow: 0 4px #990000; }
+        
+        /* หน้าต่างป๊อปอัปเครื่องคิดเลข */
+        #calc-modal .modal-content { max-width: 320px; border-color: #f1c40f; box-shadow: 0 0 25px rgba(241,196,15,0.2); }
+        .calc-input { width: 100%; background: #0b0c10; border: 1px solid #f1c40f; color: #fff; padding: 10px; border-radius: 4px; font-size: 16px; margin-bottom: 15px; text-align: center; }
+        .btn-calc-apply { background: #f1c40f; color: #000; width: 100%; padding: 10px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; margin-bottom: 8px; }
         
         @media screen and (max-width: 768px) {
             .header-bar { flex-direction: column; gap: 12px; text-align: center; }
@@ -287,36 +297,75 @@
         <div class="modal-grid">
             <div class="m-group">
                 <label>1. สเตตัสปัจจุบัน (สีขาวรวม)</label>
-                <div class="m-row-2"><input type="number" id="ref-base-str" value="91"><input type="number" id="ref-plus-str" value="342"></div>
-                <div class="m-row-2" style="margin-top:4px;"><input type="number" id="ref-base-dex" value="1133"><input type="number" id="ref-plus-dex" value="1304"></div>
-                <div class="m-row-2" style="margin-top:4px;"><input type="number" id="ref-base-con" value="105"><input type="number" id="ref-plus-con" value="420"></div>
-                <div class="m-row-2" style="margin-top:4px;"><input type="number" id="ref-base-int" value="53"><input type="number" id="ref-plus-int" value="235"></div>
+                <div class="m-row-2"><div class="dna-input-wrap"><input type="number" id="ref-base-str" value="91"></div><div class="dna-input-wrap"><input type="number" id="ref-plus-str" value="342"></div></div>
+                <div class="m-row-2" style="margin-top:4px;"><div class="dna-input-wrap"><input type="number" id="ref-base-dex" value="1133"></div><div class="dna-input-wrap"><input type="number" id="ref-plus-dex" value="1304"></div></div>
+                <div class="m-row-2" style="margin-top:4px;"><div class="dna-input-wrap"><input type="number" id="ref-base-con" value="105"></div><div class="dna-input-wrap"><input type="number" id="ref-plus-con" value="420"></div></div>
+                <div class="m-row-2" style="margin-top:4px;"><div class="dna-input-wrap"><input type="number" id="ref-base-int" value="53"></div><div class="dna-input-wrap"><input type="number" id="ref-plus-int" value="235"></div></div>
             </div>
             <div class="m-group">
                 <label>2. ค่าพลังหน้าจอปัจจุบัน</label>
-                <div class="m-row-2"><input type="number" id="ref-patk-min" value="76509"><input type="number" id="ref-patk-max" value="95645"></div>
-                <div class="m-row-2" style="margin-top:4px;"><input type="number" id="ref-matk-min" value="14069"><input type="number" id="ref-matk-max" value="14129"></div>
-                <input type="number" id="ref-def" value="16812" style="margin-top:4px;"><div class="m-row-2" style="margin-top:4px;"><input type="number" id="ref-hp" value="305479"><input type="number" id="ref-mp" value="29448"></div>
+                <div class="m-row-2"><div class="dna-input-wrap"><input type="number" id="ref-patk-min" value="76509"></div><div class="dna-input-wrap"><input type="number" id="ref-patk-max" value="95645"></div></div>
+                <div class="m-row-2" style="margin-top:4px;"><div class="dna-input-wrap"><input type="number" id="ref-matk-min" value="14069"></div><div class="dna-input-wrap"><input type="number" id="ref-matk-max" value="14129"></div></div>
+                <div class="dna-input-wrap" style="margin-top:4px;"><input type="number" id="ref-def" value="16812"></div>
+                <div class="m-row-2" style="margin-top:4px;"><div class="dna-input-wrap"><input type="number" id="ref-hp" value="305479"></div><div class="dna-input-wrap"><input type="number" id="ref-mp" value="29448"></div></div>
             </div>
+            
             <div class="m-group full-width-group">
                 <label style="color:#f1c40f;">3. โครงสร้าง PATK (%) กายภาพ</label>
-                <div class="m-row-3"><div><span>อาวุธหลัก (%)</span><input type="number" id="ref-w-atk" value="50"></div><div><span>อุปกรณ์ (%)</span><input type="number" id="ref-p-equip" value="2"></div><div><span>สารานุกรม (%)</span><input type="number" id="ref-p-encyc" value="3"></div></div>
-                <div class="m-row-3" style="margin-top:4px;"><div><span>ภูต (%)</span><input type="number" id="ref-p-spirit" value="5"></div><div><span>นักษัตร (%)</span><input type="number" id="ref-p-zodiac" value="4"></div><div><span>บัฟยืนพื้น (%)</span><input type="number" id="ref-p-basebuff" value="69"></div></div>
+                <div class="m-row-3">
+                    <div><span>อาวุธหลัก (%)</span><div class="dna-input-wrap"><input type="number" id="ref-w-atk" value="50"><button class="btn-calc" onclick="openCalc('ref-w-atk')">🧮</button></div></div>
+                    <div><span>อุปกรณ์ (%)</span><div class="dna-input-wrap"><input type="number" id="ref-p-equip" value="2"><button class="btn-calc" onclick="openCalc('ref-p-equip')">🧮</button></div></div>
+                    <div><span>สารานุกรม (%)</span><div class="dna-input-wrap"><input type="number" id="ref-p-encyc" value="3"><button class="btn-calc" onclick="openCalc('ref-p-encyc')">🧮</button></div></div>
+                </div>
+                <div class="m-row-3" style="margin-top:4px;">
+                    <div><span>ภูต (%)</span><div class="dna-input-wrap"><input type="number" id="ref-p-spirit" value="5"><button class="btn-calc" onclick="openCalc('ref-p-spirit')">🧮</button></div></div>
+                    <div><span>นักษัตร (%)</span><div class="dna-input-wrap"><input type="number" id="ref-p-zodiac" value="4"><button class="btn-calc" onclick="openCalc('ref-p-zodiac')">🧮</button></div></div>
+                    <div><span>บัฟยืนพื้น (%)</span><div class="dna-input-wrap"><input type="number" id="ref-p-basebuff" value="69"><button class="btn-calc" onclick="openCalc('ref-p-basebuff')">🧮</button></div></div>
+                </div>
             </div>
+            
             <div class="m-group full-width-group">
                 <label style="color:#9b59b6;">4. โครงสร้าง MATK (%) เวทมนตร์</label>
-                <div class="m-row-3"><div><span>อาวุธหลัก (%)</span><input type="number" id="ref-w-matk" value="0"></div><div><span>อุปกรณ์ (%)</span><input type="number" id="ref-m-equip" value="2"></div><div><span>สารานุกรม (%)</span><input type="number" id="ref-m-encyc" value="0"></div></div>
-                <div class="m-row-3" style="margin-top:4px;"><div><span>ภูต (%)</span><input type="number" id="ref-m-spirit" value="0"></div><div><span>นักษัตร (%)</span><input type="number" id="ref-m-zodiac" value="4"></div><div><span>บัฟยืนพื้น (%)</span><input type="number" id="ref-m-basebuff" value="70"></div></div>
+                <div class="m-row-3">
+                    <div><span>อาวุธหลัก (%)</span><div class="dna-input-wrap"><input type="number" id="ref-w-matk" value="0"><button class="btn-calc" onclick="openCalc('ref-w-matk')">🧮</button></div></div>
+                    <div><span>อุปกรณ์ (%)</span><div class="dna-input-wrap"><input type="number" id="ref-m-equip" value="2"><button class="btn-calc" onclick="openCalc('ref-m-equip')">🧮</button></div></div>
+                    <div><span>สารานุกรม (%)</span><div class="dna-input-wrap"><input type="number" id="ref-m-encyc" value="0"><button class="btn-calc" onclick="openCalc('ref-m-encyc')">🧮</button></div></div>
+                </div>
+                <div class="m-row-3" style="margin-top:4px;">
+                    <div><span>ภูต (%)</span><div class="dna-input-wrap"><input type="number" id="ref-m-spirit" value="0"><button class="btn-calc" onclick="openCalc('ref-m-spirit')">🧮</button></div></div>
+                    <div><span>นักษัตร (%)</span><div class="dna-input-wrap"><input type="number" id="ref-m-zodiac" value="4"><button class="btn-calc" onclick="openCalc('ref-m-zodiac')">🧮</button></div></div>
+                    <div><span>บัฟยืนพื้น (%)</span><div class="dna-input-wrap"><input type="number" id="ref-m-basebuff" value="70"><button class="btn-calc" onclick="openCalc('ref-m-basebuff')">🧮</button></div></div>
+                </div>
             </div>
+            
             <div class="m-group full-width-group">
                 <label>5. เปอร์เซ็นต์หมวดอื่นๆ (%)</label>
-                <div class="pct-grid-4"><div><span>DEF ยืนพื้น</span><input type="number" id="ref-def-buff" value="5"></div><div><span>% HP</span><input type="number" id="ref-b-hp" value="48.25"></div><div><span>% MP</span><input type="number" id="ref-b-mp" value="9.6"></div></div>
+                <div class="pct-grid-4">
+                    <div><span>DEF ยืนพื้น</span><div class="dna-input-wrap"><input type="number" id="ref-def-buff" value="5"><button class="btn-calc" onclick="openCalc('ref-def-buff')">🧮</button></div></div>
+                    <div><span>% HP</span><div class="dna-input-wrap"><input type="number" id="ref-b-hp" value="48.25"><button class="btn-calc" onclick="openCalc('ref-b-hp')">🧮</button></div></div>
+                    <div><span>% MP</span><div class="dna-input-wrap"><input type="number" id="ref-b-mp" value="9.6"><button class="btn-calc" onclick="openCalc('ref-b-mp')">🧮</button></div></div>
+                </div>
                 <label style="margin-top:8px; display:block;">6. โบนัสสเตตัสย่อย (%)</label>
-                <div class="pct-grid-4"><div><span>% STR</span><input type="number" id="ref-p-str" value="25.75"></div><div><span>% DEX</span><input type="number" id="ref-p-dex" value="26.25"></div><div><span>% CON</span><input type="number" id="ref-p-con" value="24.25"></div><div><span>% INT</span><input type="number" id="ref-p-int" value="21.25"></div></div>
+                <div class="pct-grid-4">
+                    <div><span>% STR</span><div class="dna-input-wrap"><input type="number" id="ref-p-str" value="25.75"><button class="btn-calc" onclick="openCalc('ref-p-str')">🧮</button></div></div>
+                    <div><span>% DEX</span><div class="dna-input-wrap"><input type="number" id="ref-p-dex" value="26.25"><button class="btn-calc" onclick="openCalc('ref-p-dex')">🧮</button></div></div>
+                    <div><span>% CON</span><div class="dna-input-wrap"><input type="number" id="ref-p-con" value="24.25"><button class="btn-calc" onclick="openCalc('ref-p-con')">🧮</button></div></div>
+                    <div><span>% INT</span><div class="dna-input-wrap"><input type="number" id="ref-p-int" value="21.25"><button class="btn-calc" onclick="openCalc('ref-p-int')">🧮</button></div></div>
+                </div>
             </div>
         </div>
         <button class="btn-confirm-modal" onclick="setNewBaseline()">Sync พลังงานตั้งฐานข้อมูล</button>
         <button style="background:transparent; color:#ff7675; border:none; width:100%; margin-top:8px; cursor:pointer; font-weight:bold;" onclick="closeModal()">✕ ยกเลิก</button>
+    </div>
+</div>
+
+<div class="modal-overlay" id="calc-modal" style="z-index: 2000;">
+    <div class="modal-content" style="text-align: center;">
+        <div style="color: #f1c40f; font-weight: bold; margin-bottom: 15px; font-size: 16px;">🧮 เครื่องคิดเลขรวม %</div>
+        <div style="font-size: 12px; color: #dcdde1; margin-bottom: 10px;">พิมพ์ตัวเลขบวกกัน เช่น 1.5+2.2+3</div>
+        <input type="text" id="calc-input" class="calc-input" placeholder="พิมพ์สมการที่นี่...">
+        <button class="btn-calc-apply" onclick="applyCalc()">= รวมผลลัพธ์และใส่ช่อง</button>
+        <button style="background: transparent; color: #ff7675; border: none; width: 100%; cursor: pointer; padding: 10px; font-weight: bold;" onclick="closeCalc()">✕ ยกเลิก</button>
     </div>
 </div>
 
@@ -337,6 +386,7 @@
     };
 
     let currentSavedSnapshot = null;
+    let targetCalcField = ''; // เก็บ ID ช่องที่รอรับค่าจากเครื่องคิดเลข
 
     function getVal(id) { const el = document.getElementById(id); return el ? (parseFloat(el.value) || 0) : 0; }
     function setVal(id, val) { const el = document.getElementById(id); if (el) el.value = val; }
@@ -344,6 +394,39 @@
 
     function openModal() { document.getElementById('config-modal').style.display = 'flex'; }
     function closeModal() { document.getElementById('config-modal').style.display = 'none'; }
+
+    // --- ระบบเครื่องคิดเลขป๊อปอัป 🧮 ---
+    function openCalc(targetId) {
+        targetCalcField = targetId;
+        document.getElementById('calc-input').value = '';
+        document.getElementById('calc-modal').style.display = 'flex';
+    }
+    
+    function closeCalc() {
+        document.getElementById('calc-modal').style.display = 'none';
+        targetCalcField = '';
+    }
+    
+    function applyCalc() {
+        try {
+            let expr = document.getElementById('calc-input').value;
+            // เช็กความปลอดภัยเบื้องต้น ยอมให้พิมพ์แค่ตัวเลขและเครื่องหมาย
+            if (/^[0-9+\-*/. ()]+$/.test(expr)) {
+                let result = Function('return ' + expr)();
+                if (result !== undefined && !isNaN(result)) {
+                    document.getElementById(targetCalcField).value = parseFloat(result.toFixed(4));
+                    closeCalc();
+                } else {
+                    alert('⚠️ รูปแบบสมการไม่ถูกต้อง!');
+                }
+            } else {
+                alert('⚠️ กรุณาพิมพ์เฉพาะตัวเลขและเครื่องหมายบวกลบคูณหารเท่านั้นครับ!');
+            }
+        } catch (e) {
+            alert('⚠️ เกิดข้อผิดพลาดในการคำนวณ ตรวจสอบสมการอีกครั้งครับ!');
+        }
+    }
+    // --------------------------------
 
     function setNewBaseline() {
         baseline.baseStr = getVal('ref-base-str'); baseline.plusStr = getVal('ref-plus-str');
@@ -368,7 +451,7 @@
         setVal('base-con', baseline.baseCon); setVal('plus-con', baseline.plusCon);
         setVal('base-int', baseline.baseInt); setVal('plus-int', baseline.plusInt);
         
-        // Sync ค่า % สเตตัสมาที่หน้าเครื่องคิดเลขจำลองด้วย
+        // ส่งค่า % เข้าหน้าจอจำลอง
         setVal('live-p-str', baseline.pStr);
         setVal('live-p-dex', baseline.pDex);
         setVal('live-p-con', baseline.pCon);
@@ -379,14 +462,10 @@
         calculateStats();
     }
 
-    // ฟังก์ชันถอดร่างต้นและคูณ % ใหม่เพื่อหา Effective Stat
     function getEffective(baseId, plusId, pctId, baseBaseline, plusBaseline, pctBaseline) {
         const liveTotal = getVal(baseId) + getVal(plusId);
-        // ถอด % เดิมออกเพื่อหาร่างต้น
         const rawStat = liveTotal / (1 + pctBaseline / 100);
-        // เอา % ใหม่(หรือเก่า) ที่ผู้ใช้กรอก มาคูณขยายร่าง
         const effective = rawStat * (1 + getVal(pctId) / 100);
-        // เทียบส่วนต่างกับแต้มหน้าจอเดิม
         const delta = effective - (baseBaseline + plusBaseline);
         return { effective: effective, delta: delta };
     }
@@ -397,7 +476,6 @@
         const conData = getEffective('base-con', 'plus-con', 'live-p-con', baseline.baseCon, baseline.plusCon, baseline.pCon);
         const intData = getEffective('base-int', 'plus-int', 'live-p-int', baseline.baseInt, baseline.plusInt, baseline.pInt);
 
-        // โชว์ค่าแต้มที่ทวีคูณ % เรียบร้อยแล้ว ในหน้าสรุปขวามือ
         setTxt('total-str', Math.round(strData.effective));
         setTxt('total-dex', Math.round(dexData.effective));
         setTxt('total-con', Math.round(conData.effective));
@@ -423,7 +501,6 @@
         const oldRawHp = baseline.hp / (1 + baseline.bHp / 100);
         const oldRawMp = baseline.mp / (1 + baseline.bMp / 100);
 
-        // เอาแต้ม Delta (ส่วนต่างที่ทวีคูณ % แล้ว) ไปคำนวณดาเมจ
         const dStr = strData.delta;
         const dDex = dexData.delta;
         const dCon = conData.delta;
