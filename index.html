@@ -87,11 +87,11 @@
             border-radius: 4px; font-size: 13px; font-weight: bold; outline: none; width: 100%; cursor: pointer;
         }
         .panels-container { display: flex; width: 100%; flex-wrap: wrap; }
-        .left-panel { background-color: #1f2226; width: 44%; padding: 15px; border-right: 2px solid #2c3a47; }
-        .right-panel { background-color: #282c34; width: 56%; padding: 15px; display: flex; flex-direction: column; gap: 12px; }
+        .left-panel { background-color: #1f2226; width: 48%; padding: 15px; border-right: 2px solid #2c3a47; }
+        .right-panel { background-color: #282c34; width: 52%; padding: 15px; display: flex; flex-direction: column; gap: 12px; }
         .window-title {
             background-color: #141619; padding: 8px 12px; font-weight: bold; font-size: 15px;
-            display: flex; justify-content: space-between; border-radius: 5px; margin-bottom: 5px; border-left: 3px solid #ff3838;
+            display: flex; justify-content: space-between; align-items: center; border-radius: 5px; margin-bottom: 5px; border-left: 3px solid #ff3838;
         }
         .stat-row {
             display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;
@@ -104,6 +104,7 @@
         .section-title {
             background-color: #141619; padding: 5px 8px; font-size: 13px; color: #ff3838;
             font-weight: bold; margin-top: 12px; margin-bottom: 8px; border-left: 4px solid #ff3838;
+            display: flex; justify-content: space-between; align-items: center;
         }
         .control-row {
             display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;
@@ -111,10 +112,11 @@
         }
         .input-box { display: flex; align-items: center; gap: 4px; }
         .input-box input {
-            width: 55px; background-color: #0b0c10; border: 1px solid #ff3838; color: #fff;
-            padding: 4px; text-align: center; border-radius: 4px; font-size: 13px;
+            background-color: #0b0c10; border: 1px solid #ff3838; color: #fff;
+            padding: 4px; text-align: center; border-radius: 4px; font-size: 12px; width: 45px;
         }
-        .input-box span { font-size: 11px; color: #ff3838; }
+        .input-box input.pct-input { border-color: #f1c40f; color: #f1c40f; width: 50px; font-weight: bold; }
+        
         .button-group { display: flex; gap: 8px; margin-top: 15px; }
         .btn-apply { background-color: #ff3838; color: white; border: none; padding: 10px; flex: 2; border-radius: 5px; font-weight: bold; cursor: pointer; text-align: center; box-shadow: 0 4px #990000; }
         .btn-apply:active { box-shadow: 0 1px #990000; transform: translateY(2px); }
@@ -123,7 +125,6 @@
         .btn-reset { background-color: #1e272e; color: #ff3838; border: 1px solid #ff3838; padding: 10px; flex: 1.2; border-radius: 5px; font-weight: bold; cursor: pointer; text-align: center; }
         .btn-reset:active { transform: translateY(1px); }
         
-        /* ป้ายแจ้งเตือนความคลาดเคลื่อน */
         .warning-box {
             font-size: 11px; color: #ff7675; text-align: center; margin-top: 12px; margin-bottom: 5px;
             padding: 6px; background-color: rgba(255,118,117,0.08); border-radius: 5px; border: 1px dashed #ff7675;
@@ -149,12 +150,14 @@
         .m-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
         .pct-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; }
         .btn-confirm-modal { background: #ff3838; color: #fff; width: 100%; padding: 12px; border: none; border-radius: 5px; margin-top: 20px; font-weight: bold; cursor: pointer; font-size: 15px; box-shadow: 0 4px #990000; }
+        
         @media screen and (max-width: 768px) {
             .header-bar { flex-direction: column; gap: 12px; text-align: center; }
             .header-bar > div { display: flex; width: 100%; gap: 8px; justify-content: center; }
             .top-controls { flex-direction: column; gap: 10px; }
             .panels-container { flex-direction: column; }
             .left-panel { width: 100%; border-right: none; border-bottom: 2px solid #2c3a47; }
+            .right-panel { width: 100%; }
             .modal-grid { grid-template-columns: 1fr; }
             .full-width-group { grid-column: span 1; }
             .m-row-3 { grid-template-columns: 1fr 1fr; }
@@ -210,19 +213,57 @@
             <div class="stat-row"><span class="stat-label">🔮 MATK พลังเวท</span><span class="stat-value stat-main-val" id="view-matk">-</span></div>
             <div class="stat-row"><span class="stat-label">🛡️ พลังป้องกัน DEF</span><span class="stat-value stat-main-val" id="view-def">-</span></div>
             
-            <div class="section-title">🔺 แต้มความสามารถ</div>
-            <div class="control-row"><span class="stat-label">✊ STR:</span><div class="input-box"><input type="number" id="base-str" value="91"><span>+</span><input type="number" id="plus-str" value="342"></div></div>
-            <div class="control-row"><span class="stat-label">🏹 DEX:</span><div class="input-box"><input type="number" id="base-dex" value="1133"><span>+</span><input type="number" id="plus-dex" value="1304"></div></div>
-            <div class="control-row"><span class="stat-label">🏋️‍♂️ CON:</span><div class="input-box"><input type="number" id="base-con" value="105"><span>+</span><input type="number" id="plus-con" value="420"></div></div>
-            <div class="control-row"><span class="stat-label">💡 INT:</span><div class="input-box"><input type="number" id="base-int" value="53"><span>+</span><input type="number" id="plus-int" value="235"></div></div>
+            <div class="section-title">
+                <span>🔺 เครื่องคิดเลขจำลองสเตตัสล่วงหน้า</span>
+            </div>
+            
+            <div class="control-row"><span class="stat-label">✊ STR:</span>
+                <div class="input-box">
+                    <input type="number" id="base-str" value="91" onchange="calculateStats()">
+                    <span style="color:#7f8fa6;">+</span>
+                    <input type="number" id="plus-str" value="342" onchange="calculateStats()">
+                    <span style="color:#f1c40f; margin:0 2px;">|</span>
+                    <input type="number" id="live-p-str" class="pct-input" value="25.75" onchange="calculateStats()" step="0.01">
+                    <span style="color:#f1c40f; font-size:11px;">%</span>
+                </div>
+            </div>
+            <div class="control-row"><span class="stat-label">🏹 DEX:</span>
+                <div class="input-box">
+                    <input type="number" id="base-dex" value="1133" onchange="calculateStats()">
+                    <span style="color:#7f8fa6;">+</span>
+                    <input type="number" id="plus-dex" value="1304" onchange="calculateStats()">
+                    <span style="color:#f1c40f; margin:0 2px;">|</span>
+                    <input type="number" id="live-p-dex" class="pct-input" value="26.25" onchange="calculateStats()" step="0.01">
+                    <span style="color:#f1c40f; font-size:11px;">%</span>
+                </div>
+            </div>
+            <div class="control-row"><span class="stat-label">🏋️‍♂️ CON:</span>
+                <div class="input-box">
+                    <input type="number" id="base-con" value="105" onchange="calculateStats()">
+                    <span style="color:#7f8fa6;">+</span>
+                    <input type="number" id="plus-con" value="420" onchange="calculateStats()">
+                    <span style="color:#f1c40f; margin:0 2px;">|</span>
+                    <input type="number" id="live-p-con" class="pct-input" value="24.25" onchange="calculateStats()" step="0.01">
+                    <span style="color:#f1c40f; font-size:11px;">%</span>
+                </div>
+            </div>
+            <div class="control-row"><span class="stat-label">💡 INT:</span>
+                <div class="input-box">
+                    <input type="number" id="base-int" value="53" onchange="calculateStats()">
+                    <span style="color:#7f8fa6;">+</span>
+                    <input type="number" id="plus-int" value="235" onchange="calculateStats()">
+                    <span style="color:#f1c40f; margin:0 2px;">|</span>
+                    <input type="number" id="live-p-int" class="pct-input" value="21.25" onchange="calculateStats()" step="0.01">
+                    <span style="color:#f1c40f; font-size:11px;">%</span>
+                </div>
+            </div>
             
             <div class="button-group">
-                <button class="btn-apply" onclick="calculateStats()">คำนวณ</button>
+                <button class="btn-apply" onclick="calculateStats()">คำนวณใหม่</button>
                 <button class="btn-save" onclick="saveCurrentStats()">บันทึก</button>
                 <button class="btn-reset" onclick="loadSavedStats()">รีเซ็ต</button>
             </div>
 
-            <!-- กล่องแจ้งเตือนความคลาดเคลื่อน -->
             <div class="warning-box">
                 ⚠️ <b>หมายเหตุ:</b> ตัวเลขผลลัพธ์อาจคลาดเคลื่อน 1-5 แต้ม จากระบบการปัดเศษทศนิยมทบต้นของเซิร์ฟเวอร์เกม
             </div>
@@ -231,11 +272,11 @@
             <div class="window-title"><span>📊 ตัวคูณสุทธิ (Multiplier)</span></div>
             <div class="stat-row"><span class="stat-label">PATK Multiplier</span><span class="stat-main-val" id="detail-patk-mult">-</span></div>
             <div class="stat-row"><span class="stat-label">MATK Multiplier</span><span class="stat-main-val" id="detail-matk-mult">-</span></div>
-            <div class="window-title"><span>📝 สรุปแต้มสเตตัสสุทธิ</span></div>
-            <div class="stat-row"><span class="stat-label">STR รวม</span><span class="stat-main-val" id="total-str" style="color:#fff;">-</span></div>
-            <div class="stat-row"><span class="stat-label">DEX รวม</span><span class="stat-main-val" id="total-dex" style="color:#fff;">-</span></div>
-            <div class="stat-row"><span class="stat-label">CON รวม</span><span class="stat-main-val" id="total-con" style="color:#fff;">-</span></div>
-            <div class="stat-row"><span class="stat-label">INT รวม</span><span class="stat-main-val" id="total-int" style="color:#fff;">-</span></div>
+            <div class="window-title"><span>📝 สรุปแต้มสเตตัสสุทธิ (รวมเอฟเฟกต์ %)</span></div>
+            <div class="stat-row"><span class="stat-label">STR รวม (Effective)</span><span class="stat-main-val" id="total-str" style="color:#fff;">-</span></div>
+            <div class="stat-row"><span class="stat-label">DEX รวม (Effective)</span><span class="stat-main-val" id="total-dex" style="color:#fff;">-</span></div>
+            <div class="stat-row"><span class="stat-label">CON รวม (Effective)</span><span class="stat-main-val" id="total-con" style="color:#fff;">-</span></div>
+            <div class="stat-row"><span class="stat-label">INT รวม (Effective)</span><span class="stat-main-val" id="total-int" style="color:#fff;">-</span></div>
         </div>
     </div>
 </div>
@@ -268,8 +309,8 @@
                 <div class="m-row-3" style="margin-top:4px;"><div><span>ภูต (%)</span><input type="number" id="ref-m-spirit" value="0"></div><div><span>นักษัตร (%)</span><input type="number" id="ref-m-zodiac" value="4"></div><div><span>บัฟยืนพื้น (%)</span><input type="number" id="ref-m-basebuff" value="70"></div></div>
             </div>
             <div class="m-group full-width-group">
-                <label>5. เปอร์เซ็นต์หมวดอื่นๆ</label>
-                <div class="pct-grid-4"><div><span>DEF ยืนพื้น (%)</span><input type="number" id="ref-def-buff" value="5"></div><div><span>% HP</span><input type="number" id="ref-b-hp" value="48.25"></div><div><span>% MP</span><input type="number" id="ref-b-mp" value="9.6"></div></div>
+                <label>5. เปอร์เซ็นต์หมวดอื่นๆ (%)</label>
+                <div class="pct-grid-4"><div><span>DEF ยืนพื้น</span><input type="number" id="ref-def-buff" value="5"></div><div><span>% HP</span><input type="number" id="ref-b-hp" value="48.25"></div><div><span>% MP</span><input type="number" id="ref-b-mp" value="9.6"></div></div>
                 <label style="margin-top:8px; display:block;">6. โบนัสสเตตัสย่อย (%)</label>
                 <div class="pct-grid-4"><div><span>% STR</span><input type="number" id="ref-p-str" value="25.75"></div><div><span>% DEX</span><input type="number" id="ref-p-dex" value="26.25"></div><div><span>% CON</span><input type="number" id="ref-p-con" value="24.25"></div><div><span>% INT</span><input type="number" id="ref-p-int" value="21.25"></div></div>
             </div>
@@ -326,20 +367,41 @@
         setVal('base-dex', baseline.baseDex); setVal('plus-dex', baseline.plusDex);
         setVal('base-con', baseline.baseCon); setVal('plus-con', baseline.plusCon);
         setVal('base-int', baseline.baseInt); setVal('plus-int', baseline.plusInt);
+        
+        // Sync ค่า % สเตตัสมาที่หน้าเครื่องคิดเลขจำลองด้วย
+        setVal('live-p-str', baseline.pStr);
+        setVal('live-p-dex', baseline.pDex);
+        setVal('live-p-con', baseline.pCon);
+        setVal('live-p-int', baseline.pInt);
 
         currentSavedSnapshot = null;
         closeModal();
         calculateStats();
     }
 
-    function calculateStats() {
-        const totalStr = getVal('base-str') + getVal('plus-str');
-        const totalDex = getVal('base-dex') + getVal('plus-dex');
-        const totalCon = getVal('base-con') + getVal('plus-con');
-        const totalInt = getVal('base-int') + getVal('plus-int');
+    // ฟังก์ชันถอดร่างต้นและคูณ % ใหม่เพื่อหา Effective Stat
+    function getEffective(baseId, plusId, pctId, baseBaseline, plusBaseline, pctBaseline) {
+        const liveTotal = getVal(baseId) + getVal(plusId);
+        // ถอด % เดิมออกเพื่อหาร่างต้น
+        const rawStat = liveTotal / (1 + pctBaseline / 100);
+        // เอา % ใหม่(หรือเก่า) ที่ผู้ใช้กรอก มาคูณขยายร่าง
+        const effective = rawStat * (1 + getVal(pctId) / 100);
+        // เทียบส่วนต่างกับแต้มหน้าจอเดิม
+        const delta = effective - (baseBaseline + plusBaseline);
+        return { effective: effective, delta: delta };
+    }
 
-        setTxt('total-str', totalStr); setTxt('total-dex', totalDex);
-        setTxt('total-con', totalCon); setTxt('total-int', totalInt);
+    function calculateStats() {
+        const strData = getEffective('base-str', 'plus-str', 'live-p-str', baseline.baseStr, baseline.plusStr, baseline.pStr);
+        const dexData = getEffective('base-dex', 'plus-dex', 'live-p-dex', baseline.baseDex, baseline.plusDex, baseline.pDex);
+        const conData = getEffective('base-con', 'plus-con', 'live-p-con', baseline.baseCon, baseline.plusCon, baseline.pCon);
+        const intData = getEffective('base-int', 'plus-int', 'live-p-int', baseline.baseInt, baseline.plusInt, baseline.pInt);
+
+        // โชว์ค่าแต้มที่ทวีคูณ % เรียบร้อยแล้ว ในหน้าสรุปขวามือ
+        setTxt('total-str', Math.round(strData.effective));
+        setTxt('total-dex', Math.round(dexData.effective));
+        setTxt('total-con', Math.round(conData.effective));
+        setTxt('total-int', Math.round(intData.effective));
 
         const selectedClass = document.getElementById('class-select').value;
         const petBonus = parseFloat(document.getElementById('pet-select').value) || 0;
@@ -361,16 +423,14 @@
         const oldRawHp = baseline.hp / (1 + baseline.bHp / 100);
         const oldRawMp = baseline.mp / (1 + baseline.bMp / 100);
 
-        const dStr = totalStr - (baseline.baseStr + baseline.plusStr);
-        const dDex = totalDex - (baseline.baseDex + baseline.plusDex);
-        const dCon = totalCon - (baseline.baseCon + baseline.plusCon);
-        const dInt = totalInt - (baseline.baseInt + baseline.plusInt);
+        // เอาแต้ม Delta (ส่วนต่างที่ทวีคูณ % แล้ว) ไปคำนวณดาเมจ
+        const dStr = strData.delta;
+        const dDex = dexData.delta;
+        const dCon = conData.delta;
+        const dInt = intData.delta;
 
-        // 🔥 อัปเดตสัมประสิทธิ์ Max PATK เป็น 6.78 ตามความเป็นจริงของเกม
         const scaleMinPatk = oldRawPatkMin + (dStr * 2.0) + (dDex * 4.71);
         const scaleMaxPatk = oldRawPatkMax + (dStr * 2.0) + (dDex * 6.78);
-        
-        // 🔥 เอา DEX ออกจากสมการเวทมนตร์ เพราะเกมไม่ได้นำ DEX ไปคูณ MATK
         const scaleMinMatk = oldRawMatkMin + (dInt * 25.8);
         const scaleMaxMatk = oldRawMatkMax + (dInt * 25.92);
         
@@ -403,8 +463,10 @@
 
     function saveCurrentStats() {
         currentSavedSnapshot = {
-            baseStr: getVal('base-str'), plusStr: getVal('plus-str'), baseDex: getVal('base-dex'), plusDex: getVal('plus-dex'),
-            baseCon: getVal('base-con'), plusCon: getVal('plus-con'), baseInt: getVal('base-int'), plusInt: getVal('plus-int'),
+            baseStr: getVal('base-str'), plusStr: getVal('plus-str'), livePStr: getVal('live-p-str'),
+            baseDex: getVal('base-dex'), plusDex: getVal('plus-dex'), livePDex: getVal('live-p-dex'),
+            baseCon: getVal('base-con'), plusCon: getVal('plus-con'), livePCon: getVal('live-p-con'),
+            baseInt: getVal('base-int'), plusInt: getVal('plus-int'), livePInt: getVal('live-p-int'),
             classSelect: document.getElementById('class-select').value, petSelect: document.getElementById('pet-select').value, partyBuff: getVal('party-buff')
         };
         alert('💾 บันทึกสำเร็จ!');
@@ -412,10 +474,10 @@
 
     function loadSavedStats() {
         if (currentSavedSnapshot) {
-            setVal('base-str', currentSavedSnapshot.baseStr); setVal('plus-str', currentSavedSnapshot.plusStr);
-            setVal('base-dex', currentSavedSnapshot.baseDex); setVal('plus-dex', currentSavedSnapshot.plusDex);
-            setVal('base-con', currentSavedSnapshot.baseCon); setVal('plus-con', currentSavedSnapshot.plusCon);
-            setVal('base-int', currentSavedSnapshot.baseInt); setVal('plus-int', currentSavedSnapshot.plusInt);
+            setVal('base-str', currentSavedSnapshot.baseStr); setVal('plus-str', currentSavedSnapshot.plusStr); setVal('live-p-str', currentSavedSnapshot.livePStr);
+            setVal('base-dex', currentSavedSnapshot.baseDex); setVal('plus-dex', currentSavedSnapshot.plusDex); setVal('live-p-dex', currentSavedSnapshot.livePDex);
+            setVal('base-con', currentSavedSnapshot.baseCon); setVal('plus-con', currentSavedSnapshot.plusCon); setVal('live-p-con', currentSavedSnapshot.livePCon);
+            setVal('base-int', currentSavedSnapshot.baseInt); setVal('plus-int', currentSavedSnapshot.plusInt); setVal('live-p-int', currentSavedSnapshot.livePInt);
             document.getElementById('class-select').value = currentSavedSnapshot.classSelect;
             document.getElementById('pet-select').value = currentSavedSnapshot.petSelect;
             setVal('party-buff', currentSavedSnapshot.partyBuff);
