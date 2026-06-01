@@ -248,10 +248,11 @@
                 <div class="m-row-3"><div><span>อาวุธหลัก (%)</span><input type="number" id="ref-w-atk" value="50"></div><div><span>อุปกรณ์ (%)</span><input type="number" id="ref-p-equip" value="2"></div><div><span>สารานุกรม (%)</span><input type="number" id="ref-p-encyc" value="3"></div></div>
                 <div class="m-row-3" style="margin-top:4px;"><div><span>ภูต (%)</span><input type="number" id="ref-p-spirit" value="5"></div><div><span>นักษัตร (%)</span><input type="number" id="ref-p-zodiac" value="4"></div><div><span>บัฟยืนพื้น (%)</span><input type="number" id="ref-p-basebuff" value="69"></div></div>
             </div>
+            <!-- อัปเดต MATK ตามรูปภาพล่าสุด -->
             <div class="m-group full-width-group">
                 <label style="color:#9b59b6;">4. โครงสร้าง MATK (%) เวทมนตร์</label>
-                <div class="m-row-3"><div><span>อาวุธหลัก (%)</span><input type="number" id="ref-w-matk" value="0"></div><div><span>อุปกรณ์ (%)</span><input type="number" id="ref-m-equip" value="0"></div><div><span>สารานุกรม (%)</span><input type="number" id="ref-m-encyc" value="0"></div></div>
-                <div class="m-row-3" style="margin-top:4px;"><div><span>ภูต (%)</span><input type="number" id="ref-m-spirit" value="0"></div><div><span>นักษัตร (%)</span><input type="number" id="ref-m-zodiac" value="0"></div><div><span>บัฟยืนพื้น (%)</span><input type="number" id="ref-m-basebuff" value="76"></div></div>
+                <div class="m-row-3"><div><span>อาวุธหลัก (%)</span><input type="number" id="ref-w-matk" value="0"></div><div><span>อุปกรณ์ (%)</span><input type="number" id="ref-m-equip" value="2"></div><div><span>สารานุกรม (%)</span><input type="number" id="ref-m-encyc" value="0"></div></div>
+                <div class="m-row-3" style="margin-top:4px;"><div><span>ภูต (%)</span><input type="number" id="ref-m-spirit" value="0"></div><div><span>นักษัตร (%)</span><input type="number" id="ref-m-zodiac" value="4"></div><div><span>บัฟยืนพื้น (%)</span><input type="number" id="ref-m-basebuff" value="70"></div></div>
             </div>
             <div class="m-group full-width-group">
                 <label>5. เปอร์เซ็นต์หมวดอื่นๆ</label>
@@ -266,11 +267,12 @@
 </div>
 
 <script>
+    // อัปเดต Baseline MATK จากข้อมูลล่าสุด (Equip 2, Zodiac 4, Buff 70)
     let baseline = {
         baseStr: 91, plusStr: 342, baseDex: 1133, plusDex: 1304, baseCon: 105, plusCon: 420, baseInt: 53, plusInt: 235,
         patkMin: 76509, patkMax: 95645, matkMin: 14069, matkMax: 14129, def: 16812, hp: 305479, mp: 29448,
         wAtk: 50, pEquip: 2, pEncyc: 3, pSpirit: 5, pZodiac: 4, pBaseBuff: 69,
-        wMatk: 0, mEquip: 0, mEncyc: 0, mSpirit: 0, mZodiac: 0, mBaseBuff: 76,
+        wMatk: 0, mEquip: 2, mEncyc: 0, mSpirit: 0, mZodiac: 4, mBaseBuff: 70,
         defBaseBuff: 5, bHp: 48.25, bMp: 9.6, savedDynamicBuffs: 55,
         pStr: 25.75, pDex: 26.25, pCon: 24.25, pInt: 21.25
     };
@@ -372,6 +374,7 @@
         setTxt('detail-patk-mult', `x${currentMult.toFixed(3)}`);
         setTxt('detail-matk-mult', `x${currentMatkMult.toFixed(3)}`);
 
+        // ปรับการปัดเศษเพิ่มค่าทศนิยมดักไว้ไม่ให้ดาเมจตกหล่น 5 แต้ม
         const finalMinPatk = Math.max(1, Math.floor((scaleMinPatk * currentMult) + 0.0001));
         const finalMaxPatk = Math.max(1, Math.floor((scaleMaxPatk * currentMult) + 0.0001));
         const finalMinMatk = Math.max(1, Math.floor((scaleMinMatk * currentMatkMult) + 0.0001));
