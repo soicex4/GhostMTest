@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SOICEX : Ghost M Stats Simulator Pro</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Tahoma', 'Segoe UI', sans-serif;
+            background-color: #0b0c10;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            margin: 0;
+            padding: 10px;
+        }
+        .game-window {
+            background-color: #2a2d32;
+            border: 3px solid #ff3838;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 980px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            position: relative;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        .header-bar {
+            background: linear-gradient(135deg, #b31010 0%, #1e272e 100%);
+            padding: 14px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #ff3838;
+        }
+        .header-title { font-weight: bold; color: #ffffff; font-size: 16px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        .char-name-container {
+            display: flex;
+            align-items: center;
+            background-color: #0b0c10;
+            padding: 5px 12px;
+            border-radius: 5px;
+            font-size: 12px;
+            font-weight: bold;
+            box-shadow: 0 0 10px rgba(255, 56, 56, 0.6);
+            gap: 6px;
+            border: 1.5px solid #ff3838;
+        }
+        .char-name-input {
+            background: transparent;
+            border: none;
+            color: #f1c40f;
+            font-weight: bold;
+            font-size: 13px;
+            width: 120px;
+            outline: none;
+            padding: 0;
+            text-shadow: 0 0 4px rgba(241, 196, 15, 0.5);
+        }
+        .btn-config {
+            background-color: #ff3838; color: #ffffff; border: none; padding: 8px 14px;
+            border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 13px;
+            box-shadow: 0 3px #990000; transition: all 0.1s;
+        }
+        .btn-config:active { transform: translateY(2px); box-shadow: 0 1px #990000; }
+        .top-controls {
+            background-color: #141619;
+            padding: 12px 15px;
+            display: flex;
+            gap: 15px;
+            border-bottom: 2px solid #ff3838;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .select-container {
+            flex: 1; display: flex; flex-direction: column; gap: 5px; min-width: 140px;
+        }
+        .select-container label { font-size: 11px; color: #f1c40f; font-weight: bold; padding-left: 2px; }
+        .select-container select, .select-container input {
+            background-color: #0b0c10; border: 1px solid #485460; color: #fff; padding: 8px;
+            border-radius: 4px; font-size: 13px; font-weight: bold; outline: none; width: 100%; cursor: pointer;
+        }
+        .panels-container { display: flex; width: 100%; flex-wrap: wrap; }
+        .left-panel { background-color: #1f2226; width: 44%; padding: 15px; border-right: 2px solid #2c3a47; }
+        .right-panel { background-color: #282c34; width: 56%; padding: 15px; display: flex; flex-direction: column; gap: 12px; }
+        .window-title {
+            background-color: #141619; padding: 8px 12px; font-weight: bold; font-size: 15px;
+            display: flex; justify-content: space-between; border-radius: 5px; margin-bottom: 5px; border-left: 3px solid #ff3838;
+        }
+        .stat-row {
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;
+            font-size: 14px; background-color: rgba(0,0,0,0.3); padding: 7px 12px; border-radius: 4px;
+            flex-wrap: wrap; gap: 5px;
+        }
+        .stat-label { color: #dcdde1; }
+        .stat-values-wrapper { display: flex; align-items: center; gap: 15px; flex-wrap: wrap; justify-content: flex-end; }
+        .stat-main-val { font-weight: bold; color: #f1c40f; text-align: right; text-shadow: 0 0 4px rgba(241,196,15,0.3); }
+        .section-title {
+            background-color: #141619; padding: 5px 8px; font-size: 13px; color: #ff3838;
+            font-weight: bold; margin-top: 12px; margin-bottom: 8px; border-left: 4px solid #ff3838;
+        }
+        .control-row {
+            display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;
+            background-color: rgba(255,255,255,0.03); padding: 5px 8px; border-radius: 5px;
+        }
+        .input-box { display: flex; align-items: center; gap: 4px; }
+        .input-box input {
+            width: 55px; background-color: #0b0c10; border: 1px solid #ff3838; color: #fff;
+            padding: 4px; text-align: center; border-radius: 4px; font-size: 13px;
+        }
+        .input-box span { font-size: 11px; color: #ff3838; }
+        .button-group { display: flex; gap: 8px; margin-top: 15px; }
+        .btn-apply { background-color: #ff3838; color: white; border: none; padding: 10px; flex: 2; border-radius: 5px; font-weight: bold; cursor: pointer; text-align: center; box-shadow: 0 4px #990000; }
+        .btn-apply:active { box-shadow: 0 1px #990000; transform: translateY(2px); }
+        .btn-save { background-color: #4b4b4b; color: white; border: none; padding: 10px; flex: 1.2; border-radius: 5px; font-weight: bold; cursor: pointer; box-shadow: 0 4px #222; }
+        .btn-save:active { box-shadow: 0 1px #222; transform: translateY(2px); }
+        .btn-reset { background-color: #1e272e; color: #ff3838; border: 1px solid #ff3838; padding: 10px; flex: 1.2; border-radius: 5px; font-weight: bold; cursor: pointer; text-align: center; }
+        .btn-reset:active { transform: translateY(1px); }
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); z-index: 1000; justify-content: center; align-items: center;
+            padding: 10px; overflow-y: auto;
+        }
+        .modal-content {
+            background-color: #22252a; border: 2px solid #ff3838; border-radius: 10px;
+            width: 100%; max-width: 780px; padding: 20px; color: #fff; box-shadow: 0 0 25px rgba(255,56,56,0.2);
+            margin: auto; max-height: 90vh; overflow-y: auto;
+        }
+        .modal-header { font-size: 18px; font-weight: bold; color: #ff3838; text-align: center; margin-bottom: 15px; border-bottom: 1px solid #485460; padding-bottom: 10px; }
+        .modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .m-group { background: #141619; padding: 12px; border-radius: 6px; border: 1px solid #485460; }
+        .full-width-group { grid-column: span 2; }
+        .m-group label { display: block; font-size: 13px; color: #ff3838; margin-bottom: 8px; font-weight: bold; }
+        .m-group input { width: 100%; background: #282c34; border: 1px solid #485460; color: #fff; padding: 6px; border-radius: 4px; font-size: 13px; font-weight: bold; }
+        .m-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+        .m-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
+        .pct-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; }
+        .btn-confirm-modal { background: #ff3838; color: #fff; width: 100%; padding: 12px; border: none; border-radius: 5px; margin-top: 20px; font-weight: bold; cursor: pointer; font-size: 15px; box-shadow: 0 4px #990000; }
+        @media screen and (max-width: 768px) {
+            .header-bar { flex-direction: column; gap: 12px; text-align: center; }
+            .header-bar > div { display: flex; width: 100%; gap: 8px; justify-content: center; }
+            .top-controls { flex-direction: column; gap: 10px; }
+            .panels-container { flex-direction: column; }
+            .left-panel { width: 100%; border-right: none; border-bottom: 2px solid #2c3a47; }
+            .modal-grid { grid-template-columns: 1fr; }
+            .full-width-group { grid-column: span 1; }
+            .m-row-3 { grid-template-columns: 1fr 1fr; }
+            .pct-grid-4 { grid-template-columns: repeat(2, 1fr); }
+            .stat-values-wrapper { width: 100%; margin-top: 5px; }
+            .stat-row { align-items: flex-start; flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+<div class="game-window">
+    <div class="header-bar">
+        <div class="header-title">
+            <span>👻 SOICEX : Ghost M Stats Simulator</span>
+            <div class="char-name-container"><span>ชื่อ:</span><input type="text" id="char-name-box" class="char-name-input" value="soicex"></div>
+        </div>
+        <div><button class="btn-config" onclick="openModal()">⚙️ ตั้งฐานสเตตัส (DNA)</button></div>
+    </div>
+    <div class="top-controls">
+        <div class="select-container">
+            <label>👥 อาชีพตัวละคร</label>
+            <select id="class-select" onchange="calculateStats()">
+                <option value="mamluk" selected>มัมลุค (ATK 40% | DEF 30%)</option>
+                <option value="hero">จอมยุทธ (ATK 40% | DEF 30%)</option>
+                <option value="mage">นักพรต (ATK 20% | DEF 30%)</option>
+                <option value="fighter">จอมพลัง (ATK 30% | DEF 30%)</option>
+                <option value="ninja">นินจา (ATK 20% | DEF 0%)</option>
+                <option value="police">มือปราบ (ATK 20% | DEF 30%)</option>
+                <option value="knight">นักรบ (ATK 20% | DEF 30%)</option>
+                <option value="assassin">มือสังหาร (ATK 20% | DEF 0%)</option>
+            </select>
+        </div>
+        <div class="select-container">
+            <label>🐾 สัตว์เลี้ยงแฝง</label>
+            <select id="pet-select" onchange="calculateStats()">
+                <option value="0">ไม่มีสกิล (0%)</option>
+                <option value="2">ผสม Lv.1 (+2%)</option>
+                <option value="4" selected>ผสม Lv.2 (+4%)</option>
+                <option value="6">ผสม Lv.3 (+6%)</option>
+            </select>
+        </div>
+        <div class="select-container" style="min-width: 80px; flex: 0.5;">
+            <label>🤝 บัฟปาร์ตี้ (%)</label>
+            <input type="number" id="party-buff" value="11" onchange="calculateStats()">
+        </div>
+    </div>
+    <div class="panels-container">
+        <div class="left-panel">
+            <div class="window-title"><span>👤 ตัวละคร</span></div>
+            <div class="stat-row"><span class="stat-label">❤️ HP สูงสุด</span><span class="stat-value stat-main-val" id="view-hp">-</span></div>
+            <div class="stat-row"><span class="stat-label">🔵 MP สูงสุด</span><span class="stat-value stat-main-val" id="view-mp">-</span></div>
+            <div class="stat-row"><span class="stat-label">⚔️ PATK พลังโจมตี</span><span class="stat-value stat-main-val" id="view-patk">-</span></div>
+            <div class="stat-row"><span class="stat-label">🔮 MATK พลังเวท</span><span class="stat-value stat-main-val" id="view-matk">-</span></div>
+            <div class="stat-row"><span class="stat-label">🛡️ พลังป้องกัน DEF</span><span class="stat-value stat-main-val" id="view-def">-</span></div>
+            <div class="section-title">🔺 แต้มความสามารถ</div>
+            <div class="control-row"><span class="stat-label">✊ STR:</span><div class="input-box"><input type="number" id="base-str" value="91"><span>+</span><input type="number" id="plus-str" value="342"></div></div>
+            <div class="control-row"><span class="stat-label">🏹 DEX:</span><div class="input-box"><input type="number" id="base-dex" value="1133"><span>+</span><input type="number" id="plus-dex" value="1304"></div></div>
+            <div class="control-row"><span class="stat-label">🏋️‍♂️ CON:</span><div class="input-box"><input type="number" id="base-con" value="105"><span>+</span><input type="number" id="plus-con" value="420"></div></div>
+            <div class="control-row"><span class="stat-label">💡 INT:</span><div class="input-box"><input type="number" id="base-int" value="53"><span>+</span><input type="number" id="plus-int" value="235"></div></div>
+            <div class="button-group">
+                <button class="btn-apply" onclick="calculateStats()">คำนวณ</button>
+                <button class="btn-save" onclick="saveCurrentStats()">บันทึก</button>
+                <button class="btn-reset" onclick="loadSavedStats()">รีเซ็ต</button>
+            </div>
+        </div>
+        <div class="right-panel">
+            <div class="window-title"><span>📊 ตัวคูณสุทธิ (Multiplier)</span></div>
+            <div class="stat-row"><span class="stat-label">PATK Multiplier</span><span class="stat-main-val" id="detail-patk-mult">-</span></div>
+            <div class="stat-row"><span class="stat-label">MATK Multiplier</span><span class="stat-main-val" id="detail-matk-mult">-</span></div>
+            <div class="window-title"><span>📝 สรุปแต้มสเตตัสสุทธิ</span></div>
+            <div class="stat-row"><span class="stat-label">STR รวม</span><span class="stat-main-val" id="total-str" style="color:#fff;">-</span></div>
+            <div class="stat-row"><span class="stat-label">DEX รวม</span><span class="stat-main-val" id="total-dex" style="color:#fff;">-</span></div>
+            <div class="stat-row"><span class="stat-label">CON รวม</span><span class="stat-main-val" id="total-con" style="color:#fff;">-</span></div>
+            <div class="stat-row"><span class="stat-label">INT รวม</span><span class="stat-main-val" id="total-int" style="color:#fff;">-</span></div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="config-modal">
+    <div class="modal-content">
+        <div class="modal-header">⚙️ ตั้งฐานข้อมูลสเตตัสระดับลึก (DNA)</div>
+        <div class="modal-grid">
+            <div class="m-group">
+                <label>1. สเตตัสปัจจุบัน (สีขาวรวม)</label>
+                <div class="m-row-2"><input type="number" id="ref-base-str" value="91"><input type="number" id="ref-plus-str" value="342"></div>
+                <div class="m-row-2" style="margin-top:4px;"><input type="number" id="ref-base-dex" value="1133"><input type="number" id="ref-plus-dex" value="1304"></div>
+                <div class="m-row-2" style="margin-top:4px;"><input type="number" id="ref-base-con" value="105"><input type="number" id="ref-plus-con" value="420"></div>
+                <div class="m-row-2" style="margin-top:4px;"><input type="number" id="ref-base-int" value="53"><input type="number" id="ref-plus-int" value="235"></div>
+            </div>
+            <div class="m-group">
+                <label>2. ค่าพลังหน้าจอปัจจุบัน</label>
+                <div class="m-row-2"><input type="number" id="ref-patk-min" value="76509"><input type="number" id="ref-patk-max" value="95645"></div>
+                <div class="m-row-2" style="margin-top:4px;"><input type="number" id="ref-matk-min" value="14069"><input type="number" id="ref-matk-max" value="14129"></div>
+                <input type="number" id="ref-def" value="16812" style="margin-top:4px;"><div class="m-row-2" style="margin-top:4px;"><input type="number" id="ref-hp" value="305479"><input type="number" id="ref-mp" value="29448"></div>
+            </div>
+            <div class="m-group full-width-group">
+                <label style="color:#f1c40f;">3. โครงสร้าง PATK (%) กายภาพ</label>
+                <div class="m-row-3"><div><span>อาวุธหลัก (%)</span><input type="number" id="ref-w-atk" value="50"></div><div><span>อุปกรณ์ (%)</span><input type="number" id="ref-p-equip" value="2"></div><div><span>สารานุกรม (%)</span><input type="number" id="ref-p-encyc" value="3"></div></div>
+                <div class="m-row-3" style="margin-top:4px;"><div><span>ภูต (%)</span><input type="number" id="ref-p-spirit" value="5"></div><div><span>นักษัตร (%)</span><input type="number" id="ref-p-zodiac" value="4"></div><div><span>บัฟยืนพื้น (%)</span><input type="number" id="ref-p-basebuff" value="69"></div></div>
+            </div>
+            <div class="m-group full-width-group">
+                <label style="color:#9b59b6;">4. โครงสร้าง MATK (%) เวทมนตร์</label>
+                <div class="m-row-3"><div><span>อาวุธหลัก (%)</span><input type="number" id="ref-w-matk" value="0"></div><div><span>อุปกรณ์ (%)</span><input type="number" id="ref-m-equip" value="0"></div><div><span>สารานุกรม (%)</span><input type="number" id="ref-m-encyc" value="0"></div></div>
+                <div class="m-row-3" style="margin-top:4px;"><div><span>ภูต (%)</span><input type="number" id="ref-m-spirit" value="0"></div><div><span>นักษัตร (%)</span><input type="number" id="ref-m-zodiac" value="0"></div><div><span>บัฟยืนพื้น (%)</span><input type="number" id="ref-m-basebuff" value="76"></div></div>
+            </div>
+            <div class="m-group full-width-group">
+                <label>5. เปอร์เซ็นต์หมวดอื่นๆ</label>
+                <div class="pct-grid-4"><div><span>DEF ยืนพื้น (%)</span><input type="number" id="ref-def-buff" value="5"></div><div><span>% HP</span><input type="number" id="ref-b-hp" value="48.25"></div><div><span>% MP</span><input type="number" id="ref-b-mp" value="9.6"></div></div>
+                <label style="margin-top:8px; display:block;">6. โบนัสสเตตัสย่อย (%)</label>
+                <div class="pct-grid-4"><div><span>% STR</span><input type="number" id="ref-p-str" value="25.75"></div><div><span>% DEX</span><input type="number" id="ref-p-dex" value="26.25"></div><div><span>% CON</span><input type="number" id="ref-p-con" value="24.25"></div><div><span>% INT</span><input type="number" id="ref-p-int" value="21.25"></div></div>
+            </div>
+        </div>
+        <button class="btn-confirm-modal" onclick="setNewBaseline()">Sync พลังงานตั้งฐานข้อมูล</button>
+        <button style="background:transparent; color:#ff7675; border:none; width:100%; margin-top:8px; cursor:pointer; font-weight:bold;" onclick="closeModal()">✕ ยกเลิก</button>
+    </div>
+</div>
+
+<script>
+    let baseline = {
+        baseStr: 91, plusStr: 342, baseDex: 1133, plusDex: 1304, baseCon: 105, plusCon: 420, baseInt: 53, plusInt: 235,
+        patkMin: 76509, patkMax: 95645, matkMin: 14069, matkMax: 14129, def: 16812, hp: 305479, mp: 29448,
+        wAtk: 50, pEquip: 2, pEncyc: 3, pSpirit: 5, pZodiac: 4, pBaseBuff: 69,
+        wMatk: 0, mEquip: 0, mEncyc: 0, mSpirit: 0, mZodiac: 0, mBaseBuff: 76,
+        defBaseBuff: 5, bHp: 48.25, bMp: 9.6, savedDynamicBuffs: 55,
+        pStr: 25.75, pDex: 26.25, pCon: 24.25, pInt: 21.25
+    };
+
+    const classBuffs = {
+        mamluk: { atk: 40, def: 30 }, hero: { atk: 40, def: 30 }, mage: { atk: 20, def: 30 },
+        fighter: { atk: 30, def: 30 }, ninja: { atk: 20, def: 0 }, police: { atk: 20, def: 30 },
+        knight: { atk: 20, def: 30 }, assassin: { atk: 20, def: 0 }
+    };
+
+    let currentSavedSnapshot = null;
+
+    function getVal(id) { const el = document.getElementById(id); return el ? (parseFloat(el.value) || 0) : 0; }
+    function setVal(id, val) { const el = document.getElementById(id); if (el) el.value = val; }
+    function setTxt(id, val) { const el = document.getElementById(id); if (el) el.innerText = val; }
+
+    function openModal() {
+        document.getElementById('config-modal').style.display = 'flex';
+    }
+    function closeModal() {
+        document.getElementById('config-modal').style.display = 'none';
+    }
+
+    function setNewBaseline() {
+        baseline.baseStr = getVal('ref-base-str'); baseline.plusStr = getVal('ref-plus-str');
+        baseline.baseDex = getVal('ref-base-dex'); baseline.plusDex = getVal('ref-plus-dex');
+        baseline.baseCon = getVal('ref-base-con'); baseline.plusCon = getVal('ref-plus-con');
+        baseline.baseInt = getVal('ref-base-int'); baseline.plusInt = getVal('ref-plus-int');
+        baseline.patkMin = getVal('ref-patk-min'); baseline.patkMax = getVal('ref-patk-max');
+        baseline.matkMin = getVal('ref-matk-min'); baseline.matkMax = getVal('ref-matk-max');
+        baseline.def = getVal('ref-def'); baseline.hp = getVal('ref-hp'); baseline.mp = getVal('ref-mp');
+        baseline.wAtk = getVal('ref-w-atk'); baseline.pEquip = getVal('ref-p-equip'); baseline.pEncyc = getVal('ref-p-encyc');
+        baseline.pSpirit = getVal('ref-p-spirit'); baseline.pZodiac = getVal('ref-p-zodiac'); baseline.pBaseBuff = getVal('ref-p-basebuff');
+        baseline.wMatk = getVal('ref-w-matk'); baseline.mEquip = getVal('ref-m-equip'); baseline.mEncyc = getVal('ref-m-encyc');
+        baseline.mSpirit = getVal('ref-m-spirit'); baseline.mZodiac = getVal('ref-m-zodiac'); baseline.mBaseBuff = getVal('ref-m-basebuff');
+        baseline.defBaseBuff = getVal('ref-def-buff'); baseline.bHp = getVal('ref-b-hp'); baseline.bMp = getVal('ref-b-mp');
+        baseline.pStr = getVal('ref-p-str'); baseline.pDex = getVal('ref-p-dex'); baseline.pCon = getVal('ref-p-con'); baseline.pInt = getVal('ref-p-int');
+
+        const classAtkBonus = classBuffs[document.getElementById('class-select').value].atk;
+        baseline.savedDynamicBuffs = classAtkBonus + getVal('pet-select') + getVal('party-buff');
+
+        setVal('base-str', baseline.baseStr); setVal('plus-str', baseline.plusStr);
+        setVal('base-dex', baseline.baseDex); setVal('plus-dex', baseline.plusDex);
+        setVal('base-con', baseline.baseCon); setVal('plus-con', baseline.plusCon);
+        setVal('base-int', baseline.baseInt); setVal('plus-int', baseline.plusInt);
+
+        currentSavedSnapshot = null;
+        closeModal();
+        calculateStats();
+    }
+
+    function calculateStats() {
+        const totalStr = getVal('base-str') + getVal('plus-str');
+        const totalDex = getVal('base-dex') + getVal('plus-dex');
+        const totalCon = getVal('base-con') + getVal('plus-con');
+        const totalInt = getVal('base-int') + getVal('plus-int');
+
+        setTxt('total-str', totalStr); setTxt('total-dex', totalDex);
+        setTxt('total-con', totalCon); setTxt('total-int', totalInt);
+
+        const selectedClass = document.getElementById('class-select').value;
+        const petBonus = parseFloat(document.getElementById('pet-select').value) || 0;
+        const partyBonus = getVal('party-buff');
+        const classBonus = classBuffs[selectedClass] || { atk: 40, def: 30 };
+
+        const dnaTotalAtkPct = baseline.pEquip + baseline.pEncyc + baseline.pSpirit + baseline.pZodiac + baseline.pBaseBuff + baseline.savedDynamicBuffs;
+        const dnaTotalMatkPct = baseline.mEquip + baseline.mEncyc + baseline.mSpirit + baseline.mZodiac + baseline.mBaseBuff + baseline.savedDynamicBuffs;
+        
+        const dnaMult = (1 + baseline.wAtk/100) * (1 + dnaTotalAtkPct/100);
+        const dnaMatkMult = (1 + baseline.wMatk/100) * (1 + dnaTotalMatkPct/100);
+        const dnaDefMult = 1 + (baseline.defBaseBuff + classBonus.def) / 100;
+
+        const oldRawPatkMin = baseline.patkMin / dnaMult;
+        const oldRawPatkMax = baseline.patkMax / dnaMult;
+        const oldRawMatkMin = baseline.matkMin / dnaMatkMult;
+        const oldRawMatkMax = baseline.matkMax / dnaMatkMult;
+        const oldRawDef = baseline.def / dnaDefMult;
+        const oldRawHp = baseline.hp / (1 + baseline.bHp / 100);
+        const oldRawMp = baseline.mp / (1 + baseline.bMp / 100);
+
+        const dStr = totalStr - (baseline.baseStr + baseline.plusStr);
+        const dDex = totalDex - (baseline.baseDex + baseline.plusDex);
+        const dCon = totalCon - (baseline.baseCon + baseline.plusCon);
+        const dInt = totalInt - (baseline.baseInt + baseline.plusInt);
+
+        const scaleMinPatk = oldRawPatkMin + (dStr * 2.0) + (dDex * 4.75);
+        const scaleMaxPatk = oldRawPatkMax + (dStr * 2.0) + (dDex * 6.55);
+        const scaleMinMatk = oldRawMatkMin + (dInt * 25.8) + (dDex * 0.45);
+        const scaleMaxMatk = oldRawMatkMax + (dInt * 25.92) + (dDex * 0.65);
+        const scaleDef = oldRawDef + (dCon * 20.445);
+        const scaleHp = oldRawHp + (dCon * 575.4);
+        const scaleMp = oldRawMp + (dInt * 103.6);
+
+        const liveBuffs = classBonus.atk + petBonus + partyBonus;
+        const currentMult = (1 + baseline.wAtk/100) * (1 + (baseline.pEquip+baseline.pEncyc+baseline.pSpirit+baseline.pZodiac+baseline.pBaseBuff+liveBuffs)/100);
+        const currentMatkMult = (1 + baseline.wMatk/100) * (1 + (baseline.mEquip+baseline.mEncyc+baseline.mSpirit+baseline.mZodiac+baseline.mBaseBuff+liveBuffs)/100);
+        const totalDefMultiplier = 1 + (baseline.defBaseBuff + classBonus.def) / 100;
+
+        setTxt('detail-patk-mult', `x${currentMult.toFixed(3)}`);
+        setTxt('detail-matk-mult', `x${currentMatkMult.toFixed(3)}`);
+
+        const finalMinPatk = Math.max(1, Math.floor((scaleMinPatk * currentMult) + 0.0001));
+        const finalMaxPatk = Math.max(1, Math.floor((scaleMaxPatk * currentMult) + 0.0001));
+        const finalMinMatk = Math.max(1, Math.floor((scaleMinMatk * currentMatkMult) + 0.0001));
+        const finalMaxMatk = Math.max(1, Math.floor((scaleMaxMatk * currentMatkMult) + 0.0001));
+        const finalDef = Math.max(1, Math.floor((scaleDef * totalDefMultiplier) + 0.0001));
+        const finalHp = Math.max(1, Math.floor((scaleHp * (1 + baseline.bHp / 100)) + 0.0001));
+        const finalMp = Math.max(1, Math.floor((scaleMp * (1 + baseline.bMp / 100)) + 0.0001));
+
+        setTxt('view-patk', `${finalMinPatk.toLocaleString()} ~ ${finalMaxPatk.toLocaleString()}`);
+        setTxt('view-matk', `${finalMinMatk.toLocaleString()} ~ ${finalMaxMatk.toLocaleString()}`);
+        setTxt('view-def', finalDef.toLocaleString());
+        setTxt('view-hp', finalHp.toLocaleString());
+        setTxt('view-mp', finalMp.toLocaleString());
+    }
+
+    function saveCurrentStats() {
+        currentSavedSnapshot = {
+            baseStr: getVal('base-str'), plusStr: getVal('plus-str'), baseDex: getVal('base-dex'), plusDex: getVal('plus-dex'),
+            baseCon: getVal('base-con'), plusCon: getVal('plus-con'), baseInt: getVal('base-int'), plusInt: getVal('plus-int'),
+            classSelect: document.getElementById('class-select').value, petSelect: document.getElementById('pet-select').value, partyBuff: getVal('party-buff')
+        };
+        alert('💾 บันทึกสำเร็จ!');
+    }
+
+    function loadSavedStats() {
+        if (currentSavedSnapshot) {
+            setVal('base-str', currentSavedSnapshot.baseStr); setVal('plus-str', currentSavedSnapshot.plusStr);
+            setVal('base-dex', currentSavedSnapshot.baseDex); setVal('plus-dex', currentSavedSnapshot.plusDex);
+            setVal('base-con', currentSavedSnapshot.baseCon); setVal('plus-con', currentSavedSnapshot.plusCon);
+            setVal('base-int', currentSavedSnapshot.baseInt); setVal('plus-int', currentSavedSnapshot.plusInt);
+            document.getElementById('class-select').value = currentSavedSnapshot.classSelect;
+            document.getElementById('pet-select').value = currentSavedSnapshot.petSelect;
+            setVal('party-buff', currentSavedSnapshot.partyBuff);
+        }
+        calculateStats();
+    }
+
+    window.onload = function() { calculateStats(); };
+</script>
+</body>
+</html>
