@@ -122,6 +122,13 @@
         .btn-save:active { box-shadow: 0 1px #222; transform: translateY(2px); }
         .btn-reset { background-color: #1e272e; color: #ff3838; border: 1px solid #ff3838; padding: 10px; flex: 1.2; border-radius: 5px; font-weight: bold; cursor: pointer; text-align: center; }
         .btn-reset:active { transform: translateY(1px); }
+        
+        /* ป้ายแจ้งเตือนความคลาดเคลื่อน */
+        .warning-box {
+            font-size: 11px; color: #ff7675; text-align: center; margin-top: 12px; margin-bottom: 5px;
+            padding: 6px; background-color: rgba(255,118,117,0.08); border-radius: 5px; border: 1px dashed #ff7675;
+        }
+
         .modal-overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.85); z-index: 1000; justify-content: center; align-items: center;
@@ -202,15 +209,22 @@
             <div class="stat-row"><span class="stat-label">⚔️ PATK พลังโจมตี</span><span class="stat-value stat-main-val" id="view-patk">-</span></div>
             <div class="stat-row"><span class="stat-label">🔮 MATK พลังเวท</span><span class="stat-value stat-main-val" id="view-matk">-</span></div>
             <div class="stat-row"><span class="stat-label">🛡️ พลังป้องกัน DEF</span><span class="stat-value stat-main-val" id="view-def">-</span></div>
+            
             <div class="section-title">🔺 แต้มความสามารถ</div>
             <div class="control-row"><span class="stat-label">✊ STR:</span><div class="input-box"><input type="number" id="base-str" value="91"><span>+</span><input type="number" id="plus-str" value="342"></div></div>
             <div class="control-row"><span class="stat-label">🏹 DEX:</span><div class="input-box"><input type="number" id="base-dex" value="1133"><span>+</span><input type="number" id="plus-dex" value="1304"></div></div>
             <div class="control-row"><span class="stat-label">🏋️‍♂️ CON:</span><div class="input-box"><input type="number" id="base-con" value="105"><span>+</span><input type="number" id="plus-con" value="420"></div></div>
             <div class="control-row"><span class="stat-label">💡 INT:</span><div class="input-box"><input type="number" id="base-int" value="53"><span>+</span><input type="number" id="plus-int" value="235"></div></div>
+            
             <div class="button-group">
                 <button class="btn-apply" onclick="calculateStats()">คำนวณ</button>
                 <button class="btn-save" onclick="saveCurrentStats()">บันทึก</button>
                 <button class="btn-reset" onclick="loadSavedStats()">รีเซ็ต</button>
+            </div>
+
+            <!-- กล่องแจ้งเตือนความคลาดเคลื่อน -->
+            <div class="warning-box">
+                ⚠️ <b>หมายเหตุ:</b> ตัวเลขผลลัพธ์อาจคลาดเคลื่อน 1-5 แต้ม จากระบบการปัดเศษทศนิยมทบต้นของเซิร์ฟเวอร์เกม
             </div>
         </div>
         <div class="right-panel">
@@ -248,7 +262,6 @@
                 <div class="m-row-3"><div><span>อาวุธหลัก (%)</span><input type="number" id="ref-w-atk" value="50"></div><div><span>อุปกรณ์ (%)</span><input type="number" id="ref-p-equip" value="2"></div><div><span>สารานุกรม (%)</span><input type="number" id="ref-p-encyc" value="3"></div></div>
                 <div class="m-row-3" style="margin-top:4px;"><div><span>ภูต (%)</span><input type="number" id="ref-p-spirit" value="5"></div><div><span>นักษัตร (%)</span><input type="number" id="ref-p-zodiac" value="4"></div><div><span>บัฟยืนพื้น (%)</span><input type="number" id="ref-p-basebuff" value="69"></div></div>
             </div>
-            <!-- อัปเดต MATK ตามรูปภาพล่าสุด -->
             <div class="m-group full-width-group">
                 <label style="color:#9b59b6;">4. โครงสร้าง MATK (%) เวทมนตร์</label>
                 <div class="m-row-3"><div><span>อาวุธหลัก (%)</span><input type="number" id="ref-w-matk" value="0"></div><div><span>อุปกรณ์ (%)</span><input type="number" id="ref-m-equip" value="2"></div><div><span>สารานุกรม (%)</span><input type="number" id="ref-m-encyc" value="0"></div></div>
@@ -267,7 +280,6 @@
 </div>
 
 <script>
-    // อัปเดต Baseline MATK จากข้อมูลล่าสุด (Equip 2, Zodiac 4, Buff 70)
     let baseline = {
         baseStr: 91, plusStr: 342, baseDex: 1133, plusDex: 1304, baseCon: 105, plusCon: 420, baseInt: 53, plusInt: 235,
         patkMin: 76509, patkMax: 95645, matkMin: 14069, matkMax: 14129, def: 16812, hp: 305479, mp: 29448,
@@ -289,12 +301,8 @@
     function setVal(id, val) { const el = document.getElementById(id); if (el) el.value = val; }
     function setTxt(id, val) { const el = document.getElementById(id); if (el) el.innerText = val; }
 
-    function openModal() {
-        document.getElementById('config-modal').style.display = 'flex';
-    }
-    function closeModal() {
-        document.getElementById('config-modal').style.display = 'none';
-    }
+    function openModal() { document.getElementById('config-modal').style.display = 'flex'; }
+    function closeModal() { document.getElementById('config-modal').style.display = 'none'; }
 
     function setNewBaseline() {
         baseline.baseStr = getVal('ref-base-str'); baseline.plusStr = getVal('ref-plus-str');
@@ -358,10 +366,14 @@
         const dCon = totalCon - (baseline.baseCon + baseline.plusCon);
         const dInt = totalInt - (baseline.baseInt + baseline.plusInt);
 
-        const scaleMinPatk = oldRawPatkMin + (dStr * 2.0) + (dDex * 4.75);
-        const scaleMaxPatk = oldRawPatkMax + (dStr * 2.0) + (dDex * 6.55);
-        const scaleMinMatk = oldRawMatkMin + (dInt * 25.8) + (dDex * 0.45);
-        const scaleMaxMatk = oldRawMatkMax + (dInt * 25.92) + (dDex * 0.65);
+        // 🔥 อัปเดตสัมประสิทธิ์ Max PATK เป็น 6.78 ตามความเป็นจริงของเกม
+        const scaleMinPatk = oldRawPatkMin + (dStr * 2.0) + (dDex * 4.71);
+        const scaleMaxPatk = oldRawPatkMax + (dStr * 2.0) + (dDex * 6.78);
+        
+        // 🔥 เอา DEX ออกจากสมการเวทมนตร์ เพราะเกมไม่ได้นำ DEX ไปคูณ MATK
+        const scaleMinMatk = oldRawMatkMin + (dInt * 25.8);
+        const scaleMaxMatk = oldRawMatkMax + (dInt * 25.92);
+        
         const scaleDef = oldRawDef + (dCon * 20.445);
         const scaleHp = oldRawHp + (dCon * 575.4);
         const scaleMp = oldRawMp + (dInt * 103.6);
@@ -374,7 +386,6 @@
         setTxt('detail-patk-mult', `x${currentMult.toFixed(3)}`);
         setTxt('detail-matk-mult', `x${currentMatkMult.toFixed(3)}`);
 
-        // ปรับการปัดเศษเพิ่มค่าทศนิยมดักไว้ไม่ให้ดาเมจตกหล่น 5 แต้ม
         const finalMinPatk = Math.max(1, Math.floor((scaleMinPatk * currentMult) + 0.0001));
         const finalMaxPatk = Math.max(1, Math.floor((scaleMaxPatk * currentMult) + 0.0001));
         const finalMinMatk = Math.max(1, Math.floor((scaleMinMatk * currentMatkMult) + 0.0001));
