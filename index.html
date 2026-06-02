@@ -74,53 +74,61 @@
         }
         .btn-config:active { transform: translateY(2px); box-shadow: 0 1px #990000; }
         
-        /* หลอดความแม่นยำสไตล์ Retro 8-Bit ส้มเรืองแสง */
+        /* 🧡 หลอดโดเนท 8-Bit ความแม่นยำเซิร์ฟเวอร์แบบโปร่งแสง */
         .accuracy-banner {
             background-color: #141619; 
-            padding: 12px 15px; 
-            display: flex; 
-            flex-direction: column;
-            gap: 8px;
+            padding: 15px; 
             border-bottom: 2px solid #ff3838;
-        }
-        .acc-info-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .acc-text { 
-            color: #f1c40f; 
-            font-weight: bold; 
-            display: flex; 
-            align-items: center; 
-            font-family: 'Press Start 2P', monospace;
-            font-size: 9px;
-            letter-spacing: 0.5px;
-        }
-        .acc-users { 
-            color: #dcdde1; 
-            font-size: 11px; 
-            font-weight: bold;
-        }
-        .acc-glow { 
-            text-shadow: 0 0 10px #ff793f, 0 0 20px #ffb142; 
-            color: #ff793f; 
-            margin-left: 5px; 
         }
         .pixel-bar-container {
             width: 100%;
-            height: 16px;
+            height: 38px;
             background-color: #050505;
             border: 3px solid #485460;
+            border-radius: 5px;
             position: relative;
-            box-shadow: inset 0 0 6px #000;
+            box-shadow: inset 0 0 8px #000;
+            overflow: hidden;
         }
         .pixel-bar-fill {
             height: 100%;
             width: 0%; 
-            background: linear-gradient(90deg, #ff793f 0%, #ffb142 100%);
-            box-shadow: 0 0 12px #ff793f, 0 0 20px #ffb142;
-            transition: width 0.6s cubic-bezier(0.1, 0.8, 0.3, 1);
+            /* สีส้มโปร่งแสง ให้มองเห็นตัวอักษรด้านหลัง */
+            background: linear-gradient(90deg, rgba(255,121,63,0.75) 0%, rgba(255,177,66,0.85) 100%);
+            box-shadow: 0 0 15px rgba(255,121,63,0.6);
+            transition: width 0.8s cubic-bezier(0.1, 0.8, 0.3, 1);
+            position: absolute;
+            top: 0; left: 0;
+            z-index: 1;
+        }
+        .pixel-bar-text {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 12px;
+            z-index: 2;
+            /* ขอบตัวหนังสือสีดำให้ป๊อปเด้งออกมา */
+            text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 0 0 8px rgba(0,0,0,0.9);
+        }
+        .acc-text { 
+            color: #ffffff; 
+            font-weight: bold; 
+            font-family: 'Press Start 2P', monospace;
+            font-size: 10px;
+            letter-spacing: 0.5px;
+        }
+        .acc-number {
+            color: #f1c40f;
+            font-size: 18px;
+            font-weight: bold;
+            text-shadow: 0 0 10px #f1c40f, 1px 1px 0 #000, -1px -1px 0 #000;
+        }
+        .acc-users { 
+            color: #dcdde1; 
+            font-size: 12px; 
+            font-weight: bold;
         }
 
         .top-controls {
@@ -133,6 +141,7 @@
             background-color: #0b0c10; border: 1px solid #485460; color: #fff; padding: 8px;
             border-radius: 4px; font-size: 13px; font-weight: bold; outline: none; width: 100%; cursor: pointer; height: 36px;
         }
+        .class-action-group { display: flex; gap: 6px; width: 100%; }
 
         .panels-container { display: flex; width: 100%; flex-wrap: wrap; }
         .left-panel { background-color: #1f2226; width: 44%; padding: 15px; border-right: 2px solid #2c3a47; display: flex; flex-direction: column; }
@@ -165,7 +174,7 @@
         .btn-class-buff {
             background-color: #141619; color: #dcdde1; border: 1px solid #485460;
             padding: 0 10px; border-radius: 4px; font-weight: bold; cursor: pointer;
-            font-size: 13px; transition: all 0.2s; height: 36px; white-space: nowrap; display: flex; align-items: center;
+            font-size: 13px; transition: all 0.2s; height: 36px; white-space: nowrap; display: flex; align-items: center; justify-content: center; flex: 1;
         }
         .btn-class-buff.active { background-color: #9b59b6; color: #fff; border-color: #9b59b6; box-shadow: 0 0 8px rgba(155, 89, 182, 0.5); }
         .btn-class-buff:disabled { background-color: #1c1e22; color: #555; border-color: #333; cursor: not-allowed; box-shadow: none; }
@@ -185,9 +194,23 @@
         
         .warning-text { font-size: 11px; color: #dcdde1; text-align: left; margin-top: 15px; line-height: 1.4; opacity: 0.8; }
 
-        /* 🏆 Leaderboard UI ระบบจัดความกว้างใหม่ ล็อกบรรทัดเดียวห้ามซ้อนกันบนมือถือ 👻 */
+        /* 🏆 Leaderboard UI พร้อมระบบปัดเลื่อนซ้ายขวาบนมือถือ 👻 */
         .leaderboard-container { background: #141619; border-top: 3px solid #ff793f; padding: 20px; }
         .lb-header { text-align: center; color: #ff793f; font-size: 14px; font-weight: bold; text-shadow: 0 0 10px rgba(255,121,63,0.5); margin-bottom: 15px; font-family: 'Press Start 2P', monospace; }
+        
+        /* สร้าง Wrapper ให้ตารางเลื่อนได้ */
+        .lb-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            padding-bottom: 5px;
+        }
+        /* กำหนดขนาดขั้นต่ำของตาราง ไม่ให้โดนมือถือบีบ */
+        .lb-table {
+            min-width: 580px; 
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
         
         .lb-header-row, .lb-row { 
             display: flex; 
@@ -200,14 +223,13 @@
         .lb-row { padding: 12px 8px; font-size: 13px; transition: all 0.2s; }
         .lb-row:nth-child(even) { background: rgba(255,255,255,0.01); }
 
-        /* ระบบล็อกสัดส่วนคอลัมน์และตัดข้อความยาวด้วยจุดไข่ปลา (...) */
         .lb-rank { width: 45px; font-weight: bold; color: #dcdde1; font-family: 'Press Start 2P', monospace; font-size: 10px; text-align: center; flex-shrink: 0; }
-        .lb-name { flex: 2; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-right: 8px; font-weight: bold; }
-        .lb-job { width: 95px; text-align: center; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #a55eea; }
+        .lb-name { flex: 2; white-space: nowrap; padding-right: 8px; font-weight: bold; }
+        .lb-job { width: 95px; text-align: center; flex-shrink: 0; white-space: nowrap; color: #a55eea; }
         .lb-score { width: 120px; font-weight: bold; text-align: right; flex-shrink: 0; font-variant-numeric: tabular-nums; }
         .lb-acc { width: 75px; color: #2ecc71; text-align: right; flex-shrink: 0; font-weight: bold; }
 
-        /* 🌟 ระบบกรอบฉายาตามแบบเกมจริง (ถอดรหัสจากรูปฉายา) 🌟 */
+        /* 🌟 ระบบกรอบฉายายุทธภพ Top 20 🌟 */
         .frame-rank1 { background: linear-gradient(90deg, #111, #4c0505, #111) !important; border: 2px solid #ff3838 !important; box-shadow: 0 0 12px rgba(255, 56, 56, 0.7); }
         .frame-rank1 .lb-name { color: #ff3838; text-shadow: 0 0 5px rgba(255,56,56,0.5); }
         .frame-rank1 .lb-rank { color: #ff1f1f; font-size: 12px; }
@@ -276,10 +298,17 @@
         .calc-input { width: 100%; background: #0b0c10; border: 1px solid #f1c40f; color: #fff; padding: 10px; border-radius: 4px; font-size: 16px; margin-bottom: 15px; text-align: center; }
         .btn-calc-apply { background: #f1c40f; color: #000; width: 100%; padding: 10px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; margin-bottom: 8px; }
         
+        /* 📱 Mobile Responsive ปรับโครงสร้างหลบการบีบอัด */
         @media screen and (max-width: 768px) {
             .header-bar { flex-direction: column; gap: 12px; text-align: center; }
             .header-bar > div { display: flex; width: 100%; gap: 8px; justify-content: center; }
             .top-controls { flex-direction: column; gap: 10px; align-items: stretch; }
+            
+            /* แก้ไขช่องเลือกอาชีพให้เต็มแถว แล้วปัดปุ่มบัฟลงมา */
+            .class-action-group { flex-direction: column; }
+            .class-action-group select { width: 100%; margin-bottom: 5px; }
+            .class-action-group > div { width: 100%; }
+            
             .panels-container { flex-direction: column; }
             .left-panel, .right-panel { width: 100%; border-right: none; }
             .modal-grid { grid-template-columns: 1fr; }
@@ -290,12 +319,10 @@
             .val-row { flex-direction: column; gap: 5px; }
             .val-label, .val-sim { width: 100%; text-align: left; }
             
-            /* Responsive ล็อกความกว้างบอร์ดมือถือ ห้ามตกบรรทัดเด็ดขาด */
-            .lb-rank { width: 35px; font-size: 9px; }
-            .lb-name { flex: 1.8; font-size: 11px; }
-            .lb-job { width: 75px; font-size: 11px; }
-            .lb-score { width: 95px; font-size: 11px; }
-            .lb-acc { width: 60px; font-size: 11px; }
+            /* ย่อฟอนต์ในหลอดโดเนทให้พอดีจอมือถือ */
+            .acc-text { font-size: 8px; }
+            .acc-number { font-size: 14px; }
+            .acc-users { font-size: 10px; }
         }
     </style>
 </head>
@@ -313,22 +340,24 @@
         <div><button class="btn-config" onclick="openModal()">⚙️ ตั้งฐานสเตตัส (DNA)</button></div>
     </div>
     
-    <!-- แถบบาร์สถิติเวอร์ชัน 8-Bit สีส้มเรืองแสงตามสั่งจั๊ฟ -->
+    <!-- 🧡 หลอดสถิติ 8-Bit สไตล์ Donation Bar -->
     <div class="accuracy-banner">
-        <div class="acc-info-row">
-            <div class="acc-text">🎯 SERVER ACCURACY: <span class="acc-glow" id="global-acc">LOADING...</span></div>
-            <div class="acc-users" id="total-users">👥 ส่งผลแล้ว: 0 คน</div>
-        </div>
         <div class="pixel-bar-container">
             <div class="pixel-bar-fill" id="pixel-bar-fill"></div>
+            <div class="pixel-bar-text">
+                <span class="acc-text">🎯 SERVER ACCURACY</span>
+                <span class="acc-number" id="global-acc">LOADING...</span>
+                <span class="acc-users" id="total-users">👥 0 คน</span>
+            </div>
         </div>
     </div>
 
     <div class="top-controls" onchange="autoCalculate()">
         <div class="select-container" style="flex: 2.5; min-width: 320px;">
-            <label>👥 อาชีพตัวละคร และ สกิลบัฟอาชีพ (กดเพื่อใช้งาน)</label>
-            <div style="display:flex; gap:6px; width:100%;">
-                <select id="class-select" style="flex: 1.5;">
+            <label>👥 อาชีพตัวละคร และ สกิลบัฟอาชีพ</label>
+            <!-- แก้ไขโครงสร้างรองรับจอมือถือ -->
+            <div class="class-action-group">
+                <select id="class-select" style="flex: 1;">
                     <option value="mamluk" data-atk="40" data-def="30" selected>มัมลุค</option>
                     <option value="hero" data-atk="40" data-def="30">จอมยุทธ</option>
                     <option value="mage" data-atk="20" data-def="30">นักพรต</option>
@@ -338,8 +367,10 @@
                     <option value="knight" data-atk="20" data-def="30">นักรบ</option>
                     <option value="assassin" data-atk="20" data-def="0">มือสังหาร</option>
                 </select>
-                <button class="btn-class-buff active" id="btn-class-atk" onclick="toggleClassBuff('atk')">⚔️ บัฟโจมตี (+40%)</button>
-                <button class="btn-class-buff active" id="btn-class-def" onclick="toggleClassBuff('def')">🛡️ บัฟป้องกัน (+30%)</button>
+                <div style="display:flex; gap:6px; flex:2;">
+                    <button class="btn-class-buff active" id="btn-class-atk" onclick="toggleClassBuff('atk')">⚔️ บัฟโจมตี (+40%)</button>
+                    <button class="btn-class-buff active" id="btn-class-def" onclick="toggleClassBuff('def')">🛡️ บัฟป้องกัน (+30%)</button>
+                </div>
             </div>
         </div>
         <div class="select-container">
@@ -481,14 +512,22 @@
         </div>
     </div>
     
-    <!-- Leaderboard TOP 100 -->
+    <!-- 🏆 Leaderboard TOP 100 แบบเลื่อนปัดซ้ายขวาได้ -->
     <div class="leaderboard-container">
         <div class="lb-header">🏆 TOP 100 RANKING (RAW BASE ATK)</div>
-        <div class="lb-header-row">
-            <span class="lb-rank">Rnk</span><span style="flex:2; padding-left:10px;">ชื่อตัวละคร</span><span class="lb-job">อาชีพ</span><span class="lb-score">ดาเมจดิบ (Raw)</span><span class="lb-acc">ความเป๊ะ</span>
-        </div>
-        <div id="lb-body" style="max-height: 500px; overflow-y: auto;">
-            <div style="text-align:center; padding:30px; color:#7f8fa6; font-weight:bold;">📡 กำลังเชื่อมต่อข้อมูลเซิร์ฟเวอร์...</div>
+        <div class="lb-wrapper">
+            <div class="lb-table">
+                <div class="lb-header-row">
+                    <span class="lb-rank">Rnk</span>
+                    <span style="flex:2; padding-left:10px;">ชื่อตัวละคร</span>
+                    <span class="lb-job">อาชีพ</span>
+                    <span class="lb-score">ดาเมจดิบ (Raw)</span>
+                    <span class="lb-acc">ความเป๊ะ</span>
+                </div>
+                <div id="lb-body" style="max-height: 500px; overflow-y: auto; overflow-x: hidden;">
+                    <div style="text-align:center; padding:30px; color:#7f8fa6; font-weight:bold;">📡 กำลังเชื่อมต่อข้อมูลเซิร์ฟเวอร์...</div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -605,7 +644,7 @@
 
 <!-- Modal 2: เครื่องคิดเลข 🧮 -->
 <div class="modal-overlay" id="calc-modal" style="z-index: 2000;">
-    <div class="modal-content" style="text-align: center;">
+    <div class="modal-content" style="text-align: center; max-width: 320px;">
         <div style="color: #f1c40f; font-weight: bold; margin-bottom: 15px; font-size: 16px;">🧮 เครื่องคิดเลขรวม %</div>
         <div style="font-size: 12px; color: #dcdde1; margin-bottom: 10px;">พิมพ์ตัวเลขบวกกัน เช่น 1.5+2.2+3</div>
         <input type="text" id="calc-input" class="calc-input" placeholder="พิมพ์สมการที่นี่...">
@@ -649,8 +688,25 @@
     </div>
 </div>
 
+<!-- Modal 4: 📖 คู่มือผู้เล่นใหม่ฉบับไวไว -->
+<div class="modal-overlay" id="tutorial-modal" style="z-index: 4000;">
+    <div class="modal-content" style="max-width: 500px; border-color: #3498db; box-shadow: 0 0 25px rgba(52,152,219,0.3);">
+        <div class="modal-header" style="color: #3498db; border-bottom-color: #3498db;">🎮 คู่มือใช้งานฉบับไวไว (Quick Start Guide)</div>
+        <div style="font-size: 13px; line-height: 1.6; color: #dcdde1; margin-bottom: 20px;">
+            <p><b>Step 1: ตั้งฐาน DNA (ปุ่ม ⚙️ มุมขวาบน)</b><br>กรอกค่าเปอร์เซ็นต์เชิงลึก (อาวุธ, ภูต, สารานุกรม) ให้ตรงกับตัวละครจริงของคุณเป็นอันดับแรก เพื่อความแม่นยำสูงสุด!</p>
+            <p><b>Step 2: จำลองสเตตัส (หน้าจอหลัก 💻)</b><br>ปรับแต่งแต้ม STR, DEX, CON, INT หรือเปิด-ปิดบัฟ เพื่อดูผลลัพธ์ดาเมจที่เปลี่ยนไปแบบเรียลไทม์</p>
+            <p><b>Step 3: ขิงอันดับ (ปุ่มสีเขียว ✅)</b><br>กด "ส่งผลจำลอง" แล้วเอาเลขดาเมจจริงในเกมมากรอกเพื่อวัด % ความเป๊ะ หากสถิติผ่านเกณฑ์ ชื่อของคุณจะทะยานขึ้นบอร์ด Top 100 ทันที!</p>
+        </div>
+        <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #f1c40f; cursor: pointer; margin-bottom: 15px; justify-content: center;">
+            <input type="checkbox" id="tut-dont-show" style="width: 16px; height: 16px; cursor: pointer;">
+            ไม่ต้องแสดงหน้านี้อีก (เป็นงานแล้วจั๊ฟ!)
+        </label>
+        <button class="btn-confirm-modal" style="background:#3498db; box-shadow:0 4px #2980b9; margin-top:0;" onclick="closeTutorial()">เข้าสู่ระบบจำลองสเตตัส 🚀</button>
+    </div>
+</div>
+
 <script>
-    // 🎯 ลิงก์ API ตัวล่าสุดที่ Deploy ใหม่
+    // 🎯 ลิงก์ API ตัวล่าสุด
     const API_URL = 'https://script.google.com/macros/s/AKfycbxUhmuY7Q0w_xp9hP8PAEeVnLSLBDOQQXzMltCBv7gZ0biJ_AiEC1W9gM1huN2tlpN7/exec';
 
     let currentSimulatedStats = { patkMin: 0, patkMax: 0, def: 0, rawMaxAtk: 0 };
@@ -673,6 +729,15 @@
 
     function openModal() { updateDnaSums(); document.getElementById('config-modal').style.display = 'flex'; }
     function closeModal() { document.getElementById('config-modal').style.display = 'none'; }
+    
+    // 📖 ฟังก์ชันปิดหน้าต่าง Tutorial และจำค่า LocalStorage
+    function closeTutorial() {
+        if (document.getElementById('tut-dont-show').checked) {
+            localStorage.setItem('ghostm_hide_tut', 'true');
+        }
+        document.getElementById('tutorial-modal').style.display = 'none';
+    }
+
     function updateDnaSums() {
         setTxt('dna-sum-str', getVal('ref-base-str') + getVal('ref-plus-str'));
         setTxt('dna-sum-dex', getVal('ref-base-dex') + getVal('ref-plus-dex'));
@@ -835,7 +900,7 @@
         const dnaTotalMatkPct = (baseline.mEquip||0) + (baseline.mEncyc||0) + (baseline.mSpirit||0) + (baseline.mZodiac||0) + (baseline.mBaseBuff||0);
         
         const dnaMult = (1 + (baseline.wAtk||0)/100) * (1 + dnaTotalAtkPct/100);
-        const dnaMatkMult = (1 + (baseline.wMatk||0)/100) * (1 + dnaTotalMatkPct/100); 
+        const dnaMatkMult = (1 + (baseline.wAtk||0)/100) * (1 + dnaTotalMatkPct/100); 
         const dnaDefMult = 1 + (baseline.defBaseBuff||0)/100;
 
         const oldRawPatkMin = (baseline.patkMin||0) / dnaMult;
@@ -867,7 +932,7 @@
         currentSimulatedStats.def = Math.max(1, Math.round(scaleDef * totalDefMultiplier));
         
         const finalMinMatk = Math.max(1, Math.round(scaleMinMatk * currentMatkMult));
-        const finalMaxMatk = Math.max(1, Math.round(scaleMaxMatk * currentMatkMult)); // ✅ จุดที่เคยบั๊ก แก้ไขแล้วครับลูกพี่!
+        const finalMaxMatk = Math.max(1, Math.round(scaleMaxMatk * currentMatkMult)); 
         const finalHp = Math.max(1, Math.round(scaleHp * (1 + getVal('live-p-hp')/100)));
         const finalMp = Math.max(1, Math.round(scaleMp * (1 + getVal('live-p-mp')/100)));
 
@@ -953,12 +1018,12 @@
         }
     }
 
-    // --- ระบบมหาเทพ: ดึงข้อมูลประมวลผลสีดาเมจ ซ่อนตัวเลข และสวมกรอบยุทธภพ Top 20 ---
+    // --- 🏆 ระบบ Leaderboard Pro: ซ่อนเลขดาเมจ + กรอบฉายายุทธภพ ---
     function fetchLeaderboard() {
         fetch(API_URL).then(r => r.json()).then(data => {
             if(data.status === 'success') {
                 document.getElementById('global-acc').innerText = data.globalAcc + '%';
-                document.getElementById('total-users').innerText = '👥 ส่งผลแล้ว: ' + data.totalUsers + ' คน';
+                document.getElementById('total-users').innerText = '👥 ' + data.totalUsers + ' คน';
                 
                 const barFill = document.getElementById('pixel-bar-fill');
                 if(barFill) { barFill.style.width = parseFloat(data.globalAcc) + '%'; }
@@ -972,12 +1037,11 @@
                     let scoreStr = Math.floor(rawAtkValue).toString();
                     let maskedScore = "";
                     if (scoreStr.length > 0) {
-                        maskedScore = scoreStr[0]; // เก็บเลขตัวแรกไว้
-                        for (let i = 1; i < scoreStr.length; i++) { maskedScore += "X"; } // เติม X ตามหลัก
-                        // ทำฟอร์แมตจัดคอมม่าคั่นหลักสวยๆ
-                        if (scoreStr.length === 5) { maskedScore = maskedScore.substring(0, 2) + "," + maskedScore.substring(2); } 
-                        else if (scoreStr.length === 6) { maskedScore = maskedScore.substring(0, 3) + "," + maskedScore.substring(3); }
-                        else if (scoreStr.length === 4) { maskedScore = maskedScore.substring(0, 1) + "," + maskedScore.substring(1); }
+                        maskedScore = scoreStr[0] + "X".repeat(scoreStr.length - 1);
+                        // เติมคอมม่าสวยๆ กลับเข้าไป
+                        if (maskedScore.length > 3) {
+                            maskedScore = maskedScore.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                        }
                     }
                     
                     // 🎨 2. ฟังก์ชันแบ่งกลุ่มสีนีออนตามความแรง (Damage Tiers)
@@ -987,7 +1051,7 @@
                     else if (rawAtkValue >= 100000) { tierClass = "tier-epic"; } 
                     else if (rawAtkValue >= 50000) { tierClass = "tier-hero"; }
                     
-                    // 🏆 3. ฟังก์ชันสวมชุดกรอบฉายาประดับอันดับ (Rank Frames 1-20 แกบั๊กห้ามตกแถว)
+                    // 🏆 3. ฟังก์ชันสวมชุดกรอบฉายาประดับอันดับ (Rank Frames 1-20)
                     let frameClass = "";
                     let prefix = "";
                     let suffix = "";
@@ -1079,13 +1143,18 @@
         });
     }
 
-    // ✅ จุดชี้ชะตา: ตอนนี้เรียงลำดับการทำงานและเซฟตี้ไว้หมดแล้ว
+    // ✅ โหลดระบบทั้งหมด + ตรวจสอบคู่มือสอนเล่นตอนเข้าเว็บ
     window.onload = function() { 
         loadSavedStats(); 
         autoCalculate(); 
         updateDnaSums(); 
         handleDropdownChange(); 
         fetchLeaderboard(); 
+        
+        // 📖 ถ้าระบบยังไม่เคยจำว่าผู้เล่นกดปิดคู่มือ ให้เด้งโชว์ Tutorial Popup
+        if (localStorage.getItem('ghostm_hide_tut') !== 'true') {
+            document.getElementById('tutorial-modal').style.display = 'flex';
+        }
     };
 </script>
 </body>
