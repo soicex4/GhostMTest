@@ -185,17 +185,59 @@
         
         .warning-text { font-size: 11px; color: #dcdde1; text-align: left; margin-top: 15px; line-height: 1.4; opacity: 0.8; }
 
-        /* Leaderboard UI สไตล์อาร์เคด */
+        /* 🏆 Leaderboard UI ระบบจัดความกว้างใหม่ ล็อกบรรทัดเดียวห้ามซ้อนกันบนมือถือ 👻 */
         .leaderboard-container { background: #141619; border-top: 3px solid #ff793f; padding: 20px; }
         .lb-header { text-align: center; color: #ff793f; font-size: 14px; font-weight: bold; text-shadow: 0 0 10px rgba(255,121,63,0.5); margin-bottom: 15px; font-family: 'Press Start 2P', monospace; }
-        .lb-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 8px; border-bottom: 1px solid #2c3a47; font-size: 13px; }
-        .lb-row:nth-child(even) { background: rgba(255,255,255,0.02); }
-        .lb-rank { width: 45px; font-weight: bold; color: #dcdde1; font-family: 'Press Start 2P', monospace; font-size: 10px; }
-        .lb-name { flex: 1; color: #3498db; font-weight: bold; font-size: 14px; }
-        .lb-job { width: 95px; color: #9b59b6; text-align: center; }
-        .lb-score { width: 120px; color: #e74c3c; font-weight: bold; text-align: right; }
-        .lb-acc { width: 75px; color: #2ecc71; text-align: right; font-weight: bold; }
-        .lb-header-row { display: flex; justify-content: space-between; padding: 5px 8px; border-bottom: 2px solid #e74c3c; font-size: 11px; color: #7f8fa6; font-weight: bold; }
+        
+        .lb-header-row, .lb-row { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            width: 100%;
+            border-bottom: 1px solid #2c3a47; 
+        }
+        .lb-header-row { padding: 8px; border-bottom: 2px solid #e74c3c; font-size: 11px; color: #7f8fa6; font-weight: bold; }
+        .lb-row { padding: 12px 8px; font-size: 13px; transition: all 0.2s; }
+        .lb-row:nth-child(even) { background: rgba(255,255,255,0.01); }
+
+        /* ระบบล็อกสัดส่วนคอลัมน์และตัดข้อความยาวด้วยจุดไข่ปลา (...) */
+        .lb-rank { width: 45px; font-weight: bold; color: #dcdde1; font-family: 'Press Start 2P', monospace; font-size: 10px; text-align: center; flex-shrink: 0; }
+        .lb-name { flex: 2; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-right: 8px; font-weight: bold; }
+        .lb-job { width: 95px; text-align: center; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #a55eea; }
+        .lb-score { width: 120px; font-weight: bold; text-align: right; flex-shrink: 0; font-variant-numeric: tabular-nums; }
+        .lb-acc { width: 75px; color: #2ecc71; text-align: right; flex-shrink: 0; font-weight: bold; }
+
+        /* 🌟 ระบบกรอบฉายาตามแบบเกมจริง (ถอดรหัสจากรูปฉายา) 🌟 */
+        .frame-rank1 { background: linear-gradient(90deg, #111, #4c0505, #111) !important; border: 2px solid #ff3838 !important; box-shadow: 0 0 12px rgba(255, 56, 56, 0.7); }
+        .frame-rank1 .lb-name { color: #ff3838; text-shadow: 0 0 5px rgba(255,56,56,0.5); }
+        .frame-rank1 .lb-rank { color: #ff1f1f; font-size: 12px; }
+
+        .frame-rank2 { background: linear-gradient(90deg, #2d1702, #5c2c02, #2d1702) !important; border: 2px solid #f1c40f !important; box-shadow: 0 0 12px rgba(241, 196, 15, 0.7); }
+        .frame-rank2 .lb-name { color: #f1c40f; text-shadow: 0 0 5px rgba(241,196,15,0.5); }
+
+        .frame-rank3 { background: linear-gradient(90deg, #021a30, #04396c, #021a30) !important; border: 2px solid #3498db !important; box-shadow: 0 0 12px rgba(52, 152, 219, 0.7); }
+        .frame-rank3 .lb-name { color: #3498db; text-shadow: 0 0 5px rgba(52,152,219,0.5); }
+
+        .frame-rank4-5 { background: linear-gradient(90deg, #1c1811, #3d311e, #1c1811) !important; border: 1.5px solid #d5a453 !important; box-shadow: inset 0 0 8px rgba(0,0,0,0.6); }
+        .frame-rank4-5 .lb-name { color: #f39c12; }
+
+        .frame-rank6-7 { background: linear-gradient(90deg, #160226, #320459, #160226) !important; border: 1.5px dashed #9b59b6 !important; box-shadow: 0 0 10px rgba(155, 89, 182, 0.4); }
+        .frame-rank6-7 .lb-name { color: #9b59b6; }
+
+        .frame-rank8-20 { background: linear-gradient(90deg, #0d0e10, #1b1d22, #0d0e10) !important; border: 1px solid #4b5563 !important; box-shadow: 0 0 8px rgba(156, 163, 175, 0.2); }
+        .frame-rank8-20 .lb-name { color: #cbd5e1; }
+
+        /* ⚔️ ระบบออร่าสีดาเมจตามระดับความตึง (Damage Tiers Neon Glow) ⚔️ */
+        .tier-normal { color: #dcdde1; }
+        .tier-hero { color: #00d2d3 !important; text-shadow: 0 0 8px #00d2d3; }
+        .tier-epic { color: #9b59b6 !important; text-shadow: 0 0 8px #9b59b6; }
+        .tier-legendary { color: #f1c40f !important; text-shadow: 0 0 8px #f1c40f; }
+        .tier-mythic { color: #ff3838 !important; text-shadow: 0 0 10px #ff3838, 0 0 20px #ff7675; font-weight: bold; animation: pulseAtk 1.5s infinite alternate; }
+
+        @keyframes pulseAtk {
+            from { text-shadow: 0 0 8px #ff3838, 0 0 15px #ff3838; }
+            to { text-shadow: 0 0 15px #ff7675, 0 0 30px #ff4757; }
+        }
 
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; justify-content: center; align-items: center; padding: 10px; overflow-y: auto; }
         .modal-content { background-color: #22252a; border: 2px solid #ff3838; border-radius: 10px; width: 100%; max-width: 780px; padding: 20px; color: #fff; box-shadow: 0 0 25px rgba(255,56,56,0.2); margin: auto; max-height: 90vh; overflow-y: auto; }
@@ -247,6 +289,13 @@
             .dna-lbl { width: 40px; font-size: 11px; }
             .val-row { flex-direction: column; gap: 5px; }
             .val-label, .val-sim { width: 100%; text-align: left; }
+            
+            /* Responsive ล็อกความกว้างบอร์ดมือถือ ห้ามตกบรรทัดเด็ดขาด */
+            .lb-rank { width: 35px; font-size: 9px; }
+            .lb-name { flex: 1.8; font-size: 11px; }
+            .lb-job { width: 75px; font-size: 11px; }
+            .lb-score { width: 95px; font-size: 11px; }
+            .lb-acc { width: 60px; font-size: 11px; }
         }
     </style>
 </head>
@@ -436,7 +485,7 @@
     <div class="leaderboard-container">
         <div class="lb-header">🏆 TOP 100 RANKING (RAW BASE ATK)</div>
         <div class="lb-header-row">
-            <span style="width:45px;">Rnk</span><span style="flex:1;">ชื่อตัวละคร</span><span style="width:95px; text-align:center;">อาชีพ</span><span style="width:120px; text-align:right;">ดาเมจดิบ (Raw)</span><span style="width:75px; text-align:right;">ความเป๊ะ</span>
+            <span class="lb-rank">Rnk</span><span style="flex:2; padding-left:10px;">ชื่อตัวละคร</span><span class="lb-job">อาชีพ</span><span class="lb-score">ดาเมจดิบ (Raw)</span><span class="lb-acc">ความเป๊ะ</span>
         </div>
         <div id="lb-body" style="max-height: 500px; overflow-y: auto;">
             <div style="text-align:center; padding:30px; color:#7f8fa6; font-weight:bold;">📡 กำลังเชื่อมต่อข้อมูลเซิร์ฟเวอร์...</div>
@@ -554,6 +603,7 @@
     </div>
 </div>
 
+<!-- Modal 2: เครื่องคิดเลข 🧮 -->
 <div class="modal-overlay" id="calc-modal" style="z-index: 2000;">
     <div class="modal-content" style="text-align: center;">
         <div style="color: #f1c40f; font-weight: bold; margin-bottom: 15px; font-size: 16px;">🧮 เครื่องคิดเลขรวม %</div>
@@ -564,6 +614,7 @@
     </div>
 </div>
 
+<!-- Modal 3: ป๊อปอัปตรวจสอบความแม่นยำและขึ้นบอร์ด -->
 <div class="modal-overlay" id="validate-modal" style="z-index: 3000;">
     <div class="modal-content">
         <div class="modal-header">✅ ส่งผลสถิติขึ้นบอร์ดจัดอันดับ (Top 100)</div>
@@ -599,7 +650,7 @@
 </div>
 
 <script>
-    // 🎯 อัปเดตลิงก์ API ลับตัวใหม่แกะกล่องล่าสุดเรียบร้อยจั๊ฟลูกพี่!
+    // 🎯 ลิงก์ API ตัวล่าสุดที่ Deploy ใหม่ อุดช่องว่างบั๊ก LOADING... เรียบร้อย
     const API_URL = 'https://script.google.com/macros/s/AKfycbxUhmuY7Q0w_xp9hP8PAEeVnLSLBDOQQXzMltCBv7gZ0biJ_AiEC1W9gM1huN2tlpN7/exec';
 
     let currentSimulatedStats = { patkMin: 0, patkMax: 0, def: 0, rawMaxAtk: 0 };
@@ -631,11 +682,11 @@
 
     function updateLivePctBoxes() {
         const selClass = document.getElementById('class-select');
-        if (!selClass || selClass.selectedIndex === -1) return; // 🛡️ ระบบเซฟตี้กันคลาสหลุดค้าง
+        if (!selClass || selClass.selectedIndex === -1) return; // 🛡️ เซฟตี้กันพัง
         
         const option = selClass.options[selClass.selectedIndex];
         if (!option) return;
-        
+
         const classAtk = parseFloat(option.getAttribute('data-atk')) || 0;
         const classDef = parseFloat(option.getAttribute('data-def')) || 0;
 
@@ -665,7 +716,7 @@
 
     function toggleClassBuff(type) {
         const btn = document.getElementById('btn-class-' + type);
-        if (btn.disabled) return;
+        if (!btn || btn.disabled) return;
         activeClassBuffs[type] = !activeClassBuffs[type];
         if (activeClassBuffs[type]) btn.classList.add('active'); else btn.classList.remove('active');
         autoCalculate();
@@ -673,26 +724,29 @@
 
     function toggleItemBuff(type, val) {
         const btn = document.getElementById(`btn-${type}-${val}`);
+        if (!btn) return;
         activeItemBuffs[type][val] = !activeItemBuffs[type][val];
         if (activeItemBuffs[type][val]) btn.classList.add('active'); else btn.classList.remove('active');
         autoCalculate();
     }
 
     function toggleHpBuff(val, isExclusive) {
+        const btn = document.getElementById('btn-hp-' + val);
+        if (!btn) return;
         if (isExclusive) {
             if (activeHpBuffs[val]) {
                 activeHpBuffs[val] = false;
-                document.getElementById('btn-hp-' + val).classList.remove('active');
+                btn.classList.remove('active');
             } else {
                 [15, 20, 30].forEach(exVal => {
-                    if (activeHpBuffs[exVal]) { activeHpBuffs[exVal] = false; document.getElementById('btn-hp-' + exVal).classList.remove('active'); }
+                    if (activeHpBuffs[exVal]) { activeHpBuffs[exVal] = false; const b = document.getElementById('btn-hp-' + exVal); if(b) b.classList.remove('active'); }
                 });
                 activeHpBuffs[val] = true;
-                document.getElementById('btn-hp-' + val).classList.add('active');
+                btn.classList.add('active');
             }
         } else {
             activeHpBuffs[val] = !activeHpBuffs[val];
-            if (activeHpBuffs[val]) document.getElementById('btn-hp-' + val).classList.add('active'); else document.getElementById('btn-hp-' + val).classList.remove('active');
+            if (activeHpBuffs[val]) btn.classList.add('active'); else btn.classList.remove('active');
         }
         autoCalculate();
     }
@@ -813,7 +867,7 @@
         currentSimulatedStats.def = Math.max(1, Math.round(scaleDef * totalDefMultiplier));
         
         const finalMinMatk = Math.max(1, Math.round(scaleMinMatk * currentMatkMult));
-        const finalMaxMatk = Math.max(1, Math.round(scaleMaxPatk * currentMatkMult));
+        const finalMaxMatk = Math.max(1, Math.round(scaleMaxAtk * currentMult));
         const finalHp = Math.max(1, Math.round(scaleHp * (1 + getVal('live-p-hp')/100)));
         const finalMp = Math.max(1, Math.round(scaleMp * (1 + getVal('live-p-mp')/100)));
 
@@ -894,11 +948,11 @@
                 }
             }
         } catch (e) {
-            console.error("เซฟเก่าเอ๋อ ขอล้างโครงสร้างป้องกันแอปพัง:", e);
             localStorage.removeItem('ghostm_save');
         }
     }
 
+    // --- ระบบมหาเทพ: ดึงข้อมูลประมวลผลสีดาเมจ ซ่อนตัวเลข และสวมกรอบยุทธภพ Top 20 ---
     function fetchLeaderboard() {
         fetch(API_URL).then(r => r.json()).then(data => {
             if(data.status === 'success') {
@@ -910,13 +964,45 @@
 
                 let html = '';
                 data.leaderboard.forEach((user, index) => {
-                    let rankColor = index === 0 ? '#f1c40f' : (index === 1 ? '#bdc3c7' : (index === 2 ? '#cd7f32' : '#dcdde1'));
+                    let rank = index + 1;
+                    let rawAtkValue = parseFloat(user.rawAtk) || 0;
+                    
+                    // ⚔️ 1. ฟังก์ชันพรางดาเมจเสกตัว X (Damage Masking)
+                    let scoreStr = Math.floor(rawAtkValue).toString();
+                    let maskedScore = "";
+                    if (scoreStr.length > 0) {
+                        maskedScore = scoreStr[0]; // เก็บเลขตัวแรกไว้
+                        for (let i = 1; i < scoreStr.length; i++) { maskedScore += "X"; } // เติม X ตามหลัก
+                        // ทำฟอร์แมตจัดคอมม่าคั่นหลักสวยๆ
+                        if (scoreStr.length === 5) { maskedScore = maskedScore.substring(0, 2) + "," + maskedScore.substring(2); } 
+                        else if (scoreStr.length === 6) { maskedScore = maskedScore.substring(0, 3) + "," + maskedScore.substring(3); }
+                        else if (scoreStr.length === 4) { maskedScore = maskedScore.substring(0, 1) + "," + maskedScore.substring(1); }
+                    }
+                    
+                    // 🎨 2. ฟังก์ชันแบ่งกลุ่มสีนีออนตามความแรง (Damage Tiers)
+                    let tierClass = "tier-normal";
+                    if (rawAtkValue >= 200000) { tierClass = "tier-mythic"; } 
+                    else if (rawAtkValue >= 150000) { tierClass = "tier-legendary"; } 
+                    else if (rawAtkValue >= 100000) { tierClass = "tier-epic"; } 
+                    else if (rawAtkValue >= 50000) { tierClass = "tier-hero"; }
+                    
+                    // 🏆 3. ฟังก์ชันสวมชุดกรอบฉายาประดับอันดับ (Rank Frames 1-20 แกบั๊กห้ามตกแถว)
+                    let frameClass = "";
+                    let prefix = "";
+                    let suffix = "";
+                    if (rank === 1) { frameClass = "frame-rank1"; prefix = "⚔️ "; suffix = " 🪓"; } 
+                    else if (rank === 2) { frameClass = "frame-rank2"; prefix = "🐲 "; suffix = ""; } 
+                    else if (rank === 3) { frameClass = "frame-rank3"; prefix = "🌙 "; suffix = " ✨"; } 
+                    else if (rank >= 4 && rank <= 5) { frameClass = "frame-rank4-5"; prefix = "🦋 "; suffix = " ✨"; } 
+                    else if (rank >= 6 && rank <= 7) { frameClass = "frame-rank6-7"; prefix = "🔮 "; suffix = " 🔥"; } 
+                    else if (rank >= 8 && rank <= 20) { frameClass = "frame-rank8-20"; prefix = "🐦‍⬛ "; suffix = " 🖤"; }
+                    
                     html += `
-                    <div class="lb-row">
-                        <span class="lb-rank" style="color:${rankColor}">${index+1}</span>
-                        <span class="lb-name">${user.name}</span>
+                    <div class="lb-row ${frameClass}">
+                        <span class="lb-rank">${rank}</span>
+                        <span class="lb-name">${prefix}${user.name}${suffix}</span>
                         <span class="lb-job">${user.job}</span>
-                        <span class="lb-score">⚔️ ${Math.floor(user.rawAtk).toLocaleString()}</span>
+                        <span class="lb-score ${tierClass}">⚔️ ${maskedScore}</span>
                         <span class="lb-acc">${parseFloat(user.accuracy).toFixed(2)}%</span>
                     </div>`;
                 });
@@ -992,7 +1078,6 @@
         });
     }
 
-    // ล้างไพ่ตอนโหลดหน้าเรียงลำดับปลอดภัยชัวร์ 100%
     window.onload = function() { 
         loadSavedStats(); 
         autoCalculate(); 
