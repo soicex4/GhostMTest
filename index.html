@@ -650,7 +650,7 @@
 </div>
 
 <script>
-    // 🎯 ลิงก์ API ตัวล่าสุดที่ Deploy ใหม่ อุดช่องว่างบั๊ก LOADING... เรียบร้อย
+    // 🎯 ลิงก์ API ตัวล่าสุดที่ Deploy ใหม่
     const API_URL = 'https://script.google.com/macros/s/AKfycbxUhmuY7Q0w_xp9hP8PAEeVnLSLBDOQQXzMltCBv7gZ0biJ_AiEC1W9gM1huN2tlpN7/exec';
 
     let currentSimulatedStats = { patkMin: 0, patkMax: 0, def: 0, rawMaxAtk: 0 };
@@ -682,7 +682,7 @@
 
     function updateLivePctBoxes() {
         const selClass = document.getElementById('class-select');
-        if (!selClass || selClass.selectedIndex === -1) return; // 🛡️ เซฟตี้กันพัง
+        if (!selClass || selClass.selectedIndex === -1) return;
         
         const option = selClass.options[selClass.selectedIndex];
         if (!option) return;
@@ -835,7 +835,7 @@
         const dnaTotalMatkPct = (baseline.mEquip||0) + (baseline.mEncyc||0) + (baseline.mSpirit||0) + (baseline.mZodiac||0) + (baseline.mBaseBuff||0);
         
         const dnaMult = (1 + (baseline.wAtk||0)/100) * (1 + dnaTotalAtkPct/100);
-        const dnaMatkMult = (1 + (baseline.wAtk||0)/100) * (1 + dnaTotalMatkPct/100);
+        const dnaMatkMult = (1 + (baseline.wMatk||0)/100) * (1 + dnaTotalMatkPct/100); 
         const dnaDefMult = 1 + (baseline.defBaseBuff||0)/100;
 
         const oldRawPatkMin = (baseline.patkMin||0) / dnaMult;
@@ -858,7 +858,7 @@
         const scaleMp = oldRawMp + (dInt * 103.6);
 
         const currentMult = (1 + (baseline.wAtk||0)/100) * (1 + getVal('live-p-patk')/100);
-        const currentMatkMult = (1 + (baseline.wAtk||0)/100) * (1 + getVal('live-p-matk')/100);
+        const currentMatkMult = (1 + (baseline.wMatk||0)/100) * (1 + getVal('live-p-matk')/100); 
         const totalDefMultiplier = 1 + getVal('live-p-def')/100;
 
         currentSimulatedStats.rawMaxAtk = Math.max(1, Math.round(scaleMaxPatk * dnaMult));
@@ -867,7 +867,7 @@
         currentSimulatedStats.def = Math.max(1, Math.round(scaleDef * totalDefMultiplier));
         
         const finalMinMatk = Math.max(1, Math.round(scaleMinMatk * currentMatkMult));
-        const finalMaxMatk = Math.max(1, Math.round(scaleMaxAtk * currentMult));
+        const finalMaxMatk = Math.max(1, Math.round(scaleMaxMatk * currentMatkMult)); // ✅ จุดที่เคยบั๊ก แก้ไขแล้วครับลูกพี่!
         const finalHp = Math.max(1, Math.round(scaleHp * (1 + getVal('live-p-hp')/100)));
         const finalMp = Math.max(1, Math.round(scaleMp * (1 + getVal('live-p-mp')/100)));
 
@@ -948,6 +948,7 @@
                 }
             }
         } catch (e) {
+            console.error("ล้างเซฟเก่าป้องกันโค้ดค้าง:", e);
             localStorage.removeItem('ghostm_save');
         }
     }
@@ -1078,6 +1079,7 @@
         });
     }
 
+    // ✅ จุดชี้ชะตา: ตอนนี้เรียงลำดับการทำงานและเซฟตี้ไว้หมดแล้ว
     window.onload = function() { 
         loadSavedStats(); 
         autoCalculate(); 
