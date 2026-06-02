@@ -69,52 +69,58 @@
             box-shadow: 0 3px #990000; transition: all 0.1s;
         }
         .btn-config:active { transform: translateY(2px); box-shadow: 0 1px #990000; }
+        
         .top-controls {
-            background-color: #141619;
-            padding: 12px 15px;
-            display: flex;
-            gap: 15px;
-            border-bottom: 2px solid #ff3838;
-            flex-wrap: wrap;
-            align-items: center;
+            background-color: #141619; padding: 12px 15px; display: flex; gap: 15px;
+            border-bottom: 2px solid #ff3838; flex-wrap: wrap; align-items: flex-end;
         }
-        .select-container {
-            flex: 1; display: flex; flex-direction: column; gap: 5px; min-width: 140px;
-        }
+        .select-container { flex: 1; display: flex; flex-direction: column; gap: 5px; min-width: 140px; }
         .select-container label { font-size: 11px; color: #f1c40f; font-weight: bold; padding-left: 2px; }
         .select-container select, .select-container input {
             background-color: #0b0c10; border: 1px solid #485460; color: #fff; padding: 8px;
-            border-radius: 4px; font-size: 13px; font-weight: bold; outline: none; width: 100%; cursor: pointer;
+            border-radius: 4px; font-size: 13px; font-weight: bold; outline: none; width: 100%; cursor: pointer; height: 36px;
         }
+
         .panels-container { display: flex; width: 100%; flex-wrap: wrap; }
-        .left-panel { background-color: #1f2226; width: 48%; padding: 15px; border-right: 2px solid #2c3a47; }
-        .right-panel { background-color: #282c34; width: 52%; padding: 15px; display: flex; flex-direction: column; gap: 12px; }
+        .left-panel { background-color: #1f2226; width: 44%; padding: 15px; border-right: 2px solid #2c3a47; display: flex; flex-direction: column; }
+        .right-panel { background-color: #282c34; width: 56%; padding: 15px; display: flex; flex-direction: column; gap: 12px; }
         .window-title {
-            background-color: #141619; padding: 8px 12px; font-weight: bold; font-size: 15px;
+            background-color: #141619; padding: 8px 12px; font-weight: bold; font-size: 14px;
             display: flex; justify-content: space-between; align-items: center; border-radius: 5px; margin-bottom: 5px; border-left: 3px solid #ff3838;
         }
-        .stat-row {
-            display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;
-            font-size: 14px; background-color: rgba(0,0,0,0.3); padding: 7px 12px; border-radius: 4px;
-            flex-wrap: wrap; gap: 5px;
+        
+        .stat-row-left { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-size: 13px; background-color: rgba(0,0,0,0.3); padding: 7px 12px; border-radius: 4px; }
+        .stat-label-left { color: #dcdde1; display: flex; align-items: center; gap: 6px; }
+        .stat-val-left { font-weight: bold; color: #f1c40f; text-shadow: 0 0 4px rgba(241,196,15,0.3); }
+        
+        .stat-row-right { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-size: 13px; background-color: rgba(0,0,0,0.3); padding: 6px 10px; border-radius: 4px; }
+        .stat-label-right { color: #dcdde1; }
+        .stat-val-right { font-weight: bold; color: #f1c40f; flex: 1; text-align: right; margin-right: 12px; }
+        .pct-box { display: flex; align-items: center; gap: 4px; }
+        .pct-box input { width: 55px; background-color: #0b0c10; border: 1px solid #ff3838; color: #fff; padding: 5px; text-align: center; border-radius: 4px; font-size: 12px; font-weight: bold; }
+        .pct-box input.border-yellow { border-color: #f1c40f; color: #f1c40f; }
+        
+        .btn-atk-buff, .btn-def-buff, .btn-hp-buff {
+            background-color: #141619; color: #dcdde1; border: 1px solid #485460;
+            padding: 6px; border-radius: 4px; font-weight: bold; cursor: pointer;
+            font-size: 12px; transition: all 0.2s; flex: 1; text-align: center; white-space: nowrap;
         }
-        .stat-label { color: #dcdde1; }
-        .stat-values-wrapper { display: flex; align-items: center; gap: 15px; flex-wrap: wrap; justify-content: flex-end; }
-        .stat-main-val { font-weight: bold; color: #f1c40f; text-align: right; text-shadow: 0 0 4px rgba(241,196,15,0.3); }
-        .section-title {
-            background-color: #141619; padding: 5px 8px; font-size: 13px; color: #ff3838;
-            font-weight: bold; margin-top: 12px; margin-bottom: 8px; border-left: 4px solid #ff3838;
+        .btn-atk-buff.active { background-color: #ff3838; color: #fff; border-color: #ff3838; box-shadow: 0 0 8px rgba(255,56,56,0.5); }
+        .btn-def-buff.active { background-color: #3498db; color: #fff; border-color: #3498db; box-shadow: 0 0 8px rgba(52,152,219,0.5); }
+        .btn-hp-buff.active { background-color: #2ecc71; color: #fff; border-color: #2ecc71; box-shadow: 0 0 8px rgba(46,204,113,0.5); }
+        
+        .btn-class-buff {
+            background-color: #141619; color: #dcdde1; border: 1px solid #485460;
+            padding: 0 10px; border-radius: 4px; font-weight: bold; cursor: pointer;
+            font-size: 13px; transition: all 0.2s; height: 36px; white-space: nowrap; display: flex; align-items: center;
         }
-        .control-row {
-            display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;
-            background-color: rgba(255,255,255,0.03); padding: 5px 8px; border-radius: 5px;
-        }
-        .input-box { display: flex; align-items: center; gap: 4px; }
-        .input-box input {
-            background-color: #0b0c10; border: 1px solid #ff3838; color: #fff;
-            padding: 4px; text-align: center; border-radius: 4px; font-size: 12px; width: 45px;
-        }
-        .input-box input.pct-input { border-color: #f1c40f; color: #f1c40f; width: 50px; font-weight: bold; }
+        .btn-class-buff.active { background-color: #9b59b6; color: #fff; border-color: #9b59b6; box-shadow: 0 0 8px rgba(155, 89, 182, 0.5); }
+        .btn-class-buff:disabled { background-color: #1c1e22; color: #555; border-color: #333; cursor: not-allowed; box-shadow: none; }
+
+        .section-title { background-color: transparent; padding: 5px 0; font-size: 13px; color: #dcdde1; font-weight: bold; margin-top: 8px; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
+        .control-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; background-color: rgba(255,255,255,0.03); padding: 5px 10px; border-radius: 5px; }
+        .input-box { display: flex; align-items: center; gap: 6px; }
+        .input-box input { background-color: #0b0c10; border: 1px solid #ff3838; color: #fff; padding: 5px; text-align: center; border-radius: 4px; font-size: 13px; width: 55px; font-weight: bold; }
         
         .button-group { display: flex; gap: 8px; margin-top: 15px; }
         .btn-apply { background-color: #ff3838; color: white; border: none; padding: 10px; flex: 2; border-radius: 5px; font-weight: bold; cursor: pointer; text-align: center; box-shadow: 0 4px #990000; }
@@ -123,40 +129,33 @@
         .btn-save:active { box-shadow: 0 1px #222; transform: translateY(2px); }
         .btn-reset { background-color: #1e272e; color: #ff3838; border: 1px solid #ff3838; padding: 10px; flex: 1.2; border-radius: 5px; font-weight: bold; cursor: pointer; text-align: center; }
         .btn-reset:active { transform: translateY(1px); }
-        
-        .warning-box {
-            font-size: 11px; color: #ff7675; text-align: center; margin-top: 12px; margin-bottom: 5px;
-            padding: 6px; background-color: rgba(255,118,117,0.08); border-radius: 5px; border: 1px dashed #ff7675;
-        }
+        .warning-text { font-size: 11px; color: #dcdde1; text-align: left; margin-top: 15px; line-height: 1.4; opacity: 0.8; }
 
-        .modal-overlay {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85); z-index: 1000; justify-content: center; align-items: center;
-            padding: 10px; overflow-y: auto;
-        }
-        .modal-content {
-            background-color: #22252a; border: 2px solid #ff3838; border-radius: 10px;
-            width: 100%; max-width: 780px; padding: 20px; color: #fff; box-shadow: 0 0 25px rgba(255,56,56,0.2);
-            margin: auto; max-height: 90vh; overflow-y: auto;
-        }
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; justify-content: center; align-items: center; padding: 10px; overflow-y: auto; }
+        .modal-content { background-color: #22252a; border: 2px solid #ff3838; border-radius: 10px; width: 100%; max-width: 780px; padding: 20px; color: #fff; box-shadow: 0 0 25px rgba(255,56,56,0.2); margin: auto; max-height: 90vh; overflow-y: auto; }
         .modal-header { font-size: 18px; font-weight: bold; color: #ff3838; text-align: center; margin-bottom: 15px; border-bottom: 1px solid #485460; padding-bottom: 10px; }
         .modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .m-group { background: #141619; padding: 12px; border-radius: 6px; border: 1px solid #485460; }
         .full-width-group { grid-column: span 2; }
-        .m-group label { display: block; font-size: 13px; color: #ff3838; margin-bottom: 8px; font-weight: bold; }
+        .m-group label { display: block; font-size: 13px; color: #ff3838; margin-bottom: 12px; font-weight: bold; border-bottom: 1px solid #485460; padding-bottom: 5px; }
         
-        /* CSS ปรับปรุงกล่องใน DNA เพื่อใส่ปุ่มเครื่องคิดเลข */
         .dna-input-wrap { display: flex; align-items: center; gap: 4px; }
-        .dna-input-wrap input { width: 100%; background: #282c34; border: 1px solid #485460; color: #fff; padding: 6px; border-radius: 4px; font-size: 13px; font-weight: bold; }
+        .dna-input-wrap input { width: 100%; background: #282c34; border: 1px solid #485460; color: #fff; padding: 6px; border-radius: 4px; font-size: 13px; font-weight: bold; text-align: center; }
         .btn-calc { background: #34495e; border: 1px solid #485460; color: #f1c40f; padding: 0 6px; height: 100%; border-radius: 4px; cursor: pointer; font-size: 12px; }
         .btn-calc:hover { background: #f1c40f; color: #000; border-color: #f1c40f; }
+
+        .dna-row-labeled { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+        .dna-lbl { width: 45px; font-weight: bold; font-size: 12px; text-align: right; }
+        .dna-sum-row { display: flex; align-items: center; gap: 6px; background: #1f2226; padding: 4px 8px; border-radius: 5px; border: 1px solid #2c3a47; flex: 1; }
+        .dna-sum-val { font-size: 14px; font-weight: bold; color: #f1c40f; min-width: 40px; }
+        .dna-sum-inputs { display: flex; align-items: center; gap: 4px; flex: 1; }
+        .dna-sum-inputs input { width: 50%; background: #282c34; border: 1px solid #485460; color: #fff; padding: 4px; border-radius: 3px; font-size: 13px; text-align: center; }
 
         .m-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
         .m-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
         .pct-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; }
         .btn-confirm-modal { background: #ff3838; color: #fff; width: 100%; padding: 12px; border: none; border-radius: 5px; margin-top: 20px; font-weight: bold; cursor: pointer; font-size: 15px; box-shadow: 0 4px #990000; }
         
-        /* หน้าต่างป๊อปอัปเครื่องคิดเลข */
         #calc-modal .modal-content { max-width: 320px; border-color: #f1c40f; box-shadow: 0 0 25px rgba(241,196,15,0.2); }
         .calc-input { width: 100%; background: #0b0c10; border: 1px solid #f1c40f; color: #fff; padding: 10px; border-radius: 4px; font-size: 16px; margin-bottom: 15px; text-align: center; }
         .btn-calc-apply { background: #f1c40f; color: #000; width: 100%; padding: 10px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; margin-bottom: 8px; }
@@ -164,16 +163,14 @@
         @media screen and (max-width: 768px) {
             .header-bar { flex-direction: column; gap: 12px; text-align: center; }
             .header-bar > div { display: flex; width: 100%; gap: 8px; justify-content: center; }
-            .top-controls { flex-direction: column; gap: 10px; }
+            .top-controls { flex-direction: column; gap: 10px; align-items: stretch; }
             .panels-container { flex-direction: column; }
-            .left-panel { width: 100%; border-right: none; border-bottom: 2px solid #2c3a47; }
-            .right-panel { width: 100%; }
+            .left-panel, .right-panel { width: 100%; border-right: none; }
             .modal-grid { grid-template-columns: 1fr; }
             .full-width-group { grid-column: span 1; }
             .m-row-3 { grid-template-columns: 1fr 1fr; }
             .pct-grid-4 { grid-template-columns: repeat(2, 1fr); }
-            .stat-values-wrapper { width: 100%; margin-top: 5px; }
-            .stat-row { align-items: flex-start; flex-direction: column; }
+            .dna-lbl { width: 40px; font-size: 11px; }
         }
     </style>
 </head>
@@ -182,27 +179,32 @@
     <div class="header-bar">
         <div class="header-title">
             <span>👻 SOICEX : Ghost M Stats Simulator</span>
-            <div class="char-name-container"><span>ชื่อ:</span><input type="text" id="char-name-box" class="char-name-input" value="soicex"></div>
+            <div class="char-name-container"><span>ชื่อตัวละคร:</span><input type="text" id="char-name-box" class="char-name-input" value="soicex"></div>
         </div>
         <div><button class="btn-config" onclick="openModal()">⚙️ ตั้งฐานสเตตัส (DNA)</button></div>
     </div>
-    <div class="top-controls">
-        <div class="select-container">
-            <label>👥 อาชีพตัวละคร</label>
-            <select id="class-select" onchange="calculateStats()">
-                <option value="mamluk" selected>มัมลุค (ATK 40% | DEF 30%)</option>
-                <option value="hero">จอมยุทธ (ATK 40% | DEF 30%)</option>
-                <option value="mage">นักพรต (ATK 20% | DEF 30%)</option>
-                <option value="fighter">จอมพลัง (ATK 30% | DEF 30%)</option>
-                <option value="ninja">นินจา (ATK 20% | DEF 0%)</option>
-                <option value="police">มือปราบ (ATK 20% | DEF 30%)</option>
-                <option value="knight">นักรบ (ATK 20% | DEF 30%)</option>
-                <option value="assassin">มือสังหาร (ATK 20% | DEF 0%)</option>
-            </select>
+    
+    <div class="top-controls" onchange="handleDropdownChange()">
+        <div class="select-container" style="flex: 2.5; min-width: 320px;">
+            <label>👥 อาชีพตัวละคร และ สกิลบัฟอาชีพ (กดเพื่อใช้งาน)</label>
+            <div style="display:flex; gap:6px; width:100%;">
+                <select id="class-select" style="flex: 1.5;">
+                    <option value="mamluk" data-atk="40" data-def="30" selected>มัมลุค</option>
+                    <option value="hero" data-atk="40" data-def="30">จอมยุทธ</option>
+                    <option value="mage" data-atk="20" data-def="30">นักพรต</option>
+                    <option value="fighter" data-atk="30" data-def="30">จอมพลัง</option>
+                    <option value="ninja" data-atk="20" data-def="0">นินจา</option>
+                    <option value="police" data-atk="20" data-def="30">มือปราบ</option>
+                    <option value="knight" data-atk="20" data-def="30">นักรบ</option>
+                    <option value="assassin" data-atk="20" data-def="0">มือสังหาร</option>
+                </select>
+                <button class="btn-class-buff active" id="btn-class-atk" onclick="toggleClassBuff('atk')">⚔️ บัฟโจมตี (+40%)</button>
+                <button class="btn-class-buff active" id="btn-class-def" onclick="toggleClassBuff('def')">🛡️ บัฟป้องกัน (+30%)</button>
+            </div>
         </div>
         <div class="select-container">
             <label>🐾 สัตว์เลี้ยงแฝง</label>
-            <select id="pet-select" onchange="calculateStats()">
+            <select id="pet-select">
                 <option value="0">ไม่มีสกิล (0%)</option>
                 <option value="2">ผสม Lv.1 (+2%)</option>
                 <option value="4" selected>ผสม Lv.2 (+4%)</option>
@@ -211,82 +213,130 @@
         </div>
         <div class="select-container" style="min-width: 80px; flex: 0.5;">
             <label>🤝 บัฟปาร์ตี้ (%)</label>
-            <input type="number" id="party-buff" value="11" onchange="calculateStats()">
+            <input type="number" id="party-buff" value="11">
         </div>
     </div>
+    
     <div class="panels-container">
         <div class="left-panel">
-            <div class="window-title"><span>👤 ตัวละคร</span></div>
-            <div class="stat-row"><span class="stat-label">❤️ HP สูงสุด</span><span class="stat-value stat-main-val" id="view-hp">-</span></div>
-            <div class="stat-row"><span class="stat-label">🔵 MP สูงสุด</span><span class="stat-value stat-main-val" id="view-mp">-</span></div>
-            <div class="stat-row"><span class="stat-label">⚔️ PATK พลังโจมตี</span><span class="stat-value stat-main-val" id="view-patk">-</span></div>
-            <div class="stat-row"><span class="stat-label">🔮 MATK พลังเวท</span><span class="stat-value stat-main-val" id="view-matk">-</span></div>
-            <div class="stat-row"><span class="stat-label">🛡️ พลังป้องกัน DEF</span><span class="stat-value stat-main-val" id="view-def">-</span></div>
+            <div class="window-title"><span>👤 ตัวละคร (หน้าต่างจำลองลองใจ)</span></div>
+            <div class="stat-row-left"><span class="stat-label-left">❤️ HP สูงสุด</span><span class="stat-val-left" id="view-hp">-</span></div>
+            <div class="stat-row-left"><span class="stat-label-left">🔵 MP สูงสุด</span><span class="stat-val-left" id="view-mp">-</span></div>
+            <div class="stat-row-left"><span class="stat-label-left">⚔️ PATK พลังโจมตี</span><span class="stat-val-left" id="view-patk">-</span></div>
+            <div class="stat-row-left"><span class="stat-label-left">🔮 MATK พลังเวท</span><span class="stat-val-left" id="view-matk">-</span></div>
+            <div class="stat-row-left"><span class="stat-label-left">🛡️ พลังป้องกัน DEF</span><span class="stat-val-left" id="view-def">-</span></div>
             
-            <div class="section-title">
-                <span>🔺 เครื่องคิดเลขจำลองสเตตัสล่วงหน้า</span>
+            <div class="window-title" style="margin-top:15px; border-left: 3px solid #e74c3c;">
+                <span style="color:#e74c3c;">🔺 แต้มความสามารถ (ปรับเพื่อทดลอง)</span>
             </div>
-            
             <div class="control-row"><span class="stat-label">✊ STR:</span>
-                <div class="input-box">
-                    <input type="number" id="base-str" value="91" onchange="calculateStats()">
-                    <span style="color:#7f8fa6;">+</span>
-                    <input type="number" id="plus-str" value="342" onchange="calculateStats()">
-                    <span style="color:#f1c40f; margin:0 2px;">|</span>
-                    <input type="number" id="live-p-str" class="pct-input" value="25.75" onchange="calculateStats()" step="0.01">
-                    <span style="color:#f1c40f; font-size:11px;">%</span>
-                </div>
+                <div class="input-box"><input type="number" id="base-str" value="91" onchange="calculateStats()"><span style="color:#7f8fa6;">+</span><input type="number" id="plus-str" value="342" onchange="calculateStats()"></div>
             </div>
             <div class="control-row"><span class="stat-label">🏹 DEX:</span>
-                <div class="input-box">
-                    <input type="number" id="base-dex" value="1133" onchange="calculateStats()">
-                    <span style="color:#7f8fa6;">+</span>
-                    <input type="number" id="plus-dex" value="1304" onchange="calculateStats()">
-                    <span style="color:#f1c40f; margin:0 2px;">|</span>
-                    <input type="number" id="live-p-dex" class="pct-input" value="26.25" onchange="calculateStats()" step="0.01">
-                    <span style="color:#f1c40f; font-size:11px;">%</span>
-                </div>
+                <div class="input-box"><input type="number" id="base-dex" value="1138" onchange="calculateStats()"><span style="color:#7f8fa6;">+</span><input type="number" id="plus-dex" value="1304" onchange="calculateStats()"></div>
             </div>
             <div class="control-row"><span class="stat-label">🏋️‍♂️ CON:</span>
-                <div class="input-box">
-                    <input type="number" id="base-con" value="105" onchange="calculateStats()">
-                    <span style="color:#7f8fa6;">+</span>
-                    <input type="number" id="plus-con" value="420" onchange="calculateStats()">
-                    <span style="color:#f1c40f; margin:0 2px;">|</span>
-                    <input type="number" id="live-p-con" class="pct-input" value="24.25" onchange="calculateStats()" step="0.01">
-                    <span style="color:#f1c40f; font-size:11px;">%</span>
-                </div>
+                <div class="input-box"><input type="number" id="base-con" value="105" onchange="calculateStats()"><span style="color:#7f8fa6;">+</span><input type="number" id="plus-con" value="420" onchange="calculateStats()"></div>
             </div>
             <div class="control-row"><span class="stat-label">💡 INT:</span>
-                <div class="input-box">
-                    <input type="number" id="base-int" value="53" onchange="calculateStats()">
-                    <span style="color:#7f8fa6;">+</span>
-                    <input type="number" id="plus-int" value="235" onchange="calculateStats()">
-                    <span style="color:#f1c40f; margin:0 2px;">|</span>
-                    <input type="number" id="live-p-int" class="pct-input" value="21.25" onchange="calculateStats()" step="0.01">
-                    <span style="color:#f1c40f; font-size:11px;">%</span>
-                </div>
+                <div class="input-box"><input type="number" id="base-int" value="53" onchange="calculateStats()"><span style="color:#7f8fa6;">+</span><input type="number" id="plus-int" value="235" onchange="calculateStats()"></div>
             </div>
             
             <div class="button-group">
-                <button class="btn-apply" onclick="calculateStats()">คำนวณใหม่</button>
+                <button class="btn-apply" onclick="calculateStats()">นำไปใช้ (คำนวณ)</button>
                 <button class="btn-save" onclick="saveCurrentStats()">บันทึก</button>
                 <button class="btn-reset" onclick="loadSavedStats()">รีเซ็ต</button>
             </div>
-
-            <div class="warning-box">
-                ⚠️ <b>หมายเหตุ:</b> ตัวเลขผลลัพธ์อาจคลาดเคลื่อน 1-5 แต้ม จากระบบการปัดเศษทศนิยมทบต้นของเซิร์ฟเวอร์เกม
+            
+            <div class="warning-text">
+                *ระบบเกมมีการปัดเศษทศนิยมทั้งแบบสุ่มและตามคณิตศาสตร์ในเกมจริง ผลการจำลองอาจมีค่าคลาดเคลื่อนเบี่ยงเบนเล็กน้อยประมาณ ±1 ถึง 9 แต้ม (หลักหน่วย) เมื่อแต้มขยับขึ้นสูงจั๊ฟ
             </div>
         </div>
+
         <div class="right-panel">
-            <div class="window-title"><span>📊 ตัวคูณสุทธิ (Multiplier)</span></div>
-            <div class="stat-row"><span class="stat-label">PATK Multiplier</span><span class="stat-main-val" id="detail-patk-mult">-</span></div>
-            <div class="stat-row"><span class="stat-label">MATK Multiplier</span><span class="stat-main-val" id="detail-matk-mult">-</span></div>
-            <div class="window-title"><span>📝 สรุปแต้มสเตตัสสุทธิ (รวมเอฟเฟกต์ %)</span></div>
-            <div class="stat-row"><span class="stat-label">STR รวม (Effective)</span><span class="stat-main-val" id="total-str" style="color:#fff;">-</span></div>
-            <div class="stat-row"><span class="stat-label">DEX รวม (Effective)</span><span class="stat-main-val" id="total-dex" style="color:#fff;">-</span></div>
-            <div class="stat-row"><span class="stat-label">CON รวม (Effective)</span><span class="stat-main-val" id="total-con" style="color:#fff;">-</span></div>
-            <div class="stat-row"><span class="stat-label">INT รวม (Effective)</span><span class="stat-main-val" id="total-int" style="color:#fff;">-</span></div>
+            <div class="window-title"><span>📊 รายละเอียดค่าสถานะแยกหมวด (% บัฟ)</span></div>
+            
+            <div class="section-title" style="flex-direction:column; align-items:flex-start; gap:8px;">
+                <div>⚔️ ไอเทมบัฟโจมตี (เลือกซ้อนทับได้) ⚔️</div>
+                <div style="display:flex; gap:6px; width:100%; background:rgba(0,0,0,0.2); padding:8px; border-radius:5px; border:1px solid #485460; flex-wrap: wrap; margin-bottom:8px;">
+                    <button class="btn-atk-buff" id="btn-atk-5" onclick="toggleItemBuff('atk', 5)">+ 5%</button>
+                    <button class="btn-atk-buff" id="btn-atk-10" onclick="toggleItemBuff('atk', 10)">+ 10%</button>
+                    <button class="btn-atk-buff" id="btn-atk-15" onclick="toggleItemBuff('atk', 15)">+ 15%</button>
+                    <button class="btn-atk-buff" id="btn-atk-20" onclick="toggleItemBuff('atk', 20)">+ 20%</button>
+                    <button class="btn-atk-buff" id="btn-atk-25" onclick="toggleItemBuff('atk', 25)">+ 25%</button>
+                    <button class="btn-atk-buff" id="btn-atk-30" onclick="toggleItemBuff('atk', 30)">+ 30%</button>
+                </div>
+            </div>
+            
+            <div class="stat-row-right">
+                <span class="stat-label-right">PATK (กายภาพ)</span>
+                <span class="stat-val-right" id="detail-patk">-</span>
+                <div class="pct-box"><input type="number" id="live-p-patk" class="border-yellow" value="0" step="0.01" readonly><span>%</span></div>
+            </div>
+            <div class="stat-row-right">
+                <span class="stat-label-right">MATK (เวทมนตร์)</span>
+                <span class="stat-val-right" id="detail-matk">-</span>
+                <div class="pct-box"><input type="number" id="live-p-matk" class="border-yellow" value="0" step="0.01" readonly><span>%</span></div>
+            </div>
+
+            <div class="section-title" style="margin-top:12px; flex-direction:column; align-items:flex-start; gap:8px;">
+                <div>🛡️ ป้องกัน 🛡️</div>
+                <div style="display:flex; gap:6px; width:100%; background:rgba(0,0,0,0.2); padding:8px; border-radius:5px; border:1px solid #485460; margin-bottom:8px;">
+                    <button class="btn-def-buff" id="btn-def-5" onclick="toggleItemBuff('def', 5)">+ 5%</button>
+                    <button class="btn-def-buff" id="btn-def-10" onclick="toggleItemBuff('def', 10)">+ 10%</button>
+                </div>
+            </div>
+            <div class="stat-row-right">
+                <span class="stat-label-right">DEF (พลังป้องกันสุทธิ)</span>
+                <span class="stat-val-right" id="detail-def">-</span>
+                <div class="pct-box"><input type="number" id="live-p-def" class="border-yellow" value="0" step="0.01" readonly><span>%</span></div>
+            </div>
+
+            <div class="section-title" style="margin-top:12px; flex-direction:column; align-items:flex-start; gap:8px;">
+                <div>✨ ฟื้นฟู ✨</div>
+                <div style="display:flex; gap:6px; width:100%; background:rgba(0,0,0,0.2); padding:8px; border-radius:5px; border:1px solid #485460; flex-wrap: wrap; margin-bottom:8px;">
+                    <button class="btn-hp-buff" id="btn-hp-5" onclick="toggleHpBuff(5, false)">+ 5%</button>
+                    <button class="btn-hp-buff" id="btn-hp-10" onclick="toggleHpBuff(10, false)">+ 10%</button>
+                    <span style="color:#7f8fa6; margin:0 2px; display:flex; align-items:center; font-weight:bold;">|</span>
+                    <button class="btn-hp-buff" id="btn-hp-15" onclick="toggleHpBuff(15, true)">+ 15%</button>
+                    <button class="btn-hp-buff" id="btn-hp-20" onclick="toggleHpBuff(20, true)">+ 20%</button>
+                    <button class="btn-hp-buff" id="btn-hp-30" onclick="toggleHpBuff(30, true)">+ 30%</button>
+                </div>
+            </div>
+            <div class="stat-row-right">
+                <span class="stat-label-right">HP (พลังชีวิตสุทธิ)</span>
+                <span class="stat-val-right" id="detail-hp">-</span>
+                <div class="pct-box"><input type="number" id="live-p-hp" class="border-yellow" value="0" step="0.01" readonly><span>%</span></div>
+            </div>
+            <div class="stat-row-right">
+                <span class="stat-label-right">MP (มานาสุทธิ)</span>
+                <span class="stat-val-right" id="detail-mp">-</span>
+                <div class="pct-box"><input type="number" id="live-p-mp" class="border-yellow" value="0" step="0.01" readonly><span>%</span></div>
+            </div>
+
+            <div class="window-title" style="margin-top:15px; border-left: 3px solid #f1c40f;">
+                <span style="color:#f1c40f;">📝 สรุปแต้มสเตตัสสุทธิ (รวม % สเตตัสย่อย)</span>
+            </div>
+            <div class="stat-row-right">
+                <span class="stat-label-right">STR รวม</span>
+                <span class="stat-val-right" id="total-str">-</span>
+                <div class="pct-box"><input type="number" id="live-p-str" class="border-yellow" value="0" step="0.01" onchange="calculateStats()"><span>%</span></div>
+            </div>
+            <div class="stat-row-right">
+                <span class="stat-label-right">DEX รวม</span>
+                <span class="stat-val-right" id="total-dex">-</span>
+                <div class="pct-box"><input type="number" id="live-p-dex" class="border-yellow" value="0" step="0.01" onchange="calculateStats()"><span>%</span></div>
+            </div>
+            <div class="stat-row-right">
+                <span class="stat-label-right">CON รวม</span>
+                <span class="stat-val-right" id="total-con">-</span>
+                <div class="pct-box"><input type="number" id="live-p-con" class="border-yellow" value="0" step="0.01" onchange="calculateStats()"><span>%</span></div>
+            </div>
+            <div class="stat-row-right">
+                <span class="stat-label-right">INT รวม</span>
+                <span class="stat-val-right" id="total-int">-</span>
+                <div class="pct-box"><input type="number" id="live-p-int" class="border-yellow" value="0" step="0.01" onchange="calculateStats()"><span>%</span></div>
+            </div>
         </div>
     </div>
 </div>
@@ -297,17 +347,58 @@
         <div class="modal-grid">
             <div class="m-group">
                 <label>1. สเตตัสปัจจุบัน (สีขาวรวม)</label>
-                <div class="m-row-2"><div class="dna-input-wrap"><input type="number" id="ref-base-str" value="91"></div><div class="dna-input-wrap"><input type="number" id="ref-plus-str" value="342"></div></div>
-                <div class="m-row-2" style="margin-top:4px;"><div class="dna-input-wrap"><input type="number" id="ref-base-dex" value="1133"></div><div class="dna-input-wrap"><input type="number" id="ref-plus-dex" value="1304"></div></div>
-                <div class="m-row-2" style="margin-top:4px;"><div class="dna-input-wrap"><input type="number" id="ref-base-con" value="105"></div><div class="dna-input-wrap"><input type="number" id="ref-plus-con" value="420"></div></div>
-                <div class="m-row-2" style="margin-top:4px;"><div class="dna-input-wrap"><input type="number" id="ref-base-int" value="53"></div><div class="dna-input-wrap"><input type="number" id="ref-plus-int" value="235"></div></div>
+                <div class="dna-row-labeled">
+                    <div class="dna-lbl" style="color:#f1c40f;">STR</div>
+                    <div class="dna-sum-row">
+                        <span class="dna-sum-val" id="dna-sum-str">433</span><span style="color:#7f8fa6;">(</span>
+                        <div class="dna-sum-inputs"><input type="number" id="ref-base-str" value="91" oninput="updateDnaSums()"><span style="color:#7f8fa6;">+</span><input type="number" id="ref-plus-str" value="342" oninput="updateDnaSums()"></div>
+                        <span style="color:#7f8fa6;">)</span>
+                    </div>
+                </div>
+                <div class="dna-row-labeled">
+                    <div class="dna-lbl" style="color:#3498db;">DEX</div>
+                    <div class="dna-sum-row">
+                        <span class="dna-sum-val" id="dna-sum-dex">2442</span><span style="color:#7f8fa6;">(</span>
+                        <div class="dna-sum-inputs"><input type="number" id="ref-base-dex" value="1138" oninput="updateDnaSums()"><span style="color:#7f8fa6;">+</span><input type="number" id="ref-plus-dex" value="1304" oninput="updateDnaSums()"></div>
+                        <span style="color:#7f8fa6;">)</span>
+                    </div>
+                </div>
+                <div class="dna-row-labeled">
+                    <div class="dna-lbl" style="color:#e67e22;">CON</div>
+                    <div class="dna-sum-row">
+                        <span class="dna-sum-val" id="dna-sum-con">525</span><span style="color:#7f8fa6;">(</span>
+                        <div class="dna-sum-inputs"><input type="number" id="ref-base-con" value="105" oninput="updateDnaSums()"><span style="color:#7f8fa6;">+</span><input type="number" id="ref-plus-con" value="420" oninput="updateDnaSums()"></div>
+                        <span style="color:#7f8fa6;">)</span>
+                    </div>
+                </div>
+                <div class="dna-row-labeled">
+                    <div class="dna-lbl" style="color:#f39c12;">INT</div>
+                    <div class="dna-sum-row">
+                        <span class="dna-sum-val" id="dna-sum-int">288</span><span style="color:#7f8fa6;">(</span>
+                        <div class="dna-sum-inputs"><input type="number" id="ref-base-int" value="53" oninput="updateDnaSums()"><span style="color:#7f8fa6;">+</span><input type="number" id="ref-plus-int" value="235" oninput="updateDnaSums()"></div>
+                        <span style="color:#7f8fa6;">)</span>
+                    </div>
+                </div>
             </div>
+            
             <div class="m-group">
-                <label>2. ค่าพลังหน้าจอปัจจุบัน</label>
-                <div class="m-row-2"><div class="dna-input-wrap"><input type="number" id="ref-patk-min" value="76509"></div><div class="dna-input-wrap"><input type="number" id="ref-patk-max" value="95645"></div></div>
-                <div class="m-row-2" style="margin-top:4px;"><div class="dna-input-wrap"><input type="number" id="ref-matk-min" value="14069"></div><div class="dna-input-wrap"><input type="number" id="ref-matk-max" value="14129"></div></div>
-                <div class="dna-input-wrap" style="margin-top:4px;"><input type="number" id="ref-def" value="16812"></div>
-                <div class="m-row-2" style="margin-top:4px;"><div class="dna-input-wrap"><input type="number" id="ref-hp" value="305479"></div><div class="dna-input-wrap"><input type="number" id="ref-mp" value="29448"></div></div>
+                <label>2. ค่าพลังหน้าจอปัจจุบัน <br><span style="font-size:11px; color:#dcdde1; font-weight:normal;">(ร่างสด: ไม่รวมบัฟอาชีพ และ ไม่รวมบัฟปาร์ตี้)</span></label>
+                <div class="dna-row-labeled">
+                    <div class="dna-lbl" style="color:#e74c3c;">PATK</div>
+                    <div class="m-row-2" style="flex:1; margin:0;"><div class="dna-input-wrap"><input type="number" id="ref-patk-min" value="58892"></div><div class="dna-input-wrap"><input type="number" id="ref-patk-max" value="73635"></div></div>
+                </div>
+                <div class="dna-row-labeled" style="margin-top:6px;">
+                    <div class="dna-lbl" style="color:#9b59b6;">MATK</div>
+                    <div class="m-row-2" style="flex:1; margin:0;"><div class="dna-input-wrap"><input type="number" id="ref-matk-min" value="10435"></div><div class="dna-input-wrap"><input type="number" id="ref-matk-max" value="10479"></div></div>
+                </div>
+                <div class="dna-row-labeled" style="margin-top:6px;">
+                    <div class="dna-lbl" style="color:#3498db;">DEF</div>
+                    <div class="dna-input-wrap" style="flex:1;"><input type="number" id="ref-def" value="13076"></div>
+                </div>
+                <div class="dna-row-labeled" style="margin-top:6px;">
+                    <div class="dna-lbl" style="color:#2ecc71;">HP / MP</div>
+                    <div class="m-row-2" style="flex:1; margin:0;"><div class="dna-input-wrap"><input type="number" id="ref-hp" value="305479"></div><div class="dna-input-wrap"><input type="number" id="ref-mp" value="29448"></div></div>
+                </div>
             </div>
             
             <div class="m-group full-width-group">
@@ -370,63 +461,151 @@
 </div>
 
 <script>
+    // ดัก NaN ถาวร: ประกาศตัวแปรครบถ้วนตั้งแต่โหลดครั้งแรก
     let baseline = {
-        baseStr: 91, plusStr: 342, baseDex: 1133, plusDex: 1304, baseCon: 105, plusCon: 420, baseInt: 53, plusInt: 235,
-        patkMin: 76509, patkMax: 95645, matkMin: 14069, matkMax: 14129, def: 16812, hp: 305479, mp: 29448,
+        baseStr: 91, plusStr: 342, baseDex: 1138, plusDex: 1304, baseCon: 105, plusCon: 420, baseInt: 53, plusInt: 235,
+        patkMin: 58892, patkMax: 73635, matkMin: 10435, matkMax: 10479, def: 13076, hp: 305479, mp: 29448, 
         wAtk: 50, pEquip: 2, pEncyc: 3, pSpirit: 5, pZodiac: 4, pBaseBuff: 69,
         wMatk: 0, mEquip: 2, mEncyc: 0, mSpirit: 0, mZodiac: 4, mBaseBuff: 70,
-        defBaseBuff: 5, bHp: 48.25, bMp: 9.6, savedDynamicBuffs: 55,
-        pStr: 25.75, pDex: 26.25, pCon: 24.25, pInt: 21.25
+        defBaseBuff: 5, bHp: 48.25, bMp: 9.6, pStr: 25.75, pDex: 26.25, pCon: 24.25, pInt: 21.25
     };
 
-    const classBuffs = {
-        mamluk: { atk: 40, def: 30 }, hero: { atk: 40, def: 30 }, mage: { atk: 20, def: 30 },
-        fighter: { atk: 30, def: 30 }, ninja: { atk: 20, def: 0 }, police: { atk: 20, def: 30 },
-        knight: { atk: 20, def: 30 }, assassin: { atk: 20, def: 0 }
-    };
-
-    let currentSavedSnapshot = null;
-    let targetCalcField = ''; // เก็บ ID ช่องที่รอรับค่าจากเครื่องคิดเลข
+    let activeClassBuffs = { atk: true, def: true };
+    let activeItemBuffs = { atk: {5:false, 10:false, 15:false, 20:false, 25:false, 30:false}, def: {5:false, 10:false} };
+    let activeHpBuffs = { 5: false, 10: false, 15: false, 20: false, 30: false };
 
     function getVal(id) { const el = document.getElementById(id); return el ? (parseFloat(el.value) || 0) : 0; }
     function setVal(id, val) { const el = document.getElementById(id); if (el) el.value = val; }
     function setTxt(id, val) { const el = document.getElementById(id); if (el) el.innerText = val; }
 
-    function openModal() { document.getElementById('config-modal').style.display = 'flex'; }
+    function openModal() { updateDnaSums(); document.getElementById('config-modal').style.display = 'flex'; }
     function closeModal() { document.getElementById('config-modal').style.display = 'none'; }
+    function updateDnaSums() {
+        setTxt('dna-sum-str', getVal('ref-base-str') + getVal('ref-plus-str'));
+        setTxt('dna-sum-dex', getVal('ref-base-dex') + getVal('ref-plus-dex'));
+        setTxt('dna-sum-con', getVal('ref-base-con') + getVal('ref-plus-con'));
+        setTxt('dna-sum-int', getVal('ref-base-int') + getVal('ref-plus-int'));
+    }
 
-    // --- ระบบเครื่องคิดเลขป๊อปอัป 🧮 ---
-    function openCalc(targetId) {
-        targetCalcField = targetId;
-        document.getElementById('calc-input').value = '';
-        document.getElementById('calc-modal').style.display = 'flex';
+    // ฟังชันอัปเดตกล่องเปอร์เซ็นต์แบบ Real-Time จากทุกการกระทำ ป้องกันรวน
+    function updateLivePctBoxes() {
+        const selClass = document.getElementById('class-select');
+        const option = selClass.options[selClass.selectedIndex];
+        const classAtk = parseFloat(option.getAttribute('data-atk')) || 0;
+        const classDef = parseFloat(option.getAttribute('data-def')) || 0;
+
+        const party = getVal('party-buff');
+        // เงื่อนไข: สัตว์เลี้ยงจะไม่ทำงาน ถ้าไม่กดเปิดบัฟอาชีพ ATK
+        const pet = activeClassBuffs.atk ? getVal('pet-select') : 0;
+
+        let extraAtk = 0; [5,10,15,20,25,30].forEach(v => { if(activeItemBuffs.atk[v]) extraAtk += v; });
+        let extraDef = 0; [5, 10].forEach(v => { if(activeItemBuffs.def[v]) extraDef += v; });
+        let extraHp = 0; [5, 10, 15, 20, 30].forEach(v => { if(activeHpBuffs[v]) extraHp += v; });
+
+        let baseAtkPct = (baseline.pEquip||0) + (baseline.pEncyc||0) + (baseline.pSpirit||0) + (baseline.pZodiac||0) + (baseline.pBaseBuff||0);
+        let baseMatkPct = (baseline.mEquip||0) + (baseline.mEncyc||0) + (baseline.mSpirit||0) + (baseline.mZodiac||0) + (baseline.mBaseBuff||0);
+        let baseDefPct = (baseline.defBaseBuff||0);
+        let baseHpPct = (baseline.bHp||0);
+
+        let totalAtk = baseAtkPct + party + pet + (activeClassBuffs.atk ? classAtk : 0) + extraAtk;
+        let totalMatk = baseMatkPct + party + pet + (activeClassBuffs.atk ? classAtk : 0) + extraAtk;
+        let totalDef = baseDefPct + (activeClassBuffs.def ? classDef : 0) + extraDef;
+        let totalHp = baseHpPct + extraHp;
+
+        setVal('live-p-patk', totalAtk.toFixed(2));
+        setVal('live-p-matk', totalMatk.toFixed(2));
+        setVal('live-p-def', totalDef.toFixed(2));
+        setVal('live-p-hp', totalHp.toFixed(2));
+        setVal('live-p-mp', (baseline.bMp||0).toFixed(2));
     }
-    
-    function closeCalc() {
-        document.getElementById('calc-modal').style.display = 'none';
-        targetCalcField = '';
+
+    function toggleClassBuff(type) {
+        const btn = document.getElementById('btn-class-' + type);
+        if (btn.disabled) return;
+        
+        activeClassBuffs[type] = !activeClassBuffs[type];
+        if (activeClassBuffs[type]) btn.classList.add('active');
+        else btn.classList.remove('active');
+        
+        updateLivePctBoxes();
+        calculateStats();
     }
-    
+
+    function toggleItemBuff(type, val) {
+        const btn = document.getElementById(`btn-${type}-${val}`);
+        activeItemBuffs[type][val] = !activeItemBuffs[type][val];
+        
+        if (activeItemBuffs[type][val]) btn.classList.add('active');
+        else btn.classList.remove('active');
+        
+        updateLivePctBoxes();
+        calculateStats();
+    }
+
+    function toggleHpBuff(val, isExclusive) {
+        if (isExclusive) {
+            if (activeHpBuffs[val]) {
+                activeHpBuffs[val] = false;
+                document.getElementById('btn-hp-' + val).classList.remove('active');
+            } else {
+                [15, 20, 30].forEach(exVal => {
+                    if (activeHpBuffs[exVal]) {
+                        activeHpBuffs[exVal] = false;
+                        document.getElementById('btn-hp-' + exVal).classList.remove('active');
+                    }
+                });
+                activeHpBuffs[val] = true;
+                document.getElementById('btn-hp-' + val).classList.add('active');
+            }
+        } else {
+            activeHpBuffs[val] = !activeHpBuffs[val];
+            if (activeHpBuffs[val]) document.getElementById('btn-hp-' + val).classList.add('active');
+            else document.getElementById('btn-hp-' + val).classList.remove('active');
+        }
+        
+        updateLivePctBoxes();
+        calculateStats();
+    }
+
+    function handleDropdownChange() {
+        const selClass = document.getElementById('class-select').options[document.getElementById('class-select').selectedIndex];
+        const currentClassAtk = parseFloat(selClass.getAttribute('data-atk')) || 0;
+        const currentClassDef = parseFloat(selClass.getAttribute('data-def')) || 0;
+
+        const btnAtk = document.getElementById('btn-class-atk');
+        const btnDef = document.getElementById('btn-class-def');
+        btnAtk.innerText = `⚔️ บัฟโจมตี (+${currentClassAtk}%)`;
+        btnDef.innerText = `🛡️ บัฟป้องกัน (+${currentClassDef}%)`;
+
+        if (currentClassDef === 0) {
+            btnDef.disabled = true;
+            if (activeClassBuffs.def) {
+                activeClassBuffs.def = false;
+                btnDef.classList.remove('active');
+            }
+        } else {
+            btnDef.disabled = false;
+        }
+
+        updateLivePctBoxes();
+        calculateStats();
+    }
+
+    let targetCalcField = '';
+    function openCalc(targetId) { targetCalcField = targetId; document.getElementById('calc-input').value = ''; document.getElementById('calc-modal').style.display = 'flex'; }
+    function closeCalc() { document.getElementById('calc-modal').style.display = 'none'; targetCalcField = ''; }
     function applyCalc() {
         try {
             let expr = document.getElementById('calc-input').value;
-            // เช็กความปลอดภัยเบื้องต้น ยอมให้พิมพ์แค่ตัวเลขและเครื่องหมาย
             if (/^[0-9+\-*/. ()]+$/.test(expr)) {
                 let result = Function('return ' + expr)();
                 if (result !== undefined && !isNaN(result)) {
                     document.getElementById(targetCalcField).value = parseFloat(result.toFixed(4));
                     closeCalc();
-                } else {
-                    alert('⚠️ รูปแบบสมการไม่ถูกต้อง!');
-                }
-            } else {
-                alert('⚠️ กรุณาพิมพ์เฉพาะตัวเลขและเครื่องหมายบวกลบคูณหารเท่านั้นครับ!');
-            }
-        } catch (e) {
-            alert('⚠️ เกิดข้อผิดพลาดในการคำนวณ ตรวจสอบสมการอีกครั้งครับ!');
-        }
+                } else alert('⚠️ รูปแบบสมการไม่ถูกต้อง!');
+            } else alert('⚠️ กรุณาพิมพ์เฉพาะตัวเลขและเครื่องหมายบวกลบคูณหารเท่านั้นครับ!');
+        } catch (e) { alert('⚠️ เกิดข้อผิดพลาดในการคำนวณ ตรวจสอบสมการอีกครั้งครับ!'); }
     }
-    // --------------------------------
 
     function setNewBaseline() {
         baseline.baseStr = getVal('ref-base-str'); baseline.plusStr = getVal('ref-plus-str');
@@ -443,28 +622,17 @@
         baseline.defBaseBuff = getVal('ref-def-buff'); baseline.bHp = getVal('ref-b-hp'); baseline.bMp = getVal('ref-b-mp');
         baseline.pStr = getVal('ref-p-str'); baseline.pDex = getVal('ref-p-dex'); baseline.pCon = getVal('ref-p-con'); baseline.pInt = getVal('ref-p-int');
 
-        const classAtkBonus = classBuffs[document.getElementById('class-select').value].atk;
-        baseline.savedDynamicBuffs = classAtkBonus + getVal('pet-select') + getVal('party-buff');
+        setVal('live-p-str', baseline.pStr); setVal('live-p-dex', baseline.pDex);
+        setVal('live-p-con', baseline.pCon); setVal('live-p-int', baseline.pInt);
 
-        setVal('base-str', baseline.baseStr); setVal('plus-str', baseline.plusStr);
-        setVal('base-dex', baseline.baseDex); setVal('plus-dex', baseline.plusDex);
-        setVal('base-con', baseline.baseCon); setVal('plus-con', baseline.plusCon);
-        setVal('base-int', baseline.baseInt); setVal('plus-int', baseline.plusInt);
-        
-        // ส่งค่า % เข้าหน้าจอจำลอง
-        setVal('live-p-str', baseline.pStr);
-        setVal('live-p-dex', baseline.pDex);
-        setVal('live-p-con', baseline.pCon);
-        setVal('live-p-int', baseline.pInt);
-
-        currentSavedSnapshot = null;
         closeModal();
+        updateLivePctBoxes();
         calculateStats();
     }
 
     function getEffective(baseId, plusId, pctId, baseBaseline, plusBaseline, pctBaseline) {
         const liveTotal = getVal(baseId) + getVal(plusId);
-        const rawStat = liveTotal / (1 + pctBaseline / 100);
+        const rawStat = liveTotal / (1 + (pctBaseline||0) / 100);
         const effective = rawStat * (1 + getVal(pctId) / 100);
         const delta = effective - (baseBaseline + plusBaseline);
         return { effective: effective, delta: delta };
@@ -481,61 +649,58 @@
         setTxt('total-con', Math.round(conData.effective));
         setTxt('total-int', Math.round(intData.effective));
 
-        const selectedClass = document.getElementById('class-select').value;
-        const petBonus = parseFloat(document.getElementById('pet-select').value) || 0;
-        const partyBonus = getVal('party-buff');
-        const classBonus = classBuffs[selectedClass] || { atk: 40, def: 30 };
-
-        const dnaTotalAtkPct = baseline.pEquip + baseline.pEncyc + baseline.pSpirit + baseline.pZodiac + baseline.pBaseBuff + baseline.savedDynamicBuffs;
-        const dnaTotalMatkPct = baseline.mEquip + baseline.mEncyc + baseline.mSpirit + baseline.mZodiac + baseline.mBaseBuff + baseline.savedDynamicBuffs;
+        // ถอดสมการหาร่างดิบแท้ 100% จาก DNA ที่รับมา (ค่า PATK ใน DNA คือตอนที่ยังไม่กดบัฟอาชีพ/ปาร์ตี้/สัตว์เลี้ยง)
+        // จึงหารด้วยแค่ส่วนที่เหลือ ไม่ต้องเอา pet, party, class มาหารทิ้ง
+        const dnaTotalAtkPct = (baseline.pEquip||0) + (baseline.pEncyc||0) + (baseline.pSpirit||0) + (baseline.pZodiac||0) + (baseline.pBaseBuff||0);
+        const dnaTotalMatkPct = (baseline.mEquip||0) + (baseline.mEncyc||0) + (baseline.mSpirit||0) + (baseline.mZodiac||0) + (baseline.mBaseBuff||0);
         
-        const dnaMult = (1 + baseline.wAtk/100) * (1 + dnaTotalAtkPct/100);
-        const dnaMatkMult = (1 + baseline.wMatk/100) * (1 + dnaTotalMatkPct/100);
-        const dnaDefMult = 1 + (baseline.defBaseBuff + classBonus.def) / 100;
+        const dnaMult = (1 + (baseline.wAtk||0)/100) * (1 + dnaTotalAtkPct/100);
+        const dnaMatkMult = (1 + (baseline.wMatk||0)/100) * (1 + dnaTotalMatkPct/100);
+        const dnaDefMult = 1 + (baseline.defBaseBuff||0)/100;
 
-        const oldRawPatkMin = baseline.patkMin / dnaMult;
-        const oldRawPatkMax = baseline.patkMax / dnaMult;
-        const oldRawMatkMin = baseline.matkMin / dnaMatkMult;
-        const oldRawMatkMax = baseline.matkMax / dnaMatkMult;
-        const oldRawDef = baseline.def / dnaDefMult;
-        const oldRawHp = baseline.hp / (1 + baseline.bHp / 100);
-        const oldRawMp = baseline.mp / (1 + baseline.bMp / 100);
+        const oldRawPatkMin = (baseline.patkMin||0) / dnaMult;
+        const oldRawPatkMax = (baseline.patkMax||0) / dnaMult;
+        const oldRawMatkMin = (baseline.matkMin||0) / dnaMatkMult;
+        const oldRawMatkMax = (baseline.matkMax||0) / dnaMatkMult;
+        const oldRawDef = (baseline.def||0) / dnaDefMult;
+        const oldRawHp = (baseline.hp||0) / (1 + (baseline.bHp||0) / 100);
+        const oldRawMp = (baseline.mp||0) / (1 + (baseline.bMp||0) / 100);
 
-        const dStr = strData.delta;
-        const dDex = dexData.delta;
-        const dCon = conData.delta;
-        const dInt = intData.delta;
+        const dStr = strData.delta || 0; const dDex = dexData.delta || 0;
+        const dCon = conData.delta || 0; const dInt = intData.delta || 0;
 
         const scaleMinPatk = oldRawPatkMin + (dStr * 2.0) + (dDex * 4.71);
         const scaleMaxPatk = oldRawPatkMax + (dStr * 2.0) + (dDex * 6.78);
         const scaleMinMatk = oldRawMatkMin + (dInt * 25.8);
         const scaleMaxMatk = oldRawMatkMax + (dInt * 25.92);
-        
         const scaleDef = oldRawDef + (dCon * 20.445);
         const scaleHp = oldRawHp + (dCon * 575.4);
         const scaleMp = oldRawMp + (dInt * 103.6);
 
-        const liveBuffs = classBonus.atk + petBonus + partyBonus;
-        const currentMult = (1 + baseline.wAtk/100) * (1 + (baseline.pEquip+baseline.pEncyc+baseline.pSpirit+baseline.pZodiac+baseline.pBaseBuff+liveBuffs)/100);
-        const currentMatkMult = (1 + baseline.wMatk/100) * (1 + (baseline.mEquip+baseline.mEncyc+baseline.mSpirit+baseline.mZodiac+baseline.mBaseBuff+liveBuffs)/100);
-        const totalDefMultiplier = 1 + (baseline.defBaseBuff + classBonus.def) / 100;
+        const currentMult = (1 + (baseline.wAtk||0)/100) * (1 + getVal('live-p-patk')/100);
+        const currentMatkMult = (1 + (baseline.wMatk||0)/100) * (1 + getVal('live-p-matk')/100);
+        const totalDefMultiplier = 1 + getVal('live-p-def')/100;
 
-        setTxt('detail-patk-mult', `x${currentMult.toFixed(3)}`);
-        setTxt('detail-matk-mult', `x${currentMatkMult.toFixed(3)}`);
-
-        const finalMinPatk = Math.max(1, Math.floor((scaleMinPatk * currentMult) + 0.0001));
-        const finalMaxPatk = Math.max(1, Math.floor((scaleMaxPatk * currentMult) + 0.0001));
-        const finalMinMatk = Math.max(1, Math.floor((scaleMinMatk * currentMatkMult) + 0.0001));
-        const finalMaxMatk = Math.max(1, Math.floor((scaleMaxMatk * currentMatkMult) + 0.0001));
-        const finalDef = Math.max(1, Math.floor((scaleDef * totalDefMultiplier) + 0.0001));
-        const finalHp = Math.max(1, Math.floor((scaleHp * (1 + baseline.bHp / 100)) + 0.0001));
-        const finalMp = Math.max(1, Math.floor((scaleMp * (1 + baseline.bMp / 100)) + 0.0001));
+        // แก้ไขเป็นการปัดเศษตามหลักคณิตศาสตร์ (Math.round) เพื่ออุดช่องโหว่ 1 แต้มที่คลาดเคลื่อน!
+        const finalMinPatk = Math.max(1, Math.round(scaleMinPatk * currentMult));
+        const finalMaxPatk = Math.max(1, Math.round(scaleMaxPatk * currentMult));
+        const finalMinMatk = Math.max(1, Math.round(scaleMinMatk * currentMatkMult));
+        const finalMaxMatk = Math.max(1, Math.round(scaleMaxMatk * currentMatkMult));
+        const finalDef = Math.max(1, Math.round(scaleDef * totalDefMultiplier));
+        const finalHp = Math.max(1, Math.round(scaleHp * (1 + getVal('live-p-hp')/100)));
+        const finalMp = Math.max(1, Math.round(scaleMp * (1 + getVal('live-p-mp')/100)));
 
         setTxt('view-patk', `${finalMinPatk.toLocaleString()} ~ ${finalMaxPatk.toLocaleString()}`);
         setTxt('view-matk', `${finalMinMatk.toLocaleString()} ~ ${finalMaxMatk.toLocaleString()}`);
         setTxt('view-def', finalDef.toLocaleString());
         setTxt('view-hp', finalHp.toLocaleString());
         setTxt('view-mp', finalMp.toLocaleString());
+        
+        setTxt('detail-patk', `${finalMinPatk.toLocaleString()} ~ ${finalMaxPatk.toLocaleString()}`);
+        setTxt('detail-matk', `${finalMinMatk.toLocaleString()} ~ ${finalMaxMatk.toLocaleString()}`);
+        setTxt('detail-def', finalDef.toLocaleString());
+        setTxt('detail-hp', finalHp.toLocaleString());
+        setTxt('detail-mp', finalMp.toLocaleString());
     }
 
     function saveCurrentStats() {
@@ -544,7 +709,10 @@
             baseDex: getVal('base-dex'), plusDex: getVal('plus-dex'), livePDex: getVal('live-p-dex'),
             baseCon: getVal('base-con'), plusCon: getVal('plus-con'), livePCon: getVal('live-p-con'),
             baseInt: getVal('base-int'), plusInt: getVal('plus-int'), livePInt: getVal('live-p-int'),
-            classSelect: document.getElementById('class-select').value, petSelect: document.getElementById('pet-select').value, partyBuff: getVal('party-buff')
+            classSelect: document.getElementById('class-select').value, petSelect: document.getElementById('pet-select').value, partyBuff: getVal('party-buff'),
+            savedClassBuffs: { ...activeClassBuffs },
+            savedItemBuffs: { atk: {...activeItemBuffs.atk}, def: {...activeItemBuffs.def} },
+            savedHpBuffs: { ...activeHpBuffs }
         };
         alert('💾 บันทึกสำเร็จ!');
     }
@@ -555,14 +723,47 @@
             setVal('base-dex', currentSavedSnapshot.baseDex); setVal('plus-dex', currentSavedSnapshot.plusDex); setVal('live-p-dex', currentSavedSnapshot.livePDex);
             setVal('base-con', currentSavedSnapshot.baseCon); setVal('plus-con', currentSavedSnapshot.plusCon); setVal('live-p-con', currentSavedSnapshot.livePCon);
             setVal('base-int', currentSavedSnapshot.baseInt); setVal('plus-int', currentSavedSnapshot.plusInt); setVal('live-p-int', currentSavedSnapshot.livePInt);
+            
             document.getElementById('class-select').value = currentSavedSnapshot.classSelect;
             document.getElementById('pet-select').value = currentSavedSnapshot.petSelect;
             setVal('party-buff', currentSavedSnapshot.partyBuff);
+
+            if (currentSavedSnapshot.savedClassBuffs) {
+                activeClassBuffs = { ...currentSavedSnapshot.savedClassBuffs };
+                ['atk', 'def'].forEach(val => {
+                    const btn = document.getElementById('btn-class-' + val);
+                    if(btn && !btn.disabled) {
+                        if (activeClassBuffs[val]) btn.classList.add('active');
+                        else btn.classList.remove('active');
+                    }
+                });
+            }
+
+            if (currentSavedSnapshot.savedItemBuffs) {
+                activeItemBuffs = { atk: {...currentSavedSnapshot.savedItemBuffs.atk}, def: {...currentSavedSnapshot.savedItemBuffs.def} };
+                [5, 10, 15, 20, 25, 30].forEach(val => {
+                    const btn = document.getElementById('btn-atk-' + val);
+                    if(btn) { if (activeItemBuffs.atk[val]) btn.classList.add('active'); else btn.classList.remove('active'); }
+                });
+                [5, 10].forEach(val => {
+                    const btn = document.getElementById('btn-def-' + val);
+                    if(btn) { if (activeItemBuffs.def[val]) btn.classList.add('active'); else btn.classList.remove('active'); }
+                });
+            }
+
+            if (currentSavedSnapshot.savedHpBuffs) {
+                activeHpBuffs = { ...currentSavedSnapshot.savedHpBuffs };
+                [5, 10, 15, 20, 30].forEach(val => {
+                    const btn = document.getElementById('btn-hp-' + val);
+                    if(btn) { if (activeHpBuffs[val]) btn.classList.add('active'); else btn.classList.remove('active'); }
+                });
+            }
         }
-        calculateStats();
+        handleDropdownChange();
     }
 
-    window.onload = function() { calculateStats(); };
+    // ล้างไพ่ตอนโหลดหน้า
+    window.onload = function() { updateLivePctBoxes(); calculateStats(); updateDnaSums(); handleDropdownChange(); };
 </script>
 </body>
 </html>
