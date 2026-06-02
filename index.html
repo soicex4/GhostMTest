@@ -1157,5 +1157,367 @@
         }
     };
 </script>
+<!-- ========================================================================= -->
+<!-- 👑 เริ่มต้นโซน VIP SYSTEM (Futuristic Platinum) - วางก่อนปิดแท็ก </body> 👑 -->
+<!-- ========================================================================= -->
+
+<!-- ปุ่มทางเข้า VIP (ลูกพี่ Cut โค้ดบรรทัดนี้ไปวางในจุดที่ต้องการให้แสดงบนเว็บหลักได้เลย) -->
+<button id="vipEntryBtn" style="background: linear-gradient(90deg, #d4af37, #f3e5ab); color: #000; font-weight: bold; padding: 10px 20px; border: 2px solid #fff; border-radius: 8px; cursor: pointer; box-shadow: 0 0 15px rgba(212, 175, 55, 0.5); width: 100%; margin-top: 15px; font-size: 16px;">
+    👑 ขุมพลังระดับ VIP (Member Only)
+</button>
+
+<style>
+    /* ---------------- CSS สำหรับหน้าต่าง VIP ---------------- */
+    #vipDashboard {
+        display: none; /* ซ่อนไว้จนกว่าจะล็อกอินผ่าน */
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%; min-height: 100vh;
+        background-color: #f5f7fa;
+        color: #2c3e50;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        z-index: 99999; /* ให้ลอยทับหน้าปกติทั้งหมด */
+        padding: 20px;
+        box-sizing: border-box;
+    }
+    .vip-header {
+        background: linear-gradient(135deg, #e0e5ec, #ffffff);
+        border: 2px solid #c0c6d4;
+        box-shadow: 0 0 20px rgba(0, 210, 255, 0.2);
+        padding: 15px 30px;
+        border-radius: 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+    .neon-text {
+        color: #0088ff;
+        text-shadow: 0 0 10px rgba(0, 136, 255, 0.5);
+        font-weight: bold;
+        margin: 0;
+    }
+    .vip-container {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 20px;
+    }
+    .vip-panel {
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        border: 1px solid #e1e4e8;
+    }
+    .skill-item {
+        position: relative; padding: 15px; border: 1px solid #ddd;
+        margin-bottom: 10px; border-radius: 8px; display: flex;
+        justify-content: space-between; cursor: pointer; transition: all 0.3s;
+        background: #fafafa;
+    }
+    .skill-item:hover {
+        border-color: #00d2ff; box-shadow: 0 0 10px rgba(0, 210, 255, 0.2);
+    }
+    .hologram-tooltip {
+        visibility: hidden; opacity: 0; position: absolute; top: 100%; left: 50%;
+        transform: translateX(-50%); background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px); border: 1px solid #00d2ff;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15); padding: 15px;
+        border-radius: 12px; width: 320px; z-index: 100; transition: all 0.2s;
+    }
+    .skill-item:hover .hologram-tooltip {
+        visibility: visible; opacity: 1; top: 105%;
+    }
+    .hologram-tooltip h4 { margin: 0 0 10px 0; color: #0088ff; text-align: center; border-bottom: 1px solid #eee; padding-bottom: 5px;}
+    .grid-4d { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.9em; }
+    .grid-box { background: #f8f9fa; padding: 8px; border-radius: 6px; text-align: center; border: 1px solid #eee;}
+    .btn-buff { background: #ff4757; color: white; border: none; padding: 8px 12px; border-radius: 6px; font-weight: bold; cursor: pointer;}
+    .btn-sp { background: #0088ff; color: white; border: none; width: 30px; height: 30px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 16px;}
+</style>
+
+<!-- หน้าต่าง Popup ล็อกอิน VIP -->
+<div id="vipModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 100000; justify-content: center; align-items: center;">
+    <div style="background: #1a1a2e; padding: 30px; border-radius: 12px; border: 2px solid #d4af37; width: 350px; text-align: center; box-shadow: 0 0 30px rgba(212, 175, 55, 0.3);">
+        <h2 style="color: #d4af37; margin-bottom: 20px;">👑 VIP ACCESS</h2>
+        <input type="text" id="vipUsername" placeholder="ชื่อช่อง YouTube / ตัวละคร" style="width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 6px; border: none; background: #0f0f1a; color: #fff; box-sizing: border-box;">
+        <input type="password" id="vipPin" placeholder="โค้ดลับประจำเดือน" style="width: 100%; padding: 12px; margin-bottom: 20px; border-radius: 6px; border: none; background: #0f0f1a; color: #fff; box-sizing: border-box;">
+        <button id="vipLoginSubmit" style="background: linear-gradient(90deg, #d4af37, #f3e5ab); color: #000; padding: 12px; width: 100%; font-weight: bold; font-size: 16px; border: none; border-radius: 6px; cursor: pointer;">ยืนยันการเข้าสู่ระบบ</button>
+        <button id="vipCloseBtn" style="background: transparent; color: #aaa; margin-top: 15px; border: none; cursor: pointer; text-decoration: underline;">ยกเลิก</button>
+    </div>
+</div>
+
+<!-- 🌐 เลเยอร์โลก VIP (จะแสดงเมื่อล็อกอินผ่าน) -->
+<div id="vipDashboard">
+    <div class="vip-header">
+        <div>
+            <h2 class="neon-text">VIP COMMAND CENTER</h2>
+        </div>
+        <div style="font-size: 1.2em; font-weight: bold;">
+            👤 <span id="displayUser">Unknown</span> | 🌟 Lv. <span id="displayLv">126</span>
+        </div>
+        <button id="vipLogoutBtn" style="background: #ff4757; color: white; padding: 8px 15px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold;">ออกจากระบบ VIP</button>
+    </div>
+
+    <div class="vip-container">
+        <!-- ฝั่งซ้าย: แผงควบคุม PvP & สเตตัสหลัก -->
+        <div class="vip-panel">
+            <h3 class="neon-text" style="margin-bottom: 15px;">⚔️ ระบบประเมินสมรภูมิ (PvP Core)</h3>
+            
+            <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                <label style="font-weight: bold;">อาวุธหลักที่ใช้งาน: </label>
+                <select id="mainWeapon" style="padding: 5px; border-radius: 4px;" onchange="renderSkills()">
+                    <option value="sword">ดาบ</option>
+                    <option value="glove">ปลอกแขน</option>
+                </select>
+            </div>
+
+            <p><strong>ATK สุทธิ (Min):</strong> <input type="number" id="baseAtkMin" value="60000" style="width: 100px; padding: 5px;" oninput="renderSkills()"></p>
+            <p><strong>ATK สุทธิ (Max):</strong> <input type="number" id="baseAtkMax" value="80000" style="width: 100px; padding: 5px;" oninput="renderSkills()"></p>
+            <p><strong>ดาเมจคริติคอล:</strong> <input type="number" id="critDmg" value="324.2" step="0.1" style="width: 80px; padding: 5px;" oninput="renderSkills()"> %</p>
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 15px 0;">
+            <p><strong>PVP ATK บัฟรวม:</strong> <input type="number" id="pvpAtk" value="4.4" step="0.1" style="width: 80px; padding: 5px;" oninput="renderSkills()"> %</p>
+            <p style="font-weight: bold; margin-bottom: 10px;">กดยาบัฟป้องกัน PVP (จำลองฝั่งศัตรู):</p>
+            <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                <button class="btn-buff" onclick="setEnemyDef(0)" style="background: #95a5a6;">ไม่กด</button>
+                <button class="btn-buff" onclick="setEnemyDef(200)">200%</button>
+                <button class="btn-buff" onclick="setEnemyDef(400)">400%</button>
+                <button class="btn-buff" onclick="setEnemyDef(600)">600%</button>
+            </div>
+            <p style="color: #e74c3c; font-weight: bold;">*ศัตรูมีเกราะ PVP DEF: <span id="enemyDefText">0</span>%</p>
+        </div>
+
+        <!-- ฝั่งขวา: จำลองแต้มวิชา (Skill Matrix) -->
+        <div class="vip-panel">
+            <h3 class="neon-text" style="margin-bottom: 15px;">🌀 ลานประลองวิชา (Skill Matrix)</h3>
+            <div style="background: #eef2f5; padding: 15px; border-radius: 8px; margin-bottom: 15px; font-weight: bold; display: flex; justify-content: space-between; align-items: center;">
+                <span>แต้มวิชาคงเหลือ: <span id="spCurrent" style="color: #0088ff; font-size: 1.4em;">230</span> / <span id="spMax">230</span></span>
+                <span style="font-size: 0.9em; color: #555;">(คำนวณจากเลเวล <span id="calcLv">126</span>)</span>
+            </div>
+
+            <div id="skillList">
+                <!-- รายชื่อวิชาจะถูกสร้างอัตโนมัติด้วย JavaScript ตรงนี้ -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ========================================================= -->
+<!-- ⚙️ JavaScript สำหรับ VIP Logic -->
+<!-- ========================================================= -->
+<script>
+    // --- 1. ระบบ Login & แสดง/ซ่อน Layer ---
+    const vipEntryBtn = document.getElementById('vipEntryBtn');
+    const vipModal = document.getElementById('vipModal');
+    const vipCloseBtn = document.getElementById('vipCloseBtn');
+    const vipLoginSubmit = document.getElementById('vipLoginSubmit');
+    const vipDashboard = document.getElementById('vipDashboard');
+    const vipLogoutBtn = document.getElementById('vipLogoutBtn');
+
+    if(vipEntryBtn) vipEntryBtn.addEventListener('click', () => vipModal.style.display = 'flex');
+    vipCloseBtn.addEventListener('click', () => vipModal.style.display = 'none');
+
+    vipLoginSubmit.addEventListener('click', function() {
+        const user = document.getElementById('vipUsername').value.trim();
+        const pin = document.getElementById('vipPin').value.trim();
+
+        // 👑 รหัสลับผู้พัฒนา (Dev God Mode) ตามที่ลูกพี่สั่ง!
+        if(user === "เดะวินนะ" && pin === "soice_x4") {
+            alert("ยินดีต้อนรับท่านผู้พัฒนา (God Mode Active!)");
+            vipModal.style.display = 'none';
+            vipDashboard.style.display = 'block'; // โชว์เลเยอร์ VIP ทับหน้าเว็บปกติ
+            document.body.style.overflow = 'hidden'; // ล็อกไม่ให้เลื่อนหน้าเว็บข้างหลัง
+            
+            // ดึงชื่อไปโชว์
+            document.getElementById('displayUser').innerText = user;
+            
+            // (ฟังก์ชันเสริม) พยายามดึงสเตตัสจากหน้าหลักมาใส่หน้า VIP อัตโนมัติ ถ้ามี id ตรงกัน
+            try {
+                let mainLv = document.getElementById('levelInput'); // เปลี่ยน ID ให้ตรงกับช่องกรอกเลเวลหน้าปกติ
+                if(mainLv && mainLv.value) {
+                    document.getElementById('displayLv').innerText = mainLv.value;
+                    document.getElementById('calcLv').innerText = mainLv.value;
+                }
+            } catch(e) {}
+            
+            renderSkills();
+        } else {
+            alert('ชื่อตัวละคร หรือ รหัสลับไม่ถูกต้อง!');
+        }
+    });
+
+    vipLogoutBtn.addEventListener('click', function() {
+        vipDashboard.style.display = 'none'; // ปิดหน้า VIP กลับสู่หน้าปกติ
+        document.body.style.overflow = 'auto'; // ปลดล็อกการเลื่อนจอ
+        document.getElementById('vipUsername').value = '';
+        document.getElementById('vipPin').value = '';
+    });
+
+
+    // --- 2. ระบบจำลองการคำนวณวิชา (VIP Skill Simulator) ---
+    let totalSp = 230; // แต้มวิชาเริ่มต้น (ปรับให้ดึงตามเลเวลได้ในอนาคต)
+    let currentSp = totalSp;
+    let enemyPvpDef = 0;
+    
+    function setEnemyDef(val) {
+        enemyPvpDef = val;
+        document.getElementById('enemyDefText').innerText = val;
+        renderSkills();
+    }
+
+    // สมมติค่าสัตว์เลี้ยงแฝงจากหน้าหลัก (ดึงมา 2)
+    // ถ้าระบบสมบูรณ์ให้ไปดึง value จาก dropdown สัตว์เลี้ยงหน้าเว็บหลักมาใส่ตรงนี้
+    const petMixLevel = 2; 
+
+    // ฐานข้อมูลวิชา มัมลุค (อิงจากภาพที่วิเคราะห์)
+    let skills = [
+        { id: "passive1", name: "[ติดตัว] พรจากสวรรค์ (ดาบ)", type: "sword_passive", maxLv: 10, currentLv: 10, basePct: 0, pctPerLv: 5, isPassive: true },
+        { id: "passive2", name: "[ติดตัว] พรเงาดำ (ปลอกแขน)", type: "glove_passive", maxLv: 10, currentLv: 0, basePct: 0, pctPerLv: 5, isPassive: true },
+        { id: 1, name: "[T] ดาบฟ้าสวรรค์ (ML)", type: "sword", maxLv: 20, currentLv: 20, basePct: 150, pctPerLv: 10, isPassive: false },
+        { id: 2, name: "[T] อัสนีเมฆา (ML)", type: "glove", maxLv: 20, currentLv: 1, basePct: 100, pctPerLv: 8, isPassive: false },
+        { id: 3, name: "[T] ปราณราชสีห์คลั่ง (ML)", type: "buff", maxLv: 20, currentLv: 20, basePct: 0, pctPerLv: 2, isPassive: false, buffType: "atk" }
+    ];
+
+    function calculateDamage(skill) {
+        const minAtk = parseFloat(document.getElementById('baseAtkMin').value) || 0;
+        const maxAtk = parseFloat(document.getElementById('baseAtkMax').value) || 0;
+        const critMulti = (parseFloat(document.getElementById('critDmg').value) || 0) / 100;
+        const pvpAtkBonus = (parseFloat(document.getElementById('pvpAtk').value) || 0) / 100;
+        const mainWeapon = document.getElementById('mainWeapon').value;
+        
+        // --- ระบบคำนวณ Passive อาวุธ + พลังสัตว์เลี้ยงแฝง ---
+        let weaponBonusPct = 0;
+        if (skill.type === mainWeapon) {
+            // หาสกิลติดตัวที่ตรงกับอาวุธ
+            let passiveSkill = skills.find(s => s.type === mainWeapon + "_passive");
+            if (passiveSkill) {
+                // เอาเลเวลวิชาปัจจุบัน + เลเวลสัตว์เลี้ยงแฝง
+                let totalPassiveLv = passiveSkill.currentLv + petMixLevel;
+                weaponBonusPct = totalPassiveLv * passiveSkill.pctPerLv; 
+            }
+        }
+
+        // ความแรงวิชานี้ (%) = พื้นฐาน + (เลเวล * %ต่อเลเวล)
+        let skillMultiplier = (skill.basePct + (skill.currentLv * skill.pctPerLv)) / 100;
+        
+        // Final Multiplier ของสกิล = ความแรงวิชา + โบนัสอาวุธติดตัว
+        let finalMulti = skillMultiplier + (weaponBonusPct / 100);
+
+        // คำนวณ 4 มิติ (Min - Max)
+        let pveNormalMin = minAtk * finalMulti;
+        let pveNormalMax = maxAtk * finalMulti;
+        let pveCritMin = pveNormalMin * critMulti;
+        let pveCritMax = pveNormalMax * critMulti;
+        
+        // PvP ลบเกราะศัตรู
+        let pvpMulti = 1 + pvpAtkBonus - (enemyPvpDef / 100);
+        if(pvpMulti < 0.1) pvpMulti = 0.1; // ดาเมจต่ำสุดถ้าเกราะเยอะ
+        
+        let pvpNormalMin = pveNormalMin * pvpMulti;
+        let pvpNormalMax = pveNormalMax * pvpMulti;
+        let pvpCritMin = pvpNormalMin * critMulti;
+        let pvpCritMax = pvpNormalMax * critMulti;
+
+        return {
+            pveMin: Math.floor(pveNormalMin).toLocaleString(), pveMax: Math.floor(pveNormalMax).toLocaleString(),
+            pveCMin: Math.floor(pveCritMin).toLocaleString(), pveCMax: Math.floor(pveCritMax).toLocaleString(),
+            pvpMin: Math.floor(pvpNormalMin).toLocaleString(), pvpMax: Math.floor(pvpNormalMax).toLocaleString(),
+            pvpCMin: Math.floor(pvpCritMin).toLocaleString(), pvpCMax: Math.floor(pvpCritMax).toLocaleString(),
+            pct: Math.floor(finalMulti * 100),
+            basePct: Math.floor(skillMultiplier * 100),
+            weaponBonus: weaponBonusPct
+        };
+    }
+
+    function renderSkills() {
+        const list = document.getElementById('skillList');
+        list.innerHTML = '';
+        document.getElementById('spCurrent').innerText = currentSp;
+
+        skills.forEach((s, index) => {
+            // ถ้าเป็นสกิล Passive 
+            if(s.isPassive) {
+                let totalLv = s.currentLv + petMixLevel;
+                let bonus = totalLv * s.pctPerLv;
+                list.innerHTML += `
+                    <div class="skill-item" style="background:#e8f4f8; border-color:#bde0ec;">
+                        <div>
+                            <strong>${s.name}</strong> <br>
+                            <span style="color: #666; font-size: 0.9em;">Lv. ${s.currentLv} / ${s.maxLv} <span style="color:#e74c3c;">(สัตว์เลี้ยงแฝง +${petMixLevel})</span></span>
+                            <br><span style="color:#0088ff; font-weight:bold; font-size:0.85em;">โบนัสโจมตีอาวุธ: +${bonus}%</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 5px;">
+                            <button class="btn-sp" onclick="adjustSkill(${index}, -1)">-</button>
+                            <button class="btn-sp" onclick="adjustSkill(${index}, 1)">+</button>
+                        </div>
+                    </div>
+                `;
+            } else {
+                // สกิลต่อสู้ (Active)
+                let dmg = calculateDamage(s);
+                let weaponBonusHtml = dmg.weaponBonus > 0 ? `<span style="color:#e74c3c;"> (+ โบนัสอาวุธ ${dmg.weaponBonus}%)</span>` : '';
+                
+                list.innerHTML += `
+                    <div class="skill-item">
+                        <div>
+                            <strong>${s.name}</strong> <br>
+                            <span style="color: #666; font-size: 0.9em;">Lv. ${s.currentLv} / ${s.maxLv}</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 5px;">
+                            <button class="btn-sp" onclick="adjustSkill(${index}, -1)">-</button>
+                            <button class="btn-sp" onclick="adjustSkill(${index}, 1)">+</button>
+                        </div>
+                        
+                        <!-- หน้าต่างโฮโลแกรมซ่อนรูป -->
+                        <div class="hologram-tooltip">
+                            <h4>ความแรงรวม: ${dmg.pct}%<br><span style="font-size:0.7em; color:#666;">(วิชา ${dmg.basePct}% ${weaponBonusHtml})</span></h4>
+                            <div class="grid-4d">
+                                <div class="grid-box"><strong>👾 PvE (ปกติ)</strong><br><span style="color:#2ecc71;">${dmg.pveMin} ~ ${dmg.pveMax}</span></div>
+                                <div class="grid-box"><strong>💥 PvE (คริ)</strong><br><span style="color:#e74c3c;">${dmg.pveCMin} ~ ${dmg.pveCMax}</span></div>
+                                <div class="grid-box"><strong>🥷 PvP (ตีคน)</strong><br><span style="color:#f39c12;">${dmg.pvpMin} ~ ${dmg.pvpMax}</span></div>
+                                <div class="grid-box"><strong>💀 PvP (คริ)</strong><br><span style="color:#c0392b;">${dmg.pvpCMin} ~ ${dmg.pvpCMax}</span></div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+        });
+    }
+
+    function adjustSkill(index, amount) {
+        let s = skills[index];
+        if (amount > 0 && currentSp > 0 && s.currentLv < s.maxLv) {
+            s.currentLv++;
+            currentSp--;
+        } else if (amount < 0 && s.currentLv > 0) {
+            s.currentLv--;
+            currentSp++;
+        }
+        renderSkills();
+    }
+// --- โค้ดอุดรอยรั่วอาชีพนักรบ (ดักทำงานอัตโนมัติ) ---
+setTimeout(() => {
+    const classDropdown = document.getElementById('classSelect'); // สมมติว่าช่องเลือกอาชีพชื่อนี้
+    const atkButton = document.getElementById('atkBuffBtn'); // สมมติว่าปุ่มบัฟชื่อนี้
+    
+    if(classDropdown && atkButton) {
+        classDropdown.addEventListener('change', function(e) {
+            if(e.target.value === 'นักรบ' || e.target.value.includes('นักรบ')) {
+                atkButton.disabled = true;
+                atkButton.style.opacity = '0.5';
+                atkButton.innerText = 'พาสซีฟโจมตี (ทำงานแล้ว)';
+            } else {
+                atkButton.disabled = false;
+                atkButton.style.opacity = '1';
+                atkButton.innerText = 'บัฟโจมตี';
+            }
+        });
+    }
+}, 1000);
+
+</script>
+<!-- ======================================================================= -->
+<!-- 👑 สิ้นสุดโซน VIP SYSTEM 👑 -->
+<!-- ======================================================================= -->
+
 </body>
 </html>
