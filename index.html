@@ -93,7 +93,6 @@
         .pixel-bar-fill {
             height: 100%;
             width: 0%; 
-            /* สีส้มโปร่งแสง ให้มองเห็นตัวอักษรด้านหลัง */
             background: linear-gradient(90deg, rgba(255,121,63,0.75) 0%, rgba(255,177,66,0.85) 100%);
             box-shadow: 0 0 15px rgba(255,121,63,0.6);
             transition: width 0.8s cubic-bezier(0.1, 0.8, 0.3, 1);
@@ -109,7 +108,6 @@
             align-items: center;
             padding: 0 12px;
             z-index: 2;
-            /* ขอบตัวหนังสือสีดำให้ป๊อปเด้งออกมา */
             text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 0 0 8px rgba(0,0,0,0.9);
         }
         .acc-text { 
@@ -194,17 +192,15 @@
         
         .warning-text { font-size: 11px; color: #dcdde1; text-align: left; margin-top: 15px; line-height: 1.4; opacity: 0.8; }
 
-        /* 🏆 Leaderboard UI พร้อมระบบปัดเลื่อนซ้ายขวาบนมือถือ 👻 */
+        /* 🏆 Leaderboard UI */
         .leaderboard-container { background: #141619; border-top: 3px solid #ff793f; padding: 20px; }
         .lb-header { text-align: center; color: #ff793f; font-size: 14px; font-weight: bold; text-shadow: 0 0 10px rgba(255,121,63,0.5); margin-bottom: 15px; font-family: 'Press Start 2P', monospace; }
         
-        /* สร้าง Wrapper ให้ตารางเลื่อนได้ */
         .lb-wrapper {
             width: 100%;
             overflow-x: auto;
             padding-bottom: 5px;
         }
-        /* กำหนดขนาดขั้นต่ำของตาราง ไม่ให้โดนมือถือบีบ */
         .lb-table {
             min-width: 580px; 
             width: 100%;
@@ -249,7 +245,7 @@
         .frame-rank8-20 { background: linear-gradient(90deg, #0d0e10, #1b1d22, #0d0e10) !important; border: 1px solid #4b5563 !important; box-shadow: 0 0 8px rgba(156, 163, 175, 0.2); }
         .frame-rank8-20 .lb-name { color: #cbd5e1; }
 
-        /* ⚔️ ระบบออร่าสีดาเมจตามระดับความตึง (Damage Tiers Neon Glow) ⚔️ */
+        /* ⚔️ ระบบออร่าสีดาเมจตามระดับความตึง ⚔️ */
         .tier-normal { color: #dcdde1; }
         .tier-hero { color: #00d2d3 !important; text-shadow: 0 0 8px #00d2d3; }
         .tier-epic { color: #9b59b6 !important; text-shadow: 0 0 8px #9b59b6; }
@@ -298,13 +294,11 @@
         .calc-input { width: 100%; background: #0b0c10; border: 1px solid #f1c40f; color: #fff; padding: 10px; border-radius: 4px; font-size: 16px; margin-bottom: 15px; text-align: center; }
         .btn-calc-apply { background: #f1c40f; color: #000; width: 100%; padding: 10px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; margin-bottom: 8px; }
         
-        /* 📱 Mobile Responsive ปรับโครงสร้างหลบการบีบอัด */
         @media screen and (max-width: 768px) {
             .header-bar { flex-direction: column; gap: 12px; text-align: center; }
             .header-bar > div { display: flex; width: 100%; gap: 8px; justify-content: center; }
             .top-controls { flex-direction: column; gap: 10px; align-items: stretch; }
             
-            /* แก้ไขช่องเลือกอาชีพให้เต็มแถว แล้วปัดปุ่มบัฟลงมา */
             .class-action-group { flex-direction: column; }
             .class-action-group select { width: 100%; margin-bottom: 5px; }
             .class-action-group > div { width: 100%; }
@@ -319,7 +313,6 @@
             .val-row { flex-direction: column; gap: 5px; }
             .val-label, .val-sim { width: 100%; text-align: left; }
             
-            /* ย่อฟอนต์ในหลอดโดเนทให้พอดีจอมือถือ */
             .acc-text { font-size: 8px; }
             .acc-number { font-size: 14px; }
             .acc-users { font-size: 10px; }
@@ -340,7 +333,6 @@
         <div><button class="btn-config" onclick="openModal()">⚙️ ตั้งฐานสเตตัส (DNA)</button></div>
     </div>
     
-    <!-- 🧡 หลอดสถิติ 8-Bit สไตล์ Donation Bar -->
     <div class="accuracy-banner">
         <div class="pixel-bar-container">
             <div class="pixel-bar-fill" id="pixel-bar-fill"></div>
@@ -355,21 +347,20 @@
     <div class="top-controls" onchange="autoCalculate()">
         <div class="select-container" style="flex: 2.5; min-width: 320px;">
             <label>👥 อาชีพตัวละคร และ สกิลบัฟอาชีพ</label>
-            <!-- แก้ไขโครงสร้างรองรับจอมือถือ -->
             <div class="class-action-group">
-                <select id="class-select" style="flex: 1;">
+                <select id="class-select" style="flex: 1;" onchange="handleDropdownChange()">
                     <option value="mamluk" data-atk="40" data-def="30" selected>มัมลุค</option>
                     <option value="hero" data-atk="40" data-def="30">จอมยุทธ</option>
                     <option value="mage" data-atk="20" data-def="30">นักพรต</option>
                     <option value="fighter" data-atk="30" data-def="30">จอมพลัง</option>
                     <option value="ninja" data-atk="20" data-def="0">นินจา</option>
                     <option value="police" data-atk="20" data-def="30">มือปราบ</option>
-                    <option value="knight" data-atk="20" data-def="30">นักรบ</option>
+                    <option value="knight" data-atk="0" data-def="30" data-passive-atk="true">นักรบ</option>
                     <option value="assassin" data-atk="20" data-def="0">มือสังหาร</option>
                 </select>
                 <div style="display:flex; gap:6px; flex:2;">
-                    <button class="btn-class-buff active" id="btn-class-atk" onclick="toggleClassBuff('atk')">⚔️ บัฟโจมตี (+40%)</button>
-                    <button class="btn-class-buff active" id="btn-class-def" onclick="toggleClassBuff('def')">🛡️ บัฟป้องกัน (+30%)</button>
+                    <button class="btn-class-buff active" id="btn-class-atk" onclick="toggleClassBuff('atk')">⚔️ บัฟโจมตี</button>
+                    <button class="btn-class-buff active" id="btn-class-def" onclick="toggleClassBuff('def')">🛡️ บัฟป้องกัน</button>
                 </div>
             </div>
         </div>
@@ -512,7 +503,6 @@
         </div>
     </div>
     
-    <!-- 🏆 Leaderboard TOP 100 แบบเลื่อนปัดซ้ายขวาได้ -->
     <div class="leaderboard-container">
         <div class="lb-header">🏆 TOP 100 RANKING (RAW BASE ATK)</div>
         <div class="lb-wrapper">
@@ -653,7 +643,7 @@
     </div>
 </div>
 
-<!-- Modal 3: ป๊อปอัปตรวจสอบความแม่นยำและขึ้นบอร์ด -->
+<!-- Modal 3: ตรวจสอบความแม่นยำ -->
 <div class="modal-overlay" id="validate-modal" style="z-index: 3000;">
     <div class="modal-content">
         <div class="modal-header">✅ ส่งผลสถิติขึ้นบอร์ดจัดอันดับ (Top 100)</div>
@@ -688,7 +678,7 @@
     </div>
 </div>
 
-<!-- Modal 4: 📖 คู่มือผู้เล่นใหม่ฉบับไวไว -->
+<!-- Modal 4: คู่มือ -->
 <div class="modal-overlay" id="tutorial-modal" style="z-index: 4000;">
     <div class="modal-content" style="max-width: 500px; border-color: #3498db; box-shadow: 0 0 25px rgba(52,152,219,0.3);">
         <div class="modal-header" style="color: #3498db; border-bottom-color: #3498db;">🎮 คู่มือใช้งานฉบับไวไว (Quick Start Guide)</div>
@@ -706,7 +696,6 @@
 </div>
 
 <script>
-    // 🎯 ลิงก์ API ตัวล่าสุด
     const API_URL = 'https://script.google.com/macros/s/AKfycbxUhmuY7Q0w_xp9hP8PAEeVnLSLBDOQQXzMltCBv7gZ0biJ_AiEC1W9gM1huN2tlpN7/exec';
 
     let currentSimulatedStats = { patkMin: 0, patkMax: 0, def: 0, rawMaxAtk: 0 };
@@ -730,13 +719,14 @@
     function openModal() { updateDnaSums(); document.getElementById('config-modal').style.display = 'flex'; }
     function closeModal() { document.getElementById('config-modal').style.display = 'none'; }
     
-    // 📖 ฟังก์ชันปิดหน้าต่าง Tutorial และจำค่า LocalStorage
     function closeTutorial() {
         if (document.getElementById('tut-dont-show').checked) {
             localStorage.setItem('ghostm_hide_tut', 'true');
         }
         document.getElementById('tutorial-modal').style.display = 'none';
     }
+
+    document.getElementById('class-select').addEventListener('change', handleDropdownChange);
 
     function updateDnaSums() {
         setTxt('dna-sum-str', getVal('ref-base-str') + getVal('ref-plus-str'));
@@ -754,9 +744,10 @@
 
         const classAtk = parseFloat(option.getAttribute('data-atk')) || 0;
         const classDef = parseFloat(option.getAttribute('data-def')) || 0;
+        const isPassiveAtk = option.getAttribute('data-passive-atk') === 'true';
 
         const party = getVal('party-buff');
-        const pet = activeClassBuffs.atk ? getVal('pet-select') : 0;
+        const pet = (activeClassBuffs.atk || isPassiveAtk) ? getVal('pet-select') : 0;
 
         let extraAtk = 0; [5,10,15,20,25,30].forEach(v => { if(activeItemBuffs.atk[v]) extraAtk += v; });
         let extraDef = 0; [5, 10].forEach(v => { if(activeItemBuffs.def[v]) extraDef += v; });
@@ -767,8 +758,8 @@
         let baseDefPct = (baseline.defBaseBuff||0);
         let baseHpPct = (baseline.bHp||0);
 
-        let totalAtk = baseAtkPct + party + pet + (activeClassBuffs.atk ? classAtk : 0) + extraAtk;
-        let totalMatk = baseMatkPct + party + pet + (activeClassBuffs.atk ? classAtk : 0) + extraAtk;
+        let totalAtk = baseAtkPct + party + pet + ((activeClassBuffs.atk || isPassiveAtk) ? classAtk : 0) + extraAtk;
+        let totalMatk = baseMatkPct + party + pet + ((activeClassBuffs.atk || isPassiveAtk) ? classAtk : 0) + extraAtk;
         let totalDef = baseDefPct + (activeClassBuffs.def ? classDef : 0) + extraDef;
         let totalHp = baseHpPct + extraHp;
 
@@ -823,18 +814,43 @@
         const selClass = selectEl.options[selectEl.selectedIndex];
         if(!selClass) return;
 
-        const currentClassAtk = parseFloat(selClass.getAttribute('data-atk')) || 0;
         const currentClassDef = parseFloat(selClass.getAttribute('data-def')) || 0;
+        const isPassiveAtk = selClass.getAttribute('data-passive-atk') === 'true';
 
         const btnAtk = document.getElementById('btn-class-atk');
         const btnDef = document.getElementById('btn-class-def');
-        if(btnAtk) btnAtk.innerText = `⚔️ บัฟโจมตี (+${currentClassAtk}%)`;
-        if(btnDef) btnDef.innerText = `🛡️ บัฟป้องกัน (+${currentClassDef}%)`;
+        
+        if(btnAtk) btnAtk.innerText = `⚔️ บัฟโจมตี`;
+        if(btnDef) btnDef.innerText = `🛡️ บัฟป้องกัน`;
 
+        // ❌ หากค่าโจมตีเป็น Passive (เช่น นักรบ) ให้ปิดใช้งานปุ่มโจมตี
+        if (isPassiveAtk) {
+            if(btnAtk) {
+                btnAtk.disabled = true;
+                btnAtk.classList.remove('active');
+                btnAtk.innerText = `⚔️ บัฟโจมตี (Passive)`;
+            }
+            activeClassBuffs.atk = false;
+        } else {
+            if(btnAtk) {
+                btnAtk.disabled = false;
+                if (activeClassBuffs.atk) btnAtk.classList.add('active');
+            }
+        }
+
+        // ❌ หากค่าป้องกันเป็น 0 (เช่น นินจา, มือสังหาร) ให้ปิดใช้งานปุ่มป้องกัน
         if (currentClassDef === 0) {
-            if(btnDef) btnDef.disabled = true;
-            if (activeClassBuffs.def) { activeClassBuffs.def = false; if(btnDef) btnDef.classList.remove('active'); }
-        } else { if(btnDef) btnDef.disabled = false; }
+            if(btnDef) {
+                btnDef.disabled = true;
+                btnDef.classList.remove('active');
+            }
+            activeClassBuffs.def = false;
+        } else {
+            if(btnDef) {
+                btnDef.disabled = false;
+                if (activeClassBuffs.def) btnDef.classList.add('active');
+            }
+        }
 
         autoCalculate();
     }
@@ -932,7 +948,7 @@
         currentSimulatedStats.def = Math.max(1, Math.round(scaleDef * totalDefMultiplier));
         
         const finalMinMatk = Math.max(1, Math.round(scaleMinMatk * currentMatkMult));
-        const finalMaxMatk = Math.max(1, Math.round(scaleMaxMatk * currentMatkMult)); 
+        const finalMaxMatk = Math.max(1, Math.round(scaleMaxPatk * currentMatkMult)); 
         const finalHp = Math.max(1, Math.round(scaleHp * (1 + getVal('live-p-hp')/100)));
         const finalMp = Math.max(1, Math.round(scaleMp * (1 + getVal('live-p-mp')/100)));
 
@@ -1018,7 +1034,6 @@
         }
     }
 
-    // --- 🏆 ระบบ Leaderboard Pro: ซ่อนเลขดาเมจ + กรอบฉายายุทธภพ ---
     function fetchLeaderboard() {
         fetch(API_URL).then(r => r.json()).then(data => {
             if(data.status === 'success') {
@@ -1033,25 +1048,21 @@
                     let rank = index + 1;
                     let rawAtkValue = parseFloat(user.rawAtk) || 0;
                     
-                    // ⚔️ 1. ฟังก์ชันพรางดาเมจเสกตัว X (Damage Masking)
                     let scoreStr = Math.floor(rawAtkValue).toString();
                     let maskedScore = "";
                     if (scoreStr.length > 0) {
                         maskedScore = scoreStr[0] + "X".repeat(scoreStr.length - 1);
-                        // เติมคอมม่าสวยๆ กลับเข้าไป
                         if (maskedScore.length > 3) {
                             maskedScore = maskedScore.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                         }
                     }
                     
-                    // 🎨 2. ฟังก์ชันแบ่งกลุ่มสีนีออนตามความแรง (Damage Tiers)
                     let tierClass = "tier-normal";
                     if (rawAtkValue >= 200000) { tierClass = "tier-mythic"; } 
                     else if (rawAtkValue >= 150000) { tierClass = "tier-legendary"; } 
                     else if (rawAtkValue >= 100000) { tierClass = "tier-epic"; } 
                     else if (rawAtkValue >= 50000) { tierClass = "tier-hero"; }
                     
-                    // 🏆 3. ฟังก์ชันสวมชุดกรอบฉายาประดับอันดับ (Rank Frames 1-20)
                     let frameClass = "";
                     let prefix = "";
                     let suffix = "";
@@ -1143,7 +1154,6 @@
         });
     }
 
-    // ✅ โหลดระบบทั้งหมด + ตรวจสอบคู่มือสอนเล่นตอนเข้าเว็บ
     window.onload = function() { 
         loadSavedStats(); 
         autoCalculate(); 
@@ -1151,7 +1161,6 @@
         handleDropdownChange(); 
         fetchLeaderboard(); 
         
-        // 📖 ถ้าระบบยังไม่เคยจำว่าผู้เล่นกดปิดคู่มือ ให้เด้งโชว์ Tutorial Popup
         if (localStorage.getItem('ghostm_hide_tut') !== 'true') {
             document.getElementById('tutorial-modal').style.display = 'flex';
         }
