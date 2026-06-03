@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>SOICEX : Ghost M Stats Simulator Pro</title>
-    <!-- โหลดฟอนต์ 8-Bit คลาสสิก -->
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; }
@@ -54,6 +53,7 @@
             box-shadow: 0 0 10px rgba(255, 56, 56, 0.6);
             gap: 6px;
             border: 1.5px solid #ff3838;
+            flex-wrap: wrap;
         }
         .char-name-input {
             background: transparent;
@@ -61,7 +61,7 @@
             color: #f1c40f;
             font-weight: bold;
             font-size: 13px;
-            width: 100px;
+            width: 90px;
             outline: none;
             padding: 0;
             text-shadow: 0 0 4px rgba(241, 196, 15, 0.5);
@@ -70,9 +70,14 @@
         .btn-config {
             background-color: #ff3838; color: #ffffff; border: none; padding: 8px 14px;
             border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 13px;
-            box-shadow: 0 3px #990000; transition: all 0.1s;
+            box-shadow: 0 3px #990000; transition: all 0.1s; white-space: nowrap;
         }
         .btn-config:active { transform: translateY(2px); box-shadow: 0 1px #990000; }
+        
+        .btn-vip-feature {
+            background: linear-gradient(90deg, #d4af37, #f3e5ab); color: #000; box-shadow: 0 3px #b8860b;
+        }
+        .btn-vip-feature:active { box-shadow: 0 1px #b8860b; }
         
         /* 🧡 หลอดโดเนท 8-Bit ความแม่นยำเซิร์ฟเวอร์แบบโปร่งแสง */
         .accuracy-banner {
@@ -190,8 +195,25 @@
         .btn-reset { background-color: #1e272e; color: #ff3838; border: 1px solid #ff3838; padding: 10px; flex: 1; border-radius: 5px; font-weight: bold; cursor: pointer; text-align: center; }
         .btn-reset:active { transform: translateY(1px); }
         
-        .warning-text { font-size: 11px; color: #dcdde1; text-align: left; margin-top: 15px; line-height: 1.4; opacity: 0.8; }
+        .warning-text { font-size: 11px; color: #dcdde1; text-align: left; margin-top: 15px; margin-bottom: 15px; line-height: 1.4; opacity: 0.8; }
 
+        /* 👑 โซน VIP (PVP Box) */
+        .vip-pvp-box {
+            position: relative; background: #1a1c20; padding: 15px; border-radius: 5px; border: 1px solid #d4af37;
+        }
+        .vip-lock-overlay {
+            position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.85); z-index: 10; display: flex; flex-direction: column; justify-content: center; align-items: center; border-radius: 4px; cursor: pointer; backdrop-filter: blur(2px); transition: 0.3s;
+        }
+        .vip-lock-overlay:hover { background: rgba(0,0,0,0.75); }
+
+        /* 💊 ปุ่มยาบัฟ PvP */
+        .btn-pvp-potion {
+            background-color: #141619; color: #dcdde1; border: 1px solid #485460;
+            padding: 6px 10px; border-radius: 4px; font-weight: bold; cursor: pointer;
+            font-size: 12px; transition: all 0.2s; flex: 1; text-align: center; white-space: nowrap;
+        }
+        .btn-pvp-potion.active { background-color: #e74c3c; color: #fff; border-color: #e74c3c; box-shadow: 0 0 8px rgba(231,76,60,0.5); }
+        
         /* 🏆 Leaderboard UI */
         .leaderboard-container { background: #141619; border-top: 3px solid #ff793f; padding: 20px; }
         .lb-header { text-align: center; color: #ff793f; font-size: 14px; font-weight: bold; text-shadow: 0 0 10px rgba(255,121,63,0.5); margin-bottom: 15px; font-family: 'Press Start 2P', monospace; }
@@ -287,7 +309,7 @@
 
         .m-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
         .m-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
-        .pct-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; }
+        .pct-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; text-align: center; font-size: 0.85em; }
         .btn-confirm-modal { background: #ff3838; color: #fff; width: 100%; padding: 12px; border: none; border-radius: 5px; margin-top: 20px; font-weight: bold; cursor: pointer; font-size: 15px; box-shadow: 0 4px #990000; }
         
         #calc-modal .modal-content { max-width: 320px; border-color: #f1c40f; box-shadow: 0 0 25px rgba(241,196,15,0.2); }
@@ -316,6 +338,9 @@
             .acc-text { font-size: 8px; }
             .acc-number { font-size: 14px; }
             .acc-users { font-size: 10px; }
+            
+            .char-name-container { justify-content: center; }
+            .btn-config { flex: 1; text-align: center; padding: 10px; }
         }
     </style>
 </head>
@@ -328,9 +353,14 @@
         <div class="char-name-container">
             <span>👤 ชื่อ:</span><input type="text" id="char-name-box" class="char-name-input" value="soicex" onchange="autoSave()">
             <span style="color:#7f8fa6;">|</span>
+            <span>🌟 Lv:</span><input type="number" id="char-lv-box" class="char-name-input" style="width:50px; text-align:center;" value="126" onchange="autoSave()">
+            <span style="color:#7f8fa6;">|</span>
             <span>🔑 PIN:</span><input type="password" id="char-pin-box" class="char-name-input" style="width:55px; text-align:center;" maxlength="4" placeholder="1234" onchange="autoSave()">
         </div>
-        <div><button class="btn-config" onclick="openModal()">⚙️ ตั้งฐานสเตตัส (DNA)</button></div>
+        <div style="display:flex; gap:10px; flex-wrap: wrap; justify-content: center;">
+            <button class="btn-config btn-vip-feature" onclick="openVipSkillModal()">👑 จำลองสกิล (VIP)</button>
+            <button class="btn-config" onclick="openModal()">⚙️ ตั้งฐานสเตตัส (DNA)</button>
+        </div>
     </div>
     
     <div class="accuracy-banner">
@@ -348,7 +378,7 @@
         <div class="select-container" style="flex: 2.5; min-width: 320px;">
             <label>👥 อาชีพตัวละคร และ สกิลบัฟอาชีพ</label>
             <div class="class-action-group">
-                <select id="class-select" style="flex: 1;" onchange="handleDropdownChange()">
+                <select id="class-select" style="flex: 1;">
                     <option value="mamluk" data-atk="40" data-def="30" selected>มัมลุค</option>
                     <option value="hero" data-atk="40" data-def="30">จอมยุทธ</option>
                     <option value="mage" data-atk="20" data-def="30">นักพรต</option>
@@ -413,6 +443,40 @@
             <div class="warning-text">
                 *ระบบเกมปัดเศษทศนิยมตามหลักคณิตศาสตร์ ผลการจำลองแม่นยำระดับ 99.9% (อาจคลาดเคลื่อน ±1 แต้ม)<br>
                 *การจัดอันดับเซิร์ฟเวอร์จะคัดลอกเฉพาะ <b>"ดาเมจดิบ (Raw)"</b> โดยไม่รวมบัฟชั่วคราวใดๆ ทั้งสิ้น
+            </div>
+
+            <div class="window-title" style="border-left: 3px solid #d4af37;">
+                <span style="color:#f1c40f;">⚔️ วิเคราะห์สมรภูมิ (PvP Core)</span>
+            </div>
+            <div class="vip-pvp-box">
+                <div id="pvp-lock-overlay" class="vip-lock-overlay" onclick="checkVipAccess(unlockVipFeatures)">
+                    <span style="color: #f1c40f; font-weight: bold; font-size: 14px; text-shadow: 0 0 10px #d4af37;">👑 คลิกเพื่อปลดล็อกฟังก์ชัน VIP</span>
+                </div>
+                
+                <div class="control-row" style="margin-bottom: 8px;"><span class="stat-label" style="color:#dcdde1; font-size:12px;">🥷 PVP ATK บัฟ (%):</span>
+                    <div class="input-box"><input type="number" id="vip-pvp-atk" value="4.4" step="0.1" oninput="autoCalculate();"></div>
+                </div>
+
+                <div style="text-align: center; margin-top: 10px; padding-top: 10px; border-top: 1px dashed #485460; margin-bottom: 15px;">
+                    <div style="font-size: 11px; color: #3498db; margin-bottom: 5px;">ดาเมจ PvP ยืนพื้น (ฝั่งเรา)</div>
+                    <div style="color: #f1c40f; font-size: 16px; font-weight: bold; text-shadow: 0 0 5px rgba(241,196,15,0.5);" id="main-pvp-dmg-display">-</div>
+                </div>
+
+                <div class="control-row" style="margin-bottom: 8px;"><span class="stat-label" style="color:#dcdde1; font-size:12px;">🛡️ PVP DEF บัฟ (%):</span>
+                    <div class="input-box"><input type="number" id="vip-pvp-def" value="0" step="0.1" oninput="autoCalculate();"></div>
+                </div>
+                
+                <div style="display: flex; gap: 5px; margin-bottom: 10px; padding: 0 5px;">
+                    <button class="btn-pvp-potion active" id="btn-our-pot-0" onclick="setOurPvpPotion(0)">ไม่กด</button>
+                    <button class="btn-pvp-potion" id="btn-our-pot-200" onclick="setOurPvpPotion(200)">200%</button>
+                    <button class="btn-pvp-potion" id="btn-our-pot-400" onclick="setOurPvpPotion(400)">400%</button>
+                    <button class="btn-pvp-potion" id="btn-our-pot-600" onclick="setOurPvpPotion(600)">600%</button>
+                </div>
+                
+                <div style="text-align: center; margin-top: 10px;">
+                    <div style="font-size: 11px; color: #2ecc71; margin-bottom: 5px;">พลังป้องกัน PvP ยืนพื้น (ฝั่งเรา)</div>
+                    <div style="color: #2ecc71; font-size: 16px; font-weight: bold; text-shadow: 0 0 5px rgba(46,204,113,0.5);" id="main-pvp-def-display">-</div>
+                </div>
             </div>
         </div>
 
@@ -522,7 +586,6 @@
     </div>
 </div>
 
-<!-- Modal 1: หน้าตั้งฐาน DNA -->
 <div class="modal-overlay" id="config-modal">
     <div class="modal-content">
         <div class="modal-header">⚙️ ตั้งฐานข้อมูลสเตตัสระดับลึก (DNA)</div>
@@ -632,7 +695,97 @@
     </div>
 </div>
 
-<!-- Modal 2: เครื่องคิดเลข 🧮 -->
+<div class="modal-overlay" id="vip-skill-modal" style="z-index: 4500;">
+    <div class="modal-content" style="max-width: 650px; border-color: #d4af37; box-shadow: 0 0 30px rgba(212, 175, 55, 0.25);">
+        <div class="modal-header" style="color: #d4af37; border-bottom-color: #d4af37; font-size: 20px; letter-spacing: 1px;">🌀 จำลองความแรงสกิล (Manual)</div>
+        
+        <div class="m-group" style="border-color: #d4af37; margin-bottom: 15px; padding: 15px;">
+            <div style="color:#f1c40f; font-weight:bold; margin-bottom: 10px; font-size: 14px;">⚔️ สเตตัสสกิล (ฝั่งเรา)</div>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <div style="flex: 1; min-width: 100px;">
+                    <label style="color:#dcdde1; border:none; margin-bottom:5px; font-size:12px;">ความแรงสกิล (%)</label>
+                    <input type="number" id="sim-skill-pct" style="width:100%; background:#0b0c10; border:1px solid #d4af37; color:#f1c40f; padding:10px; border-radius:4px; font-size:16px; text-align:center; font-weight:bold;" value="720" oninput="calcVipSkill()">
+                </div>
+                <div style="flex: 1; min-width: 100px;">
+                    <label style="color:#dcdde1; border:none; margin-bottom:5px; font-size:12px;">โบนัสอาวุธ (%)</label>
+                    <input type="number" id="sim-bonus-pct" style="width:100%; background:#0b0c10; border:1px solid #d4af37; color:#f1c40f; padding:10px; border-radius:4px; font-size:16px; text-align:center; font-weight:bold;" value="50" oninput="calcVipSkill()">
+                </div>
+                <div style="flex: 1; min-width: 100px;">
+                    <label style="color:#dcdde1; border:none; margin-bottom:5px; font-size:12px;">ดาเมจคริติคอล (%)</label>
+                    <input type="number" id="vip-crit-dmg" style="width:100%; background:#0b0c10; border:1px solid #e74c3c; color:#ff7675; padding:10px; border-radius:4px; font-size:16px; text-align:center; font-weight:bold;" value="324.2" step="0.1" oninput="calcVipSkill()">
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 12px; font-size: 12px; color: #7f8fa6;">
+                *ค่า ATK และบัฟ PvP ของฝั่งเรา จะถูกดึงมาจากแผงด้านนอกอัตโนมัติ
+            </div>
+        </div>
+
+        <div class="m-group" style="border-color: #e74c3c; margin-bottom: 15px; padding: 15px; background: #1a0505;">
+            <div style="color:#e74c3c; font-weight:bold; margin-bottom: 10px; font-size: 14px;">🛡️ สเตตัสเป้าหมาย (ศัตรู)</div>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-start;">
+                <div style="flex: 1; min-width: 140px;">
+                    <label style="color:#dcdde1; border:none; margin-bottom:5px; font-size:12px;">DEF พื้นฐาน (ศัตรู)</label>
+                    <input type="number" id="vip-enemy-base-def" style="width:100%; background:#0b0c10; border:1px solid #e74c3c; color:#fff; padding:10px; border-radius:4px; font-size:14px; text-align:center; font-weight:bold;" value="15000" oninput="calcVipSkill()">
+                </div>
+                <div style="flex: 1; min-width: 140px;">
+                    <label style="color:#dcdde1; border:none; margin-bottom:5px; font-size:12px;">PVP DEF บัฟ (%)</label>
+                    <input type="number" id="vip-enemy-def-buff" style="width:100%; background:#0b0c10; border:1px solid #e74c3c; color:#fff; padding:10px; border-radius:4px; font-size:14px; text-align:center; font-weight:bold;" value="80" step="0.1" oninput="calcVipSkill()">
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 15px; padding-top: 10px; border-top: 1px dashed #e74c3c; font-size: 12px; color: #ff7675; font-weight:bold;" id="enemy-total-def-display">
+                เกราะป้องกัน PvP สุทธิของศัตรู: 0
+            </div>
+        </div>
+
+        <div class="val-result-box" style="display: block; border:none; background: transparent; padding: 0;">
+            <div style="color:#f1c40f; font-weight:bold; margin-bottom: 20px; font-size: 18px; text-shadow: 0 0 10px #d4af37; letter-spacing: 1px;">⚔️ สรุปดาเมจ 4 มิติ ⚔️</div>
+            
+            <div style="display: flex; flex-direction: column; gap: 18px;">
+                <div style="background: linear-gradient(135deg, #0a192f 0%, #173a5e 100%); border: 1.5px solid #3498db; border-radius: 10px; padding: 18px; position: relative; box-shadow: 0 4px 15px rgba(52,152,219,0.2);">
+                    <div style="position: absolute; top: -12px; left: 15px; background: #0b0c10; border: 1px solid #3498db; color: #3498db; padding: 3px 12px; border-radius: 4px; font-size: 12px; font-weight: bold; box-shadow: 0 0 8px rgba(52,152,219,0.5);">👾 สายฟาร์ม (PvE)</div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 5px;">
+                        <div style="text-align: left; flex: 1;">
+                            <div style="color: #7f8fa6; font-size: 11px; margin-bottom: 4px; text-transform: uppercase;">Normal Damage</div>
+                            <div id="res-pve-norm" style="color: #2ecc71; font-size: 17px; font-weight: bold; text-shadow: 0 0 5px rgba(46,204,113,0.5);">-</div>
+                        </div>
+                        <div style="text-align: right; flex: 1;">
+                            <div style="color: #ff7675; font-size: 11px; margin-bottom: 4px; text-transform: uppercase;">Critical 💥</div>
+                            <div id="res-pve-crit" style="color: #ff4757; font-size: 21px; font-weight: bold; text-shadow: 0 0 10px rgba(255,71,87,0.6);">-</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background: linear-gradient(135deg, #2d0000 0%, #590000 100%); border: 1.5px solid #e74c3c; border-radius: 10px; padding: 18px; position: relative; box-shadow: 0 4px 15px rgba(231,76,60,0.2);">
+                    <div style="position: absolute; top: -12px; left: 15px; background: #0b0c10; border: 1px solid #e74c3c; color: #e74c3c; padding: 3px 12px; border-radius: 4px; font-size: 12px; font-weight: bold; box-shadow: 0 0 8px rgba(231,76,60,0.5);">🥷 สายบวกคน (PvP)</div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 5px;">
+                        <div style="text-align: left; flex: 1;">
+                            <div style="color: #7f8fa6; font-size: 11px; margin-bottom: 4px; text-transform: uppercase;">Pierce Damage</div>
+                            <div id="res-pvp-norm" style="color: #f39c12; font-size: 17px; font-weight: bold; text-shadow: 0 0 5px rgba(243,156,18,0.5);">-</div>
+                        </div>
+                        <div style="text-align: right; flex: 1;">
+                            <div style="color: #ff3838; font-size: 11px; margin-bottom: 4px; text-transform: uppercase;">Lethal Crit 💀</div>
+                            <div id="res-pvp-crit" style="color: #ff3838; font-size: 23px; font-weight: bold; text-shadow: 0 0 15px rgba(255,56,56,0.8);">-</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button style="background:transparent; color:#ff7675; border:none; width:100%; margin-top:20px; cursor:pointer; font-weight:bold; font-size: 14px;" onclick="closeVipSkillModal()">✕ ปิดหน้าต่าง</button>
+    </div>
+</div>
+
+<div class="modal-overlay" id="vip-login-modal" style="z-index: 5000;">
+    <div class="modal-content" style="max-width: 320px; border-color: #d4af37; box-shadow: 0 0 25px rgba(212, 175, 55, 0.3); text-align: center;">
+        <h3 style="color: #d4af37; margin-top: 0;">👑 เข้าสู่ระบบ VIP</h3>
+        <p style="font-size: 13px; color: #dcdde1; margin-bottom: 20px;">กรุณายืนยันตัวตนเพื่อปลดล็อกฟังก์ชันการคำนวณขั้นสูง</p>
+        <input type="text" id="vip-user-input" style="width: 100%; background: #0b0c10; border: 1px solid #d4af37; color: #fff; padding: 10px; border-radius: 4px; font-size: 14px; margin-bottom: 15px; text-align: center;" disabled>
+        <input type="password" id="vip-pin-input" style="width: 100%; background: #0b0c10; border: 1px solid #d4af37; color: #fff; padding: 10px; border-radius: 4px; font-size: 14px; margin-bottom: 15px; text-align: center;" placeholder="รหัสลับผู้พัฒนา">
+        <button class="btn-confirm-modal" style="background: linear-gradient(90deg, #d4af37, #f3e5ab); color: #000; box-shadow: 0 4px #b8860b;" onclick="verifyVip()">ปลดล็อกขีดจำกัด</button>
+        <button style="background:transparent; color:#aaa; border:none; width:100%; margin-top:15px; cursor:pointer; font-weight:bold;" onclick="closeVipLogin()">✕ ยกเลิก</button>
+    </div>
+</div>
+
 <div class="modal-overlay" id="calc-modal" style="z-index: 2000;">
     <div class="modal-content" style="text-align: center; max-width: 320px;">
         <div style="color: #f1c40f; font-weight: bold; margin-bottom: 15px; font-size: 16px;">🧮 เครื่องคิดเลขรวม %</div>
@@ -643,7 +796,6 @@
     </div>
 </div>
 
-<!-- Modal 3: ตรวจสอบความแม่นยำ -->
 <div class="modal-overlay" id="validate-modal" style="z-index: 3000;">
     <div class="modal-content">
         <div class="modal-header">✅ ส่งผลสถิติขึ้นบอร์ดจัดอันดับ (Top 100)</div>
@@ -678,7 +830,6 @@
     </div>
 </div>
 
-<!-- Modal 4: คู่มือ -->
 <div class="modal-overlay" id="tutorial-modal" style="z-index: 4000;">
     <div class="modal-content" style="max-width: 500px; border-color: #3498db; box-shadow: 0 0 25px rgba(52,152,219,0.3);">
         <div class="modal-header" style="color: #3498db; border-bottom-color: #3498db;">🎮 คู่มือใช้งานฉบับไวไว (Quick Start Guide)</div>
@@ -699,6 +850,9 @@
     const API_URL = 'https://script.google.com/macros/s/AKfycbxUhmuY7Q0w_xp9hP8PAEeVnLSLBDOQQXzMltCBv7gZ0biJ_AiEC1W9gM1huN2tlpN7/exec';
 
     let currentSimulatedStats = { patkMin: 0, patkMax: 0, def: 0, rawMaxAtk: 0 };
+    let isVipLogged = false;
+    let pendingVipAction = null; 
+    let activeOurPvpPotion = 0; 
 
     let baseline = {
         baseStr: 91, plusStr: 342, baseDex: 1138, plusDex: 1304, baseCon: 105, plusCon: 420, baseInt: 53, plusInt: 235,
@@ -716,6 +870,14 @@
     function setVal(id, val) { const el = document.getElementById(id); if (el) el.value = val; }
     function setTxt(id, val) { const el = document.getElementById(id); if (el) el.innerText = val; }
 
+    function getEffective(baseId, plusId, pctId, baseRef, plusRef, pctRef) {
+        let currentFlat = getVal(baseId) + getVal(plusId);
+        let refFlat = baseRef + plusRef;
+        let effective = currentFlat * (1 + getVal(pctId) / 100);
+        let delta = currentFlat - refFlat; 
+        return { effective: effective, delta: delta };
+    }
+
     function openModal() { updateDnaSums(); document.getElementById('config-modal').style.display = 'flex'; }
     function closeModal() { document.getElementById('config-modal').style.display = 'none'; }
     
@@ -725,8 +887,6 @@
         }
         document.getElementById('tutorial-modal').style.display = 'none';
     }
-
-    document.getElementById('class-select').addEventListener('change', handleDropdownChange);
 
     function updateDnaSums() {
         setTxt('dna-sum-str', getVal('ref-base-str') + getVal('ref-plus-str'));
@@ -739,7 +899,7 @@
         const selClass = document.getElementById('class-select');
         if (!selClass || selClass.selectedIndex === -1) return;
         
-        const option = selClass.options[selClass.selectedIndex];
+        const option = selClass.options[selClass.selectedIndex]; 
         if (!option) return;
 
         const classAtk = parseFloat(option.getAttribute('data-atk')) || 0;
@@ -823,7 +983,6 @@
         if(btnAtk) btnAtk.innerText = `⚔️ บัฟโจมตี`;
         if(btnDef) btnDef.innerText = `🛡️ บัฟป้องกัน`;
 
-        // ❌ หากค่าโจมตีเป็น Passive (เช่น นักรบ) ให้ปิดใช้งานปุ่มโจมตี
         if (isPassiveAtk) {
             if(btnAtk) {
                 btnAtk.disabled = true;
@@ -838,7 +997,6 @@
             }
         }
 
-        // ❌ หากค่าป้องกันเป็น 0 (เช่น นินจา, มือสังหาร) ให้ปิดใช้งานปุ่มป้องกัน
         if (currentClassDef === 0) {
             if(btnDef) {
                 btnDef.disabled = true;
@@ -853,52 +1011,6 @@
         }
 
         autoCalculate();
-    }
-
-    let targetCalcField = '';
-    function openCalc(targetId) { targetCalcField = targetId; document.getElementById('calc-input').value = ''; document.getElementById('calc-modal').style.display = 'flex'; }
-    function closeCalc() { document.getElementById('calc-modal').style.display = 'none'; targetCalcField = ''; }
-    function applyCalc() {
-        try {
-            let expr = document.getElementById('calc-input').value;
-            if (/^[0-9+\-*/. ()]+$/.test(expr)) {
-                let result = Function('return ' + expr)();
-                if (result !== undefined && !isNaN(result)) {
-                    document.getElementById(targetCalcField).value = parseFloat(result.toFixed(4));
-                    closeCalc();
-                } else alert('⚠️ รูปแบบสมการไม่ถูกต้อง!');
-            } else alert('⚠️ กรุณาพิมพ์เฉพาะตัวเลขและเครื่องหมายบวกลบคูณหารเท่านั้นครับ!');
-        } catch (e) { alert('⚠️ เกิดข้อผิดพลาดในการคำนวณ!'); }
-    }
-
-    function setNewBaseline() {
-        baseline.baseStr = getVal('ref-base-str'); baseline.plusStr = getVal('ref-plus-str');
-        baseline.baseDex = getVal('ref-base-dex'); baseline.plusDex = getVal('ref-plus-dex');
-        baseline.baseCon = getVal('ref-base-con'); baseline.plusCon = getVal('ref-plus-con');
-        baseline.baseInt = getVal('ref-base-int'); baseline.plusInt = getVal('ref-plus-int');
-        baseline.patkMin = getVal('ref-patk-min'); baseline.patkMax = getVal('ref-patk-max');
-        baseline.matkMin = getVal('ref-matk-min'); baseline.matkMax = getVal('ref-matk-max');
-        baseline.def = getVal('ref-def'); baseline.hp = getVal('ref-hp'); baseline.mp = getVal('ref-mp');
-        baseline.wAtk = getVal('ref-w-atk'); baseline.pEquip = getVal('ref-p-equip'); baseline.pEncyc = getVal('ref-p-encyc');
-        baseline.pSpirit = getVal('ref-p-spirit'); baseline.pZodiac = getVal('ref-p-zodiac'); baseline.pBaseBuff = getVal('ref-p-basebuff');
-        baseline.wMatk = getVal('ref-w-matk'); baseline.mEquip = getVal('ref-m-equip'); baseline.mEncyc = getVal('ref-m-encyc');
-        baseline.mSpirit = getVal('ref-m-spirit'); baseline.mZodiac = getVal('ref-m-zodiac'); baseline.mBaseBuff = getVal('ref-m-basebuff');
-        baseline.defBaseBuff = getVal('ref-def-buff'); baseline.bHp = getVal('ref-b-hp'); baseline.bMp = getVal('ref-b-mp');
-        baseline.pStr = getVal('ref-p-str'); baseline.pDex = getVal('ref-p-dex'); baseline.pCon = getVal('ref-p-con'); baseline.pInt = getVal('ref-p-int');
-
-        setVal('live-p-str', baseline.pStr); setVal('live-p-dex', baseline.pDex);
-        setVal('live-p-con', baseline.pCon); setVal('live-p-int', baseline.pInt);
-
-        closeModal();
-        autoCalculate();
-    }
-
-    function getEffective(baseId, plusId, pctId, baseBaseline, plusBaseline, pctBaseline) {
-        const liveTotal = getVal(baseId) + getVal(plusId);
-        const rawStat = liveTotal / (1 + (pctBaseline||0) / 100);
-        const effective = rawStat * (1 + getVal(pctId) / 100);
-        const delta = effective - (baseBaseline + plusBaseline);
-        return { effective: effective, delta: delta };
     }
 
     function calculateStats() {
@@ -934,9 +1046,11 @@
         const scaleMaxPatk = oldRawPatkMax + (dStr * 2.0) + (dDex * 6.78);
         const scaleMinMatk = oldRawMatkMin + (dInt * 25.8);
         const scaleMaxMatk = oldRawMatkMax + (dInt * 25.92);
-        const scaleDef = oldRawDef + (dCon * 20.445);
-        const scaleHp = oldRawHp + (dCon * 575.4);
-        const scaleMp = oldRawMp + (dInt * 103.6);
+
+        // ตัวแปรที่หายไป
+        const scaleDef = oldRawDef + (dCon * 2.5); 
+        const scaleHp = oldRawHp + (dCon * 25.0);  
+        const scaleMp = oldRawMp + (dInt * 15.0);  
 
         const currentMult = (1 + (baseline.wAtk||0)/100) * (1 + getVal('live-p-patk')/100);
         const currentMatkMult = (1 + (baseline.wMatk||0)/100) * (1 + getVal('live-p-matk')/100); 
@@ -948,7 +1062,7 @@
         currentSimulatedStats.def = Math.max(1, Math.round(scaleDef * totalDefMultiplier));
         
         const finalMinMatk = Math.max(1, Math.round(scaleMinMatk * currentMatkMult));
-        const finalMaxMatk = Math.max(1, Math.round(scaleMaxPatk * currentMatkMult)); 
+        const finalMaxMatk = Math.max(1, Math.round(scaleMaxMatk * currentMatkMult));
         const finalHp = Math.max(1, Math.round(scaleHp * (1 + getVal('live-p-hp')/100)));
         const finalMp = Math.max(1, Math.round(scaleMp * (1 + getVal('live-p-mp')/100)));
 
@@ -963,6 +1077,120 @@
         setTxt('detail-def', currentSimulatedStats.def.toLocaleString());
         setTxt('detail-hp', finalHp.toLocaleString());
         setTxt('detail-mp', finalMp.toLocaleString());
+
+        let pvpAtkBonus = (parseFloat(document.getElementById('vip-pvp-atk').value) || 0) / 100;
+        let basePvpMin = currentSimulatedStats.patkMin * (1 + pvpAtkBonus);
+        let basePvpMax = currentSimulatedStats.patkMax * (1 + pvpAtkBonus);
+        setTxt('main-pvp-dmg-display', `${Math.floor(basePvpMin).toLocaleString()} ~ ${Math.floor(basePvpMax).toLocaleString()}`);
+
+        let pvpDefBonus = (parseFloat(document.getElementById('vip-pvp-def').value) || 0) / 100;
+        let ourPotion = activeOurPvpPotion / 100;
+        let basePvpDef = currentSimulatedStats.def * (1 + pvpDefBonus + ourPotion);
+        setTxt('main-pvp-def-display', `${Math.floor(basePvpDef).toLocaleString()}`);
+        
+        calcVipSkill();
+    }
+
+    function checkVipAccess(actionCallback) {
+        if (isVipLogged || localStorage.getItem('ghostm_vip') === 'true') {
+            isVipLogged = true;
+            const overlay = document.getElementById('pvp-lock-overlay');
+            if(overlay) overlay.style.display = 'none'; 
+            if (actionCallback) actionCallback();
+        } else {
+            pendingVipAction = actionCallback;
+            document.getElementById('vip-user-input').value = document.getElementById('char-name-box').value;
+            document.getElementById('vip-login-modal').style.display = 'flex';
+        }
+    }
+
+    function closeVipLogin() {
+        document.getElementById('vip-login-modal').style.display = 'none';
+        pendingVipAction = null;
+    }
+
+    function verifyVip() {
+        const user = document.getElementById('vip-user-input').value.trim();
+        const pin = document.getElementById('vip-pin-input').value.trim();
+        
+        if (user === "เดะวินนะ" && pin === "soice_x4") {
+            isVipLogged = true;
+            localStorage.setItem('ghostm_vip', 'true');
+            const overlay = document.getElementById('pvp-lock-overlay');
+            if(overlay) overlay.style.display = 'none';
+            closeVipLogin();
+            if (pendingVipAction) pendingVipAction();
+        } else {
+            alert('❌ ชื่อตัวละคร หรือ รหัสลับผู้พัฒนา ไม่ถูกต้อง!');
+        }
+    }
+
+    function unlockVipFeatures() {}
+
+    document.addEventListener("DOMContentLoaded", function() {
+        const classSelect = document.getElementById('class-select');
+        if(classSelect) {
+            classSelect.addEventListener('change', handleDropdownChange);
+        }
+    });
+
+    function openVipSkillModal() {
+        checkVipAccess(() => {
+            document.getElementById('vip-skill-modal').style.display = 'flex';
+            calcVipSkill();
+        });
+    }
+
+    function closeVipSkillModal() {
+        document.getElementById('vip-skill-modal').style.display = 'none';
+    }
+
+    function setOurPvpPotion(val) {
+        activeOurPvpPotion = val;
+        [0, 200, 400, 600].forEach(v => {
+            const btn = document.getElementById('btn-our-pot-' + v);
+            if(btn) {
+                if(v === val) btn.classList.add('active');
+                else btn.classList.remove('active');
+            }
+        });
+        autoCalculate();
+    }
+
+    function calcVipSkill() {
+        let baseMin = currentSimulatedStats.patkMin || 0;
+        let baseMax = currentSimulatedStats.patkMax || 0;
+        
+        let skillPct = parseFloat(document.getElementById('sim-skill-pct').value) || 0;
+        let bonusPct = parseFloat(document.getElementById('sim-bonus-pct').value) || 0;
+        let critDmg = (parseFloat(document.getElementById('vip-crit-dmg').value) || 0) / 100;
+        
+        let pvpAtkBonus = parseFloat(document.getElementById('vip-pvp-atk').value) || 0;
+        
+        let enemyBaseDef = parseFloat(document.getElementById('vip-enemy-base-def').value) || 0;
+        let enemyDefBuff = parseFloat(document.getElementById('vip-enemy-def-buff').value) || 0;
+
+        let finalMulti = (skillPct + bonusPct) / 100;
+        let pveMin = baseMin * finalMulti;
+        let pveMax = baseMax * finalMulti;
+        
+        let pvpAtkMin = pveMin * (1 + pvpAtkBonus / 100);
+        let pvpAtkMax = pveMax * (1 + pvpAtkBonus / 100);
+        
+        let enemyTotalDef = enemyBaseDef * (1 + enemyDefBuff / 100);
+        
+        const enemyDefDisplay = document.getElementById('enemy-total-def-display');
+        if (enemyDefDisplay) {
+            enemyDefDisplay.innerText = `พลังป้องกัน PvP สุทธิของศัตรู: ${Math.floor(enemyTotalDef).toLocaleString()}`;
+        }
+        
+        let pvpMin = Math.max(1, pvpAtkMin - enemyTotalDef);
+        let pvpMax = Math.max(1, pvpAtkMax - enemyTotalDef);
+
+        setTxt('res-pve-norm', `${Math.round(pveMin).toLocaleString()} ~ ${Math.round(pveMax).toLocaleString()}`);
+        setTxt('res-pve-crit', `${Math.round(pveMin * critDmg).toLocaleString()} ~ ${Math.round(pveMax * critDmg).toLocaleString()}`);
+        setTxt('res-pvp-norm', `${Math.round(pvpMin).toLocaleString()} ~ ${Math.round(pvpMax).toLocaleString()}`);
+        setTxt('res-pvp-crit', `${Math.round(pvpMin * critDmg).toLocaleString()} ~ ${Math.round(pvpMax * critDmg).toLocaleString()}`);
     }
 
     function autoCalculate() {
@@ -973,6 +1201,7 @@
     function autoSave() {
         let snapshot = {
             charName: document.getElementById('char-name-box').value,
+            charLevel: document.getElementById('char-lv-box').value, 
             pin: document.getElementById('char-pin-box').value,
             baseStr: getVal('base-str'), plusStr: getVal('plus-str'), livePStr: getVal('live-p-str'),
             baseDex: getVal('base-dex'), plusDex: getVal('plus-dex'), livePDex: getVal('live-p-dex'),
@@ -981,7 +1210,9 @@
             classSelect: document.getElementById('class-select').value, petSelect: document.getElementById('pet-select').value, partyBuff: getVal('party-buff'),
             savedClassBuffs: { ...activeClassBuffs },
             savedItemBuffs: { atk: {...activeItemBuffs.atk}, def: {...activeItemBuffs.def} },
-            savedHpBuffs: { ...activeHpBuffs }
+            savedHpBuffs: { ...activeHpBuffs },
+            vipPvpAtk: getVal('vip-pvp-atk'), vipPvpDef: getVal('vip-pvp-def'), 
+            ourPotion: activeOurPvpPotion
         };
         localStorage.setItem('ghostm_save', JSON.stringify(snapshot));
     }
@@ -991,6 +1222,7 @@
     function resetDefaults() {
         if(confirm('⚠️ ต้องการล้างข้อมูลทั้งหมดหรือไม่?')) {
             localStorage.removeItem('ghostm_save');
+            localStorage.removeItem('ghostm_vip'); 
             location.reload();
         }
     }
@@ -1001,6 +1233,7 @@
             if (saved) {
                 let data = JSON.parse(saved);
                 document.getElementById('char-name-box').value = data.charName || 'soicex';
+                if(data.charLevel) document.getElementById('char-lv-box').value = data.charLevel;
                 document.getElementById('char-pin-box').value = data.pin || '';
                 setVal('base-str', data.baseStr); setVal('plus-str', data.plusStr); setVal('live-p-str', data.livePStr);
                 setVal('base-dex', data.baseDex); setVal('plus-dex', data.plusDex); setVal('live-p-dex', data.livePDex);
@@ -1011,6 +1244,9 @@
                 if(data.petSelect) document.getElementById('pet-select').value = data.petSelect;
                 setVal('party-buff', data.partyBuff);
 
+                if(data.vipPvpAtk !== undefined) setVal('vip-pvp-atk', data.vipPvpAtk);
+                if(data.vipPvpDef !== undefined) setVal('vip-pvp-def', data.vipPvpDef);
+                
                 if (data.savedClassBuffs) {
                     activeClassBuffs = { ...data.savedClassBuffs };
                     ['atk', 'def'].forEach(val => {
@@ -1027,9 +1263,20 @@
                     activeHpBuffs = { ...data.savedHpBuffs };
                     [5, 10, 15, 20, 30].forEach(val => { const btn = document.getElementById('btn-hp-' + val); if(btn) { if (activeHpBuffs[val]) btn.classList.add('active'); else btn.classList.remove('active'); } });
                 }
+
+                setTimeout(() => {
+                    if(data.ourPotion !== undefined) setOurPvpPotion(data.ourPotion);
+                }, 50);
             }
+
+            if (localStorage.getItem('ghostm_vip') === 'true') {
+                isVipLogged = true;
+                const overlay = document.getElementById('pvp-lock-overlay');
+                if(overlay) overlay.style.display = 'none';
+            }
+
         } catch (e) {
-            console.error("ล้างเซฟเก่าป้องกันโค้ดค้าง:", e);
+            console.error("เกิดข้อผิดพลาดในการโหลดเซฟ:", e);
             localStorage.removeItem('ghostm_save');
         }
     }
@@ -1152,6 +1399,75 @@
             btn.disabled = false;
             alert('เกิดข้อผิดพลาดในการเชื่อมต่อเครือข่าย!');
         });
+    }
+
+    // 🧮 ระบบเครื่องคิดเลข 
+    let calcTarget = '';
+    function openCalc(targetId) { 
+        calcTarget = targetId; 
+        document.getElementById('calc-input').value = ''; 
+        document.getElementById('calc-modal').style.display = 'flex'; 
+    }
+    function closeCalc() { 
+        document.getElementById('calc-modal').style.display = 'none'; 
+    }
+    function applyCalc() { 
+        try { 
+            let result = eval(document.getElementById('calc-input').value);
+            if(!isNaN(result) && calcTarget) {
+                setVal(calcTarget, result);
+                updateDnaSums();
+            }
+            closeCalc(); 
+        } catch(e) { 
+            alert("รูปแบบสมการไม่ถูกต้องครับ"); 
+        } 
+    }
+
+    // 💾 ระบบ Sync ค่าฐาน DNA
+    function setNewBaseline() {
+        baseline.baseStr = getVal('ref-base-str');
+        baseline.plusStr = getVal('ref-plus-str');
+        baseline.baseDex = getVal('ref-base-dex');
+        baseline.plusDex = getVal('ref-plus-dex');
+        baseline.baseCon = getVal('ref-base-con');
+        baseline.plusCon = getVal('ref-plus-con');
+        baseline.baseInt = getVal('ref-base-int');
+        baseline.plusInt = getVal('ref-plus-int');
+        
+        baseline.patkMin = getVal('ref-patk-min');
+        baseline.patkMax = getVal('ref-patk-max');
+        baseline.matkMin = getVal('ref-matk-min');
+        baseline.matkMax = getVal('ref-matk-max');
+        baseline.def = getVal('ref-def');
+        baseline.hp = getVal('ref-hp');
+        baseline.mp = getVal('ref-mp');
+
+        baseline.wAtk = getVal('ref-w-atk');
+        baseline.pEquip = getVal('ref-p-equip');
+        baseline.pEncyc = getVal('ref-p-encyc');
+        baseline.pSpirit = getVal('ref-p-spirit');
+        baseline.pZodiac = getVal('ref-p-zodiac');
+        baseline.pBaseBuff = getVal('ref-p-basebuff');
+
+        baseline.wMatk = getVal('ref-w-matk');
+        baseline.mEquip = getVal('ref-m-equip');
+        baseline.mEncyc = getVal('ref-m-encyc');
+        baseline.mSpirit = getVal('ref-m-spirit');
+        baseline.mZodiac = getVal('ref-m-zodiac');
+        baseline.mBaseBuff = getVal('ref-m-basebuff');
+
+        baseline.defBaseBuff = getVal('ref-def-buff');
+        baseline.bHp = getVal('ref-b-hp');
+        baseline.bMp = getVal('ref-b-mp');
+        baseline.pStr = getVal('ref-p-str');
+        baseline.pDex = getVal('ref-p-dex');
+        baseline.pCon = getVal('ref-p-con');
+        baseline.pInt = getVal('ref-p-int');
+
+        alert('✅ ซิงค์ข้อมูลตั้งฐาน DNA สำเร็จ!');
+        closeModal();
+        autoCalculate();
     }
 
     window.onload = function() { 
