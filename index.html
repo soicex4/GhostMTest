@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>SOICEX : Ghost M Stats Simulator Pro</title>
-    <!-- โหลดฟอนต์ 8-Bit คลาสสิก -->
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; }
@@ -371,7 +370,7 @@
         </div>
     </div>
 
-    <div class="top-controls" onchange="autoCalculate()">
+    <div class="top-controls">
         <div class="select-container" style="flex: 2.5; min-width: 320px;">
             <label>👥 อาชีพตัวละคร และ สกิลบัฟอาชีพ</label>
             <div class="class-action-group">
@@ -393,7 +392,7 @@
         </div>
         <div class="select-container">
             <label>🐾 สัตว์เลี้ยงแฝง</label>
-            <select id="pet-select">
+            <select id="pet-select" onchange="updateLivePctBoxes(); autoCalculate();">
                 <option value="0">ไม่มีสกิล (0%)</option>
                 <option value="2">ผสม Lv.1 (+2%)</option>
                 <option value="4" selected>ผสม Lv.2 (+4%)</option>
@@ -402,7 +401,7 @@
         </div>
         <div class="select-container" style="min-width: 80px; flex: 0.5;">
             <label>🤝 บัฟปาร์ตี้ (%)</label>
-            <input type="number" id="party-buff" value="11">
+            <input type="number" id="party-buff" value="11" onchange="updateLivePctBoxes(); autoCalculate();">
         </div>
     </div>
     
@@ -495,12 +494,12 @@
             <div class="stat-row-right">
                 <span class="stat-label-right">ATK (พลังโจมตีรวม)</span>
                 <span class="stat-val-right" id="detail-patk">-</span>
-                <div class="pct-box"><input type="number" id="live-p-patk" class="border-yellow" value="0" step="0.01" readonly><span>%</span></div>
+                <div class="pct-box"><input type="number" id="live-p-patk" class="border-yellow" value="0" step="0.01" onchange="autoCalculate()"><span>%</span></div>
             </div>
             <div class="stat-row-right">
                 <span class="stat-label-right">MATK (เวทมนตร์)</span>
                 <span class="stat-val-right" id="detail-matk">-</span>
-                <div class="pct-box"><input type="number" id="live-p-matk" class="border-yellow" value="0" step="0.01" readonly><span>%</span></div>
+                <div class="pct-box"><input type="number" id="live-p-matk" class="border-yellow" value="0" step="0.01" onchange="autoCalculate()"><span>%</span></div>
             </div>
 
             <div class="section-title" style="margin-top:12px; flex-direction:column; align-items:flex-start; gap:8px;">
@@ -513,7 +512,7 @@
             <div class="stat-row-right">
                 <span class="stat-label-right">DEF (พลังป้องกันสุทธิ)</span>
                 <span class="stat-val-right" id="detail-def">-</span>
-                <div class="pct-box"><input type="number" id="live-p-def" class="border-yellow" value="0" step="0.01" readonly><span>%</span></div>
+                <div class="pct-box"><input type="number" id="live-p-def" class="border-yellow" value="0" step="0.01" onchange="autoCalculate()"><span>%</span></div>
             </div>
 
             <div class="section-title" style="margin-top:12px; flex-direction:column; align-items:flex-start; gap:8px;">
@@ -530,12 +529,12 @@
             <div class="stat-row-right">
                 <span class="stat-label-right">HP (พลังชีวิตสุทธิ)</span>
                 <span class="stat-val-right" id="detail-hp">-</span>
-                <div class="pct-box"><input type="number" id="live-p-hp" class="border-yellow" value="0" step="0.01" readonly><span>%</span></div>
+                <div class="pct-box"><input type="number" id="live-p-hp" class="border-yellow" value="0" step="0.01" onchange="autoCalculate()"><span>%</span></div>
             </div>
             <div class="stat-row-right">
                 <span class="stat-label-right">MP (มานาสุทธิ)</span>
                 <span class="stat-val-right" id="detail-mp">-</span>
-                <div class="pct-box"><input type="number" id="live-p-mp" class="border-yellow" value="0" step="0.01" readonly><span>%</span></div>
+                <div class="pct-box"><input type="number" id="live-p-mp" class="border-yellow" value="0" step="0.01" onchange="autoCalculate()"><span>%</span></div>
             </div>
 
             <div class="window-title" style="margin-top:15px; border-left: 3px solid #f1c40f;">
@@ -922,6 +921,7 @@
         if (!btn || btn.disabled) return;
         activeClassBuffs[type] = !activeClassBuffs[type];
         if (activeClassBuffs[type]) btn.classList.add('active'); else btn.classList.remove('active');
+        updateLivePctBoxes(); // อัปเดต % เมื่อบัฟเปลี่ยน
         autoCalculate();
     }
 
@@ -930,6 +930,7 @@
         if (!btn) return;
         activeItemBuffs[type][val] = !activeItemBuffs[type][val];
         if (activeItemBuffs[type][val]) btn.classList.add('active'); else btn.classList.remove('active');
+        updateLivePctBoxes(); // อัปเดต % เมื่อบัฟเปลี่ยน
         autoCalculate();
     }
 
@@ -951,16 +952,15 @@
             activeHpBuffs[val] = !activeHpBuffs[val];
             if (activeHpBuffs[val]) btn.classList.add('active'); else btn.classList.remove('active');
         }
+        updateLivePctBoxes(); // อัปเดต % เมื่อบัฟเปลี่ยน
         autoCalculate();
     }
 
-    function handleDropdownChange() {
+    function refreshClassUI() {
         const selectEl = document.getElementById('class-select');
         if(!selectEl || selectEl.selectedIndex === -1) return;
         
         const selClass = selectEl.options[selectEl.selectedIndex];
-        if(!selClass) return;
-
         const currentClassDef = parseFloat(selClass.getAttribute('data-def')) || 0;
         const isPassiveAtk = selClass.getAttribute('data-passive-atk') === 'true';
 
@@ -976,11 +976,11 @@
                 btnAtk.classList.remove('active');
                 btnAtk.innerText = `⚔️ บัฟโจมตี (Passive)`;
             }
-            activeClassBuffs.atk = false;
         } else {
             if(btnAtk) {
                 btnAtk.disabled = false;
                 if (activeClassBuffs.atk) btnAtk.classList.add('active');
+                else btnAtk.classList.remove('active');
             }
         }
 
@@ -989,34 +989,71 @@
                 btnDef.disabled = true;
                 btnDef.classList.remove('active');
             }
-            activeClassBuffs.def = false;
         } else {
             if(btnDef) {
                 btnDef.disabled = false;
                 if (activeClassBuffs.def) btnDef.classList.add('active');
+                else btnDef.classList.remove('active');
             }
         }
+    }
 
+    function handleDropdownChange() {
+        const selectEl = document.getElementById('class-select');
+        if(!selectEl || selectEl.selectedIndex === -1) return;
+        
+        const selClass = selectEl.options[selectEl.selectedIndex];
+        const currentClassDef = parseFloat(selClass.getAttribute('data-def')) || 0;
+        const isPassiveAtk = selClass.getAttribute('data-passive-atk') === 'true';
+
+        if (isPassiveAtk) activeClassBuffs.atk = false;
+        if (currentClassDef === 0) activeClassBuffs.def = false;
+
+        refreshClassUI();
+        updateLivePctBoxes();
         autoCalculate();
     }
 
-    // ✅ สมการดั้งเดิมที่ถูกต้อง: แยก Base ดิบๆ ออกจากตัวคูณเปอร์เซ็นต์อย่างเด็ดขาด
     function calculateStats() {
-        updateLivePctBoxes();
 
-        // 1. คำนวณค่าแต้มรวมเพียวๆ (Base + Plus) 
-        const baseStr = getVal('base-str') + getVal('plus-str');
-        const baseDex = getVal('base-dex') + getVal('plus-dex');
-        const baseCon = getVal('base-con') + getVal('plus-con');
-        const baseInt = getVal('base-int') + getVal('plus-int');
+        // 1. ค่า Base (สีขาว) และ ค่า Plus (สีเขียว)
+        const rawBaseStr = getVal('base-str'); const plusStr = getVal('plus-str');
+        const rawBaseDex = getVal('base-dex'); const plusDex = getVal('plus-dex');
+        const rawBaseCon = getVal('base-con'); const plusCon = getVal('plus-con');
+        const rawBaseInt = getVal('base-int'); const plusInt = getVal('plus-int');
 
-        // 2. แสดงผลที่หน้าจอกล่องสรุป (ไม่คูณ % ให้เลขพุ่งแล้ว!)
-        setTxt('total-str', baseStr); 
-        setTxt('total-dex', baseDex);
-        setTxt('total-con', baseCon); 
-        setTxt('total-int', baseInt);
+        // ผลรวมดิบๆ ตรงไปตรงมา (เช่น 1138 + 1304 = 2442)
+        const sumStr = rawBaseStr + plusStr;
+        const sumDex = rawBaseDex + plusDex;
+        const sumCon = rawBaseCon + plusCon;
+        const sumInt = rawBaseInt + plusInt;
 
-        // 3. คำนวณตัวคูณ DNA
+        // โหลดค่า % ที่กำลังโชว์อยู่บนหน้าจอ (live)
+        const pctStr = getVal('live-p-str') || 0;
+        const pctDex = getVal('live-p-dex') || 0;
+        const pctCon = getVal('live-p-con') || 0;
+        const pctInt = getVal('live-p-int') || 0;
+
+        // ดึงค่า % ดั้งเดิมที่คุณเคยกดเซฟตอนตั้งฐานข้อมูล (ref)
+        const refPctStr = baseline.pStr || 0;
+        const refPctDex = baseline.pDex || 0;
+        const refPctCon = baseline.pCon || 0;
+        const refPctInt = baseline.pInt || 0;
+
+        // 🌟 จุดไคลแมกซ์: คำนวณสเตตัสสุทธิโดยบวกเพิ่มเฉพาะ "ส่วนต่าง %" ที่จำลองเพิ่ม/ลด 
+        // ทำแบบนี้จะไม่มีการเบิ้ล % ตอนโหลดหน้าครั้งแรกแน่นอนครับ
+        const effectiveStr = sumStr + Math.floor(rawBaseStr * (pctStr - refPctStr) / 100);
+        const effectiveDex = sumDex + Math.floor(rawBaseDex * (pctDex - refPctDex) / 100);
+        const effectiveCon = sumCon + Math.floor(rawBaseCon * (pctCon - refPctCon) / 100);
+        const effectiveInt = sumInt + Math.floor(rawBaseInt * (pctInt - refPctInt) / 100);
+
+        // 2. แสดงผลที่หน้าจอกล่องสรุป (ค่าที่แสดงจะขยับเมื่อคุณเปลี่ยน % ทันทีครับ)
+        setTxt('total-str', effectiveStr); 
+        setTxt('total-dex', effectiveDex);
+        setTxt('total-con', effectiveCon); 
+        setTxt('total-int', effectiveInt);
+
+        // 3. คำนวณตัวคูณ DNA หมวดอื่นๆ
         const dnaTotalAtkPct = (baseline.pEquip||0) + (baseline.pEncyc||0) + (baseline.pSpirit||0) + (baseline.pZodiac||0) + (baseline.pBaseBuff||0);
         const dnaTotalMatkPct = (baseline.mEquip||0) + (baseline.mEncyc||0) + (baseline.mSpirit||0) + (baseline.mZodiac||0) + (baseline.mBaseBuff||0);
         
@@ -1033,16 +1070,16 @@
         const oldRawHp = (baseline.hp||0) / (1 + (baseline.bHp||0) / 100);
         const oldRawMp = (baseline.mp||0) / (1 + (baseline.bMp||0) / 100);
 
-        // 5. หาค่าส่วนต่างเพื่อปรับดาเมจ (เอาค่าดิบ - ค่าดิบ เท่านั้น!)
-        const refTotalStr = (baseline.baseStr||0) + (baseline.plusStr||0);
-        const refTotalDex = (baseline.baseDex||0) + (baseline.plusDex||0);
-        const refTotalCon = (baseline.baseCon||0) + (baseline.plusCon||0);
-        const refTotalInt = (baseline.baseInt||0) + (baseline.plusInt||0);
+        // 5. หาค่าส่วนต่างเพื่อปรับดาเมจ (เอาค่าสเตตัส Effective ที่คำนวณข้างบน มาลบกับผลรวมดิบตอนตั้งฐาน)
+        const refSumStr = (baseline.baseStr||0) + (baseline.plusStr||0);
+        const refSumDex = (baseline.baseDex||0) + (baseline.plusDex||0);
+        const refSumCon = (baseline.baseCon||0) + (baseline.plusCon||0);
+        const refSumInt = (baseline.baseInt||0) + (baseline.plusInt||0);
 
-        const dStr = baseStr - refTotalStr;
-        const dDex = baseDex - refTotalDex;
-        const dCon = baseCon - refTotalCon;
-        const dInt = baseInt - refTotalInt;
+        const dStr = effectiveStr - refSumStr;
+        const dDex = effectiveDex - refSumDex;
+        const dCon = effectiveCon - refSumCon;
+        const dInt = effectiveInt - refSumInt;
 
         // 6. ขยายสเกลค่า Raw ตามส่วนต่าง
         const scaleMinPatk = oldRawPatkMin + (dStr * 2.0) + (dDex * 4.71);
@@ -1320,6 +1357,7 @@
 
         autoSave(); 
         closeModal();
+        updateLivePctBoxes(); // ซิงค์ % กับค่ากล่องบัฟหน้าจอใหม่
         autoCalculate();
         alert('✅ ซิงค์ฐานข้อมูล DNA สำเร็จและบันทึกเรียบร้อย!');
     }
@@ -1338,6 +1376,11 @@
             baseDex: getVal('base-dex'), plusDex: getVal('plus-dex'), livePDex: getVal('live-p-dex'),
             baseCon: getVal('base-con'), plusCon: getVal('plus-con'), livePCon: getVal('live-p-con'),
             baseInt: getVal('base-int'), plusInt: getVal('plus-int'), livePInt: getVal('live-p-int'),
+            
+            // เพิ่มการ Save ค่า % ที่ผู้ใช้พิมพ์แก้เอง
+            livePPatk: getVal('live-p-patk'), livePMatk: getVal('live-p-matk'), 
+            livePDef: getVal('live-p-def'), livePHp: getVal('live-p-hp'), livePMp: getVal('live-p-mp'),
+
             classSelect: document.getElementById('class-select').value, petSelect: document.getElementById('pet-select').value, partyBuff: getVal('party-buff'),
             savedClassBuffs: { ...activeClassBuffs },
             savedItemBuffs: { atk: {...activeItemBuffs.atk}, def: {...activeItemBuffs.def} },
@@ -1390,6 +1433,13 @@
                 setVal('base-dex', data.baseDex); setVal('plus-dex', data.plusDex); setVal('live-p-dex', data.livePDex);
                 setVal('base-con', data.baseCon); setVal('plus-con', data.plusCon); setVal('live-p-con', data.livePCon);
                 setVal('base-int', data.baseInt); setVal('plus-int', data.plusInt); setVal('live-p-int', data.livePInt);
+
+                // โหลดค่า % ที่ผู้ใช้พิมพ์แก้ค้างไว้
+                if(data.livePPatk !== undefined) setVal('live-p-patk', data.livePPatk);
+                if(data.livePMatk !== undefined) setVal('live-p-matk', data.livePMatk);
+                if(data.livePDef !== undefined) setVal('live-p-def', data.livePDef);
+                if(data.livePHp !== undefined) setVal('live-p-hp', data.livePHp);
+                if(data.livePMp !== undefined) setVal('live-p-mp', data.livePMp);
                 
                 if(data.classSelect) document.getElementById('class-select').value = data.classSelect;
                 if(data.petSelect) document.getElementById('pet-select').value = data.petSelect;
@@ -1400,10 +1450,6 @@
                 
                 if (data.savedClassBuffs) {
                     activeClassBuffs = { ...data.savedClassBuffs };
-                    ['atk', 'def'].forEach(val => {
-                        const btn = document.getElementById('btn-class-' + val);
-                        if(btn && !btn.disabled) { if (activeClassBuffs[val]) btn.classList.add('active'); else btn.classList.remove('active'); }
-                    });
                 }
                 if (data.savedItemBuffs) {
                     activeItemBuffs = { atk: {...data.savedItemBuffs.atk}, def: {...data.savedItemBuffs.def} };
@@ -1418,6 +1464,8 @@
                 setTimeout(() => {
                     if(data.ourPotion !== undefined) setOurPvpPotion(data.ourPotion);
                 }, 50);
+
+                refreshClassUI(); // อัปเดตหน้าตาปุ่มบัฟอาชีพหลังโหลดเสร็จ
             }
 
             if (localStorage.getItem('ghostm_vip') === 'true') {
@@ -1573,7 +1621,6 @@
         loadSavedStats(); 
         autoCalculate(); 
         updateDnaSums(); 
-        handleDropdownChange(); 
         fetchLeaderboard(); 
         
         if (localStorage.getItem('ghostm_hide_tut') !== 'true') {
