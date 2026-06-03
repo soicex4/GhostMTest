@@ -859,8 +859,6 @@
 
 <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbyvwccGHLs0QMxmURLy-2KVzzB8oSN3mjgcO1hFq8qpjLqrcc5vHLuhRWxIQsZ3vPRP/exec';
-
-    // 💡 รหัสผ่านสำหรับสมาชิกทั่วไป (เปลี่ยนได้ที่นี่ครับลูกพี่)
     const MONTHLY_PIN = "1234";
 
     let currentSimulatedStats = { patkMin: 0, patkMax: 0, def: 0, rawMaxAtk: 0 };
@@ -868,7 +866,6 @@
     let pendingVipAction = null; 
     let activeOurPvpPotion = 0; 
 
-    // ✅ คืนค่า Baseline
     let baseline = {
         baseStr: 91, plusStr: 342, baseDex: 1138, plusDex: 1304, baseCon: 105, plusCon: 420, baseInt: 53, plusInt: 235,
         patkMin: 58892, patkMax: 73635, matkMin: 10435, matkMax: 10479, def: 13076, hp: 305479, mp: 29448, 
@@ -884,14 +881,6 @@
     function getVal(id) { const el = document.getElementById(id); return el && el.value !== '' ? (parseFloat(el.value) || 0) : 0; }
     function setVal(id, val) { const el = document.getElementById(id); if (el) el.value = val; }
     function setTxt(id, val) { const el = document.getElementById(id); if (el) el.innerText = val; }
-
-    function getEffective(baseId, plusId, pctId, baseRef, plusRef, pctRef) {
-        let currentFlat = getVal(baseId) + getVal(plusId);
-        let refFlat = baseRef + plusRef;
-        let effective = currentFlat * (1 + getVal(pctId) / 100);
-        let delta = currentFlat - refFlat; 
-        return { effective: effective, delta: delta };
-    }
 
     function updateLivePctBoxes() {
         const selClass = document.getElementById('class-select');
@@ -1011,19 +1000,23 @@
         autoCalculate();
     }
 
+    // ✅ สมการดั้งเดิมที่ถูกต้อง: แยก Base ดิบๆ ออกจากตัวคูณเปอร์เซ็นต์อย่างเด็ดขาด
     function calculateStats() {
         updateLivePctBoxes();
 
-        const strData = getEffective('base-str', 'plus-str', 'live-p-str', baseline.baseStr, baseline.plusStr, baseline.pStr);
-        const dexData = getEffective('base-dex', 'plus-dex', 'live-p-dex', baseline.baseDex, baseline.plusDex, baseline.pDex);
-        const conData = getEffective('base-con', 'plus-con', 'live-p-con', baseline.baseCon, baseline.plusCon, baseline.pCon);
-        const intData = getEffective('base-int', 'plus-int', 'live-p-int', baseline.baseInt, baseline.plusInt, baseline.pInt);
+        // 1. คำนวณค่าแต้มรวมเพียวๆ (Base + Plus) 
+        const baseStr = getVal('base-str') + getVal('plus-str');
+        const baseDex = getVal('base-dex') + getVal('plus-dex');
+        const baseCon = getVal('base-con') + getVal('plus-con');
+        const baseInt = getVal('base-int') + getVal('plus-int');
 
-        setTxt('total-str', Math.round(strData.effective)); 
-        setTxt('total-dex', Math.round(dexData.effective));
-        setTxt('total-con', Math.round(conData.effective)); 
-        setTxt('total-int', Math.round(intData.effective));
+        // 2. แสดงผลที่หน้าจอกล่องสรุป (ไม่คูณ % ให้เลขพุ่งแล้ว!)
+        setTxt('total-str', baseStr); 
+        setTxt('total-dex', baseDex);
+        setTxt('total-con', baseCon); 
+        setTxt('total-int', baseInt);
 
+        // 3. คำนวณตัวคูณ DNA
         const dnaTotalAtkPct = (baseline.pEquip||0) + (baseline.pEncyc||0) + (baseline.pSpirit||0) + (baseline.pZodiac||0) + (baseline.pBaseBuff||0);
         const dnaTotalMatkPct = (baseline.mEquip||0) + (baseline.mEncyc||0) + (baseline.mSpirit||0) + (baseline.mZodiac||0) + (baseline.mBaseBuff||0);
         
@@ -1031,6 +1024,7 @@
         const dnaMatkMult = (1 + (baseline.wAtk||0)/100) * (1 + dnaTotalMatkPct/100); 
         const dnaDefMult = 1 + (baseline.defBaseBuff||0)/100;
 
+        // 4. ถอดรหัสค่า Base ดิบจาก DNA
         const oldRawPatkMin = (baseline.patkMin||0) / (dnaMult || 1);
         const oldRawPatkMax = (baseline.patkMax||0) / (dnaMult || 1);
         const oldRawMatkMin = (baseline.matkMin||0) / (dnaMatkMult || 1);
@@ -1039,11 +1033,18 @@
         const oldRawHp = (baseline.hp||0) / (1 + (baseline.bHp||0) / 100);
         const oldRawMp = (baseline.mp||0) / (1 + (baseline.bMp||0) / 100);
 
-        const dStr = strData.delta || 0; 
-        const dDex = dexData.delta || 0;
-        const dCon = conData.delta || 0; 
-        const dInt = intData.delta || 0;
+        // 5. หาค่าส่วนต่างเพื่อปรับดาเมจ (เอาค่าดิบ - ค่าดิบ เท่านั้น!)
+        const refTotalStr = (baseline.baseStr||0) + (baseline.plusStr||0);
+        const refTotalDex = (baseline.baseDex||0) + (baseline.plusDex||0);
+        const refTotalCon = (baseline.baseCon||0) + (baseline.plusCon||0);
+        const refTotalInt = (baseline.baseInt||0) + (baseline.plusInt||0);
 
+        const dStr = baseStr - refTotalStr;
+        const dDex = baseDex - refTotalDex;
+        const dCon = baseCon - refTotalCon;
+        const dInt = baseInt - refTotalInt;
+
+        // 6. ขยายสเกลค่า Raw ตามส่วนต่าง
         const scaleMinPatk = oldRawPatkMin + (dStr * 2.0) + (dDex * 4.71);
         const scaleMaxPatk = oldRawPatkMax + (dStr * 2.0) + (dDex * 6.78);
         const scaleMinMatk = oldRawMatkMin + (dInt * 25.8);
@@ -1053,6 +1054,7 @@
         const scaleHp = oldRawHp + (dCon * 575.4); 
         const scaleMp = oldRawMp + (dInt * 103.6); 
 
+        // 7. คูณด้วยบัฟปัจจุบัน
         const currentMult = (1 + (baseline.wAtk||0)/100) * (1 + getVal('live-p-patk')/100);
         const currentMatkMult = (1 + (baseline.wAtk||0)/100) * (1 + getVal('live-p-matk')/100); 
         const totalDefMultiplier = 1 + getVal('live-p-def')/100;
@@ -1067,6 +1069,7 @@
         const finalHp = Math.max(1, Math.round(scaleHp * (1 + getVal('live-p-hp')/100)));
         const finalMp = Math.max(1, Math.round(scaleMp * (1 + getVal('live-p-mp')/100)));
 
+        // 8. นำไปโชว์ที่หน้าจอ
         setTxt('view-patk', `${currentSimulatedStats.patkMin.toLocaleString()} ~ ${currentSimulatedStats.patkMax.toLocaleString()}`);
         setTxt('view-matk', `${finalMinMatk.toLocaleString()} ~ ${finalMaxMatk.toLocaleString()}`);
         setTxt('view-def', currentSimulatedStats.def.toLocaleString());
@@ -1092,7 +1095,6 @@
         calcVipSkill();
     }
 
-    // --- 👑 ฟังก์ชัน VIP Login ---
     function checkVipAccess(actionCallback) {
         if (isVipLogged || localStorage.getItem('ghostm_vip') === 'true') {
             isVipLogged = true;
@@ -1254,14 +1256,12 @@
         let pvpMin = Math.max(1, pvpAtkMin - enemyTotalDef);
         let pvpMax = Math.max(1, pvpAtkMax - enemyTotalDef);
 
-        // ✅ แก้บั๊กแสดงผลดาเมจ 4 มิติ ให้กลับมาแสดงแบบช่วง Min ~ Max เรียบร้อยแล้ว!
         setTxt('res-pve-norm', `${Math.round(pveMin).toLocaleString()} ~ ${Math.round(pveMax).toLocaleString()}`);
         setTxt('res-pve-crit', `${Math.round(pveMin * critDmg).toLocaleString()} ~ ${Math.round(pveMax * critDmg).toLocaleString()}`);
         setTxt('res-pvp-norm', `${Math.round(pvpMin).toLocaleString()} ~ ${Math.round(pvpMax).toLocaleString()}`);
         setTxt('res-pvp-crit', `${Math.round(pvpMin * critDmg).toLocaleString()} ~ ${Math.round(pvpMax * critDmg).toLocaleString()}`);
     }
 
-    // 🧮 เครื่องคิดเลข
     let calcTarget = '';
     function openCalc(targetId) { 
         calcTarget = targetId; 
@@ -1300,7 +1300,6 @@
     function openModal() { updateDnaSums(); document.getElementById('config-modal').style.display = 'flex'; }
     function closeModal() { document.getElementById('config-modal').style.display = 'none'; }
 
-    // 💾 ระบบ Sync ค่าฐาน DNA และเซฟฝังลง localStorage ทันที
     function setNewBaseline() {
         baseline.baseStr = getVal('ref-base-str'); baseline.plusStr = getVal('ref-plus-str');
         baseline.baseDex = getVal('ref-base-dex'); baseline.plusDex = getVal('ref-plus-dex');
@@ -1345,7 +1344,7 @@
             savedHpBuffs: { ...activeHpBuffs },
             vipPvpAtk: getVal('vip-pvp-atk'), vipPvpDef: getVal('vip-pvp-def'), 
             ourPotion: activeOurPvpPotion,
-            baseline: baseline // ✅ แนบข้อมูลกล่อง DNA ลงไปในเซฟ
+            baseline: baseline
         };
         localStorage.setItem('ghostm_save', JSON.stringify(snapshot));
     }
@@ -1367,7 +1366,6 @@
             if (saved) {
                 let data = JSON.parse(saved);
                 
-                // ✅ โหลดและเติมข้อมูลลงในกล่อง DNA อัตโนมัติ (กันบั๊กกล่องเปล่า)
                 if (data.baseline) {
                     baseline = data.baseline;
                     setVal('ref-base-str', baseline.baseStr); setVal('ref-plus-str', baseline.plusStr);
