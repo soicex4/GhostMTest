@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>SOICEX : Ghost M Stats Simulator Pro</title>
+    <!-- โหลดฟอนต์ 8-Bit คลาสสิก -->
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; }
@@ -197,16 +198,14 @@
         
         .warning-text { font-size: 11px; color: #dcdde1; text-align: left; margin-top: 15px; margin-bottom: 15px; line-height: 1.4; opacity: 0.8; }
 
-        /* 👑 โซน VIP (PVP Box) */
         .vip-pvp-box {
             position: relative; background: #1a1c20; padding: 15px; border-radius: 5px; border: 1px solid #d4af37;
         }
         .vip-lock-overlay {
-            position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.85); z-index: 10; display: flex; flex-direction: column; justify-content: center; align-items: center; border-radius: 4px; cursor: pointer; backdrop-filter: blur(2px); transition: 0.3s;
+            position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.85); z-index: 10; display: flex; flex-direction: column; justify-content: center; align-items: center; border-radius: 4px; text-align: center; padding: 10px; box-sizing: border-box; backdrop-filter: blur(1.5px); cursor: pointer; transition: 0.3s;
         }
         .vip-lock-overlay:hover { background: rgba(0,0,0,0.75); }
 
-        /* 💊 ปุ่มยาบัฟ PvP */
         .btn-pvp-potion {
             background-color: #141619; color: #dcdde1; border: 1px solid #485460;
             padding: 6px 10px; border-radius: 4px; font-weight: bold; cursor: pointer;
@@ -214,7 +213,6 @@
         }
         .btn-pvp-potion.active { background-color: #e74c3c; color: #fff; border-color: #e74c3c; box-shadow: 0 0 8px rgba(231,76,60,0.5); }
         
-        /* 🏆 Leaderboard UI */
         .leaderboard-container { background: #141619; border-top: 3px solid #ff793f; padding: 20px; }
         .lb-header { text-align: center; color: #ff793f; font-size: 14px; font-weight: bold; text-shadow: 0 0 10px rgba(255,121,63,0.5); margin-bottom: 15px; font-family: 'Press Start 2P', monospace; }
         
@@ -247,7 +245,6 @@
         .lb-score { width: 120px; font-weight: bold; text-align: right; flex-shrink: 0; font-variant-numeric: tabular-nums; }
         .lb-acc { width: 75px; color: #2ecc71; text-align: right; flex-shrink: 0; font-weight: bold; }
 
-        /* 🌟 ระบบกรอบฉายายุทธภพ Top 20 🌟 */
         .frame-rank1 { background: linear-gradient(90deg, #111, #4c0505, #111) !important; border: 2px solid #ff3838 !important; box-shadow: 0 0 12px rgba(255, 56, 56, 0.7); }
         .frame-rank1 .lb-name { color: #ff3838; text-shadow: 0 0 5px rgba(255,56,56,0.5); }
         .frame-rank1 .lb-rank { color: #ff1f1f; font-size: 12px; }
@@ -267,7 +264,6 @@
         .frame-rank8-20 { background: linear-gradient(90deg, #0d0e10, #1b1d22, #0d0e10) !important; border: 1px solid #4b5563 !important; box-shadow: 0 0 8px rgba(156, 163, 175, 0.2); }
         .frame-rank8-20 .lb-name { color: #cbd5e1; }
 
-        /* ⚔️ ระบบออร่าสีดาเมจตามระดับความตึง ⚔️ */
         .tier-normal { color: #dcdde1; }
         .tier-hero { color: #00d2d3 !important; text-shadow: 0 0 8px #00d2d3; }
         .tier-epic { color: #9b59b6 !important; text-shadow: 0 0 8px #9b59b6; }
@@ -345,13 +341,14 @@
     </style>
 </head>
 <body>
+
 <div class="game-window">
     <div class="header-bar">
         <div class="header-title">
             <span>👻 SOICEX : Ghost M Stats Simulator</span>
         </div>
         <div class="char-name-container">
-            <span>👤 ชื่อ:</span><input type="text" id="char-name-box" class="char-name-input" value="soicex" onchange="autoSave()">
+            <span>👤 ชื่อ:</span><input type="text" id="char-name-box" class="char-name-input" value="soicex" onchange="autoCalculate();">
             <span style="color:#7f8fa6;">|</span>
             <span>🌟 Lv:</span><input type="number" id="char-lv-box" class="char-name-input" style="width:50px; text-align:center;" value="126" onchange="autoSave()">
             <span style="color:#7f8fa6;">|</span>
@@ -449,8 +446,8 @@
                 <span style="color:#f1c40f;">⚔️ วิเคราะห์สมรภูมิ (PvP Core)</span>
             </div>
             <div class="vip-pvp-box">
-                <div id="pvp-lock-overlay" class="vip-lock-overlay" onclick="checkVipAccess(unlockVipFeatures)">
-                    <span style="color: #f1c40f; font-weight: bold; font-size: 14px; text-shadow: 0 0 10px #d4af37;">👑 คลิกเพื่อปลดล็อกฟังก์ชัน VIP</span>
+                <div id="pvp-lock-overlay" class="vip-lock-overlay" onclick="checkVipAccess()">
+                    <span style="color: #f1c40f; font-weight: bold; font-size: 13px; text-shadow: 0 0 10px #d4af37;">🔒 คลิกเพื่อปลดล็อกฟังก์ชัน VIP<br><span style="color:#fff; font-size:11px;">(สำหรับสมาชิก YouTube เท่านั้น)</span></span>
                 </div>
                 
                 <div class="control-row" style="margin-bottom: 8px;"><span class="stat-label" style="color:#dcdde1; font-size:12px;">🥷 PVP ATK บัฟ (%):</span>
@@ -776,12 +773,26 @@
 </div>
 
 <div class="modal-overlay" id="vip-login-modal" style="z-index: 5000;">
-    <div class="modal-content" style="max-width: 320px; border-color: #d4af37; box-shadow: 0 0 25px rgba(212, 175, 55, 0.3); text-align: center;">
-        <h3 style="color: #d4af37; margin-top: 0;">👑 เข้าสู่ระบบ VIP</h3>
-        <p style="font-size: 13px; color: #dcdde1; margin-bottom: 20px;">กรุณายืนยันตัวตนเพื่อปลดล็อกฟังก์ชันการคำนวณขั้นสูง</p>
-        <input type="text" id="vip-user-input" style="width: 100%; background: #0b0c10; border: 1px solid #d4af37; color: #fff; padding: 10px; border-radius: 4px; font-size: 14px; margin-bottom: 15px; text-align: center;" disabled>
-        <input type="password" id="vip-pin-input" style="width: 100%; background: #0b0c10; border: 1px solid #d4af37; color: #fff; padding: 10px; border-radius: 4px; font-size: 14px; margin-bottom: 15px; text-align: center;" placeholder="รหัสลับผู้พัฒนา">
-        <button class="btn-confirm-modal" style="background: linear-gradient(90deg, #d4af37, #f3e5ab); color: #000; box-shadow: 0 4px #b8860b;" onclick="verifyVip()">ปลดล็อกขีดจำกัด</button>
+    <div class="modal-content" style="max-width: 350px; border-color: #d4af37; box-shadow: 0 0 25px rgba(212, 175, 55, 0.3); text-align: center;">
+        <h3 style="color: #d4af37; margin-top: 0; font-family: 'Press Start 2P', monospace; font-size: 14px;">👑 เข้าสู่ระบบ VIP</h3>
+        <p id="vip-desc-text" style="font-size: 12px; color: #dcdde1; margin-bottom: 20px;">กรุณายืนยันตัวตนเพื่อปลดล็อกฟังก์ชันขั้นสูง</p>
+        
+        <div style="text-align: left; margin-bottom: 12px;">
+            <label style="font-size: 11px; color: #7f8fa6;">ชื่อตัวละคร (อ้างอิงจากด้านบน)</label>
+            <input type="text" id="vip-user-input" style="width: 100%; background: rgba(0,0,0,0.5); border: 1px solid #485460; color: #7f8fa6; padding: 10px; border-radius: 4px; font-size: 14px; text-align: center;" disabled>
+        </div>
+        
+        <div id="yt-name-container" style="text-align: left; margin-bottom: 12px;">
+            <label style="font-size: 11px; color: #f1c40f;">ชื่อบัญชี YouTube ของคุณ</label>
+            <input type="text" id="vip-yt-name" style="width: 100%; background: #0b0c10; border: 1px solid #d4af37; color: #fff; padding: 10px; border-radius: 4px; font-size: 14px; text-align: center;" placeholder="เช่น จอร์จรัก ซาร่า">
+        </div>
+        
+        <div style="text-align: left; margin-bottom: 20px;">
+            <label id="pin-label" style="font-size: 11px; color: #e74c3c;">รหัสผ่าน (สอบถามแอดมิน)</label>
+            <input type="password" id="vip-pin-input" style="width: 100%; background: #0b0c10; border: 1px solid #e74c3c; color: #fff; padding: 10px; border-radius: 4px; font-size: 14px; text-align: center;" placeholder="****">
+        </div>
+
+        <button id="btn-verify-vip" class="btn-confirm-modal" style="background: linear-gradient(90deg, #d4af37, #f3e5ab); color: #000; box-shadow: 0 4px #b8860b; margin-top: 0;" onclick="verifyVip()">ปลดล็อกขีดจำกัด</button>
         <button style="background:transparent; color:#aaa; border:none; width:100%; margin-top:15px; cursor:pointer; font-weight:bold;" onclick="closeVipLogin()">✕ ยกเลิก</button>
     </div>
 </div>
@@ -847,13 +858,17 @@
 </div>
 
 <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbxUhmuY7Q0w_xp9hP8PAEeVnLSLBDOQQXzMltCBv7gZ0biJ_AiEC1W9gM1huN2tlpN7/exec';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbyvwccGHLs0QMxmURLy-2KVzzB8oSN3mjgcO1hFq8qpjLqrcc5vHLuhRWxIQsZ3vPRP/exec';
+
+    // 💡 รหัสผ่านสำหรับสมาชิกทั่วไป (เปลี่ยนได้ที่นี่ครับลูกพี่)
+    const MONTHLY_PIN = "1234";
 
     let currentSimulatedStats = { patkMin: 0, patkMax: 0, def: 0, rawMaxAtk: 0 };
     let isVipLogged = false;
     let pendingVipAction = null; 
     let activeOurPvpPotion = 0; 
 
+    // ✅ คืนค่า Baseline
     let baseline = {
         baseStr: 91, plusStr: 342, baseDex: 1138, plusDex: 1304, baseCon: 105, plusCon: 420, baseInt: 53, plusInt: 235,
         patkMin: 58892, patkMax: 73635, matkMin: 10435, matkMax: 10479, def: 13076, hp: 305479, mp: 29448, 
@@ -866,7 +881,7 @@
     let activeItemBuffs = { atk: {5:false, 10:false, 15:false, 20:false, 25:false, 30:false}, def: {5:false, 10:false} };
     let activeHpBuffs = { 5: false, 10: false, 15: false, 20: false, 30: false };
 
-    function getVal(id) { const el = document.getElementById(id); return el ? (parseFloat(el.value) || 0) : 0; }
+    function getVal(id) { const el = document.getElementById(id); return el && el.value !== '' ? (parseFloat(el.value) || 0) : 0; }
     function setVal(id, val) { const el = document.getElementById(id); if (el) el.value = val; }
     function setTxt(id, val) { const el = document.getElementById(id); if (el) el.innerText = val; }
 
@@ -876,23 +891,6 @@
         let effective = currentFlat * (1 + getVal(pctId) / 100);
         let delta = currentFlat - refFlat; 
         return { effective: effective, delta: delta };
-    }
-
-    function openModal() { updateDnaSums(); document.getElementById('config-modal').style.display = 'flex'; }
-    function closeModal() { document.getElementById('config-modal').style.display = 'none'; }
-    
-    function closeTutorial() {
-        if (document.getElementById('tut-dont-show').checked) {
-            localStorage.setItem('ghostm_hide_tut', 'true');
-        }
-        document.getElementById('tutorial-modal').style.display = 'none';
-    }
-
-    function updateDnaSums() {
-        setTxt('dna-sum-str', getVal('ref-base-str') + getVal('ref-plus-str'));
-        setTxt('dna-sum-dex', getVal('ref-base-dex') + getVal('ref-plus-dex'));
-        setTxt('dna-sum-con', getVal('ref-base-con') + getVal('ref-plus-con'));
-        setTxt('dna-sum-int', getVal('ref-base-int') + getVal('ref-plus-int'));
     }
 
     function updateLivePctBoxes() {
@@ -1021,8 +1019,10 @@
         const conData = getEffective('base-con', 'plus-con', 'live-p-con', baseline.baseCon, baseline.plusCon, baseline.pCon);
         const intData = getEffective('base-int', 'plus-int', 'live-p-int', baseline.baseInt, baseline.plusInt, baseline.pInt);
 
-        setTxt('total-str', Math.round(strData.effective)); setTxt('total-dex', Math.round(dexData.effective));
-        setTxt('total-con', Math.round(conData.effective)); setTxt('total-int', Math.round(intData.effective));
+        setTxt('total-str', Math.round(strData.effective)); 
+        setTxt('total-dex', Math.round(dexData.effective));
+        setTxt('total-con', Math.round(conData.effective)); 
+        setTxt('total-int', Math.round(intData.effective));
 
         const dnaTotalAtkPct = (baseline.pEquip||0) + (baseline.pEncyc||0) + (baseline.pSpirit||0) + (baseline.pZodiac||0) + (baseline.pBaseBuff||0);
         const dnaTotalMatkPct = (baseline.mEquip||0) + (baseline.mEncyc||0) + (baseline.mSpirit||0) + (baseline.mZodiac||0) + (baseline.mBaseBuff||0);
@@ -1031,29 +1031,30 @@
         const dnaMatkMult = (1 + (baseline.wAtk||0)/100) * (1 + dnaTotalMatkPct/100); 
         const dnaDefMult = 1 + (baseline.defBaseBuff||0)/100;
 
-        const oldRawPatkMin = (baseline.patkMin||0) / dnaMult;
-        const oldRawPatkMax = (baseline.patkMax||0) / dnaMult;
-        const oldRawMatkMin = (baseline.matkMin||0) / dnaMatkMult;
-        const oldRawMatkMax = (baseline.matkMax||0) / dnaMatkMult;
-        const oldRawDef = (baseline.def||0) / dnaDefMult;
+        const oldRawPatkMin = (baseline.patkMin||0) / (dnaMult || 1);
+        const oldRawPatkMax = (baseline.patkMax||0) / (dnaMult || 1);
+        const oldRawMatkMin = (baseline.matkMin||0) / (dnaMatkMult || 1);
+        const oldRawMatkMax = (baseline.matkMax||0) / (dnaMatkMult || 1);
+        const oldRawDef = (baseline.def||0) / (dnaDefMult || 1);
         const oldRawHp = (baseline.hp||0) / (1 + (baseline.bHp||0) / 100);
         const oldRawMp = (baseline.mp||0) / (1 + (baseline.bMp||0) / 100);
 
-        const dStr = strData.delta || 0; const dDex = dexData.delta || 0;
-        const dCon = conData.delta || 0; const dInt = intData.delta || 0;
+        const dStr = strData.delta || 0; 
+        const dDex = dexData.delta || 0;
+        const dCon = conData.delta || 0; 
+        const dInt = intData.delta || 0;
 
         const scaleMinPatk = oldRawPatkMin + (dStr * 2.0) + (dDex * 4.71);
         const scaleMaxPatk = oldRawPatkMax + (dStr * 2.0) + (dDex * 6.78);
         const scaleMinMatk = oldRawMatkMin + (dInt * 25.8);
         const scaleMaxMatk = oldRawMatkMax + (dInt * 25.92);
 
-        // ตัวแปรที่หายไป
-        const scaleDef = oldRawDef + (dCon * 2.5); 
-        const scaleHp = oldRawHp + (dCon * 25.0);  
-        const scaleMp = oldRawMp + (dInt * 15.0);  
+        const scaleDef = oldRawDef + (dCon * 20.445); 
+        const scaleHp = oldRawHp + (dCon * 575.4); 
+        const scaleMp = oldRawMp + (dInt * 103.6); 
 
         const currentMult = (1 + (baseline.wAtk||0)/100) * (1 + getVal('live-p-patk')/100);
-        const currentMatkMult = (1 + (baseline.wMatk||0)/100) * (1 + getVal('live-p-matk')/100); 
+        const currentMatkMult = (1 + (baseline.wAtk||0)/100) * (1 + getVal('live-p-matk')/100); 
         const totalDefMultiplier = 1 + getVal('live-p-def')/100;
 
         currentSimulatedStats.rawMaxAtk = Math.max(1, Math.round(scaleMaxPatk * dnaMult));
@@ -1062,7 +1063,7 @@
         currentSimulatedStats.def = Math.max(1, Math.round(scaleDef * totalDefMultiplier));
         
         const finalMinMatk = Math.max(1, Math.round(scaleMinMatk * currentMatkMult));
-        const finalMaxMatk = Math.max(1, Math.round(scaleMaxMatk * currentMatkMult));
+        const finalMaxMatk = Math.max(1, Math.round(scaleMaxMatk * currentMatkMult)); 
         const finalHp = Math.max(1, Math.round(scaleHp * (1 + getVal('live-p-hp')/100)));
         const finalMp = Math.max(1, Math.round(scaleMp * (1 + getVal('live-p-mp')/100)));
 
@@ -1078,12 +1079,12 @@
         setTxt('detail-hp', finalHp.toLocaleString());
         setTxt('detail-mp', finalMp.toLocaleString());
 
-        let pvpAtkBonus = (parseFloat(document.getElementById('vip-pvp-atk').value) || 0) / 100;
+        let pvpAtkBonus = (getVal('vip-pvp-atk')) / 100;
         let basePvpMin = currentSimulatedStats.patkMin * (1 + pvpAtkBonus);
         let basePvpMax = currentSimulatedStats.patkMax * (1 + pvpAtkBonus);
         setTxt('main-pvp-dmg-display', `${Math.floor(basePvpMin).toLocaleString()} ~ ${Math.floor(basePvpMax).toLocaleString()}`);
 
-        let pvpDefBonus = (parseFloat(document.getElementById('vip-pvp-def').value) || 0) / 100;
+        let pvpDefBonus = (getVal('vip-pvp-def')) / 100;
         let ourPotion = activeOurPvpPotion / 100;
         let basePvpDef = currentSimulatedStats.def * (1 + pvpDefBonus + ourPotion);
         setTxt('main-pvp-def-display', `${Math.floor(basePvpDef).toLocaleString()}`);
@@ -1091,6 +1092,7 @@
         calcVipSkill();
     }
 
+    // --- 👑 ฟังก์ชัน VIP Login ---
     function checkVipAccess(actionCallback) {
         if (isVipLogged || localStorage.getItem('ghostm_vip') === 'true') {
             isVipLogged = true;
@@ -1099,7 +1101,24 @@
             if (actionCallback) actionCallback();
         } else {
             pendingVipAction = actionCallback;
-            document.getElementById('vip-user-input').value = document.getElementById('char-name-box').value;
+            const charName = document.getElementById('char-name-box').value.trim() || 'ยังไม่ระบุชื่อ';
+            document.getElementById('vip-user-input').value = charName;
+            
+            if(charName === "เดะวินนะ") {
+                document.getElementById('yt-name-container').style.display = 'none';
+                document.getElementById('vip-desc-text').innerText = "ยินดีต้อนรับผู้พัฒนา! กรุณาใส่ Master Key";
+                document.getElementById('pin-label').innerText = "รหัสผ่านผู้พัฒนา";
+                document.getElementById('vip-pin-input').placeholder = "รหัสผ่านผู้พัฒนา";
+            } else {
+                document.getElementById('yt-name-container').style.display = 'block';
+                document.getElementById('vip-desc-text').innerText = "กรุณายืนยันตัวตนด้วยชื่อช่อง YouTube เพื่อปลดล็อกฟังก์ชันขั้นสูง";
+                document.getElementById('pin-label').innerText = "รหัสประจำเดือน (สอบถามแอดมิน)";
+                document.getElementById('vip-pin-input').placeholder = "****";
+                
+                let savedYt = localStorage.getItem('ghostm_vip_yt');
+                if(savedYt) document.getElementById('vip-yt-name').value = savedYt;
+            }
+
             document.getElementById('vip-login-modal').style.display = 'flex';
         }
     }
@@ -1110,29 +1129,75 @@
     }
 
     function verifyVip() {
-        const user = document.getElementById('vip-user-input').value.trim();
-        const pin = document.getElementById('vip-pin-input').value.trim();
+        const charName = document.getElementById('vip-user-input').value.trim();
+        const ytName = document.getElementById('vip-yt-name').value.trim();
+        const pinInput = document.getElementById('vip-pin-input').value.trim();
         
-        if (user === "เดะวินนะ" && pin === "soice_x4") {
-            isVipLogged = true;
-            localStorage.setItem('ghostm_vip', 'true');
-            const overlay = document.getElementById('pvp-lock-overlay');
-            if(overlay) overlay.style.display = 'none';
-            closeVipLogin();
-            if (pendingVipAction) pendingVipAction();
-        } else {
-            alert('❌ ชื่อตัวละคร หรือ รหัสลับผู้พัฒนา ไม่ถูกต้อง!');
+        if (!pinInput) {
+            alert('❌ กรุณากรอกรหัสด้วยครับ!');
+            return;
         }
+
+        if (charName === "เดะวินนะ") {
+            if (pinInput === "soice_x4") {
+                grantVipAccess("เดะวินนะ (ผู้พัฒนา)", "Developer");
+            } else {
+                alert('❌ รหัสผู้พัฒนาไม่ถูกต้อง!');
+            }
+            return; 
+        }
+
+        if (!ytName) {
+            alert('❌ กรุณากรอกชื่อบัญชี YouTube ของคุณด้วยครับ!');
+            return;
+        }
+
+        if (pinInput !== MONTHLY_PIN) {
+            alert('❌ รหัสประจำเดือนไม่ถูกต้อง! (กรุณาสอบถามรหัสอัปเดตจากแอดมิน)');
+            return;
+        }
+
+        const btn = document.getElementById('btn-verify-vip');
+        btn.innerText = "⏳ กำลังตรวจสอบสิทธิ์...";
+        btn.disabled = true;
+
+        let params = new URLSearchParams();
+        params.append('action', 'checkVipStatus');
+        params.append('youtubeName', ytName);
+
+        fetch(API_URL, { method: 'POST', body: params })
+        .then(r => r.json())
+        .then(data => {
+            btn.innerText = "ปลดล็อกขีดจำกัด";
+            btn.disabled = false;
+
+            if (data.status === 'success' && data.isVip) {
+                grantVipAccess(ytName, data.tier);
+            } else {
+                alert('❌ ไม่พบชื่อบัญชี YouTube นี้ในระบบสมาชิก หรือสถานะสมาชิกหมดอายุแล้วครับ!');
+            }
+        }).catch(e => {
+            btn.innerText = "ปลดล็อกขีดจำกัด";
+            btn.disabled = false;
+            alert('เกิดข้อผิดพลาดในการเชื่อมต่อเครือข่าย กรุณาลองใหม่อีกครั้ง!');
+            console.error("Fetch error:", e);
+        });
     }
 
-    function unlockVipFeatures() {}
-
-    document.addEventListener("DOMContentLoaded", function() {
-        const classSelect = document.getElementById('class-select');
-        if(classSelect) {
-            classSelect.addEventListener('change', handleDropdownChange);
-        }
-    });
+    function grantVipAccess(ytName, tier) {
+        isVipLogged = true;
+        localStorage.setItem('ghostm_vip', 'true');
+        localStorage.setItem('ghostm_vip_yt', ytName);
+        
+        const overlay = document.getElementById('pvp-lock-overlay');
+        if(overlay) overlay.style.display = 'none';
+        
+        closeVipLogin();
+        if (pendingVipAction) pendingVipAction();
+        
+        alert(`👑 ยินดีต้อนรับสมาชิกระดับ [${tier}] \nคุณ ${ytName} เข้าสู่ระบบ VIP สำเร็จ!`);
+        calcVipSkill();
+    }
 
     function openVipSkillModal() {
         checkVipAccess(() => {
@@ -1158,6 +1223,8 @@
     }
 
     function calcVipSkill() {
+        if (!isVipLogged) return;
+
         let baseMin = currentSimulatedStats.patkMin || 0;
         let baseMax = currentSimulatedStats.patkMax || 0;
         
@@ -1181,16 +1248,81 @@
         
         const enemyDefDisplay = document.getElementById('enemy-total-def-display');
         if (enemyDefDisplay) {
-            enemyDefDisplay.innerText = `พลังป้องกัน PvP สุทธิของศัตรู: ${Math.floor(enemyTotalDef).toLocaleString()}`;
+            enemyDefDisplay.innerText = `เกราะป้องกัน PvP สุทธิของศัตรู: ${Math.floor(enemyTotalDef).toLocaleString()}`;
         }
         
         let pvpMin = Math.max(1, pvpAtkMin - enemyTotalDef);
         let pvpMax = Math.max(1, pvpAtkMax - enemyTotalDef);
 
+        // ✅ แก้บั๊กแสดงผลดาเมจ 4 มิติ ให้กลับมาแสดงแบบช่วง Min ~ Max เรียบร้อยแล้ว!
         setTxt('res-pve-norm', `${Math.round(pveMin).toLocaleString()} ~ ${Math.round(pveMax).toLocaleString()}`);
         setTxt('res-pve-crit', `${Math.round(pveMin * critDmg).toLocaleString()} ~ ${Math.round(pveMax * critDmg).toLocaleString()}`);
         setTxt('res-pvp-norm', `${Math.round(pvpMin).toLocaleString()} ~ ${Math.round(pvpMax).toLocaleString()}`);
         setTxt('res-pvp-crit', `${Math.round(pvpMin * critDmg).toLocaleString()} ~ ${Math.round(pvpMax * critDmg).toLocaleString()}`);
+    }
+
+    // 🧮 เครื่องคิดเลข
+    let calcTarget = '';
+    function openCalc(targetId) { 
+        calcTarget = targetId; 
+        document.getElementById('calc-input').value = ''; 
+        document.getElementById('calc-modal').style.display = 'flex'; 
+    }
+    function closeCalc() { 
+        document.getElementById('calc-modal').style.display = 'none'; 
+    }
+    function applyCalc() { 
+        try { 
+            let rawInput = document.getElementById('calc-input').value;
+            let expr = rawInput.replace(/[^0-9+\-*/.()]/g, '');
+            if (expr) {
+                let result = Function('return ' + expr)();
+                if(!isNaN(result) && calcTarget) {
+                    document.getElementById(calcTarget).value = parseFloat(result.toFixed(4));
+                    updateDnaSums();
+                }
+                closeCalc(); 
+            } else {
+                alert("กรุณากรอกตัวเลขครับ");
+            }
+        } catch(e) { 
+            alert("รูปแบบสมการไม่ถูกต้องครับ"); 
+        } 
+    }
+
+    function updateDnaSums() {
+        setTxt('dna-sum-str', getVal('ref-base-str') + getVal('ref-plus-str'));
+        setTxt('dna-sum-dex', getVal('ref-base-dex') + getVal('ref-plus-dex'));
+        setTxt('dna-sum-con', getVal('ref-base-con') + getVal('ref-plus-con'));
+        setTxt('dna-sum-int', getVal('ref-base-int') + getVal('ref-plus-int'));
+    }
+
+    function openModal() { updateDnaSums(); document.getElementById('config-modal').style.display = 'flex'; }
+    function closeModal() { document.getElementById('config-modal').style.display = 'none'; }
+
+    // 💾 ระบบ Sync ค่าฐาน DNA และเซฟฝังลง localStorage ทันที
+    function setNewBaseline() {
+        baseline.baseStr = getVal('ref-base-str'); baseline.plusStr = getVal('ref-plus-str');
+        baseline.baseDex = getVal('ref-base-dex'); baseline.plusDex = getVal('ref-plus-dex');
+        baseline.baseCon = getVal('ref-base-con'); baseline.plusCon = getVal('ref-plus-con');
+        baseline.baseInt = getVal('ref-base-int'); baseline.plusInt = getVal('ref-plus-int');
+        baseline.patkMin = getVal('ref-patk-min'); baseline.patkMax = getVal('ref-patk-max');
+        baseline.matkMin = getVal('ref-matk-min'); baseline.matkMax = getVal('ref-matk-max');
+        baseline.def = getVal('ref-def'); baseline.hp = getVal('ref-hp'); baseline.mp = getVal('ref-mp');
+        baseline.wAtk = getVal('ref-w-atk'); baseline.pEquip = getVal('ref-p-equip'); baseline.pEncyc = getVal('ref-p-encyc');
+        baseline.pSpirit = getVal('ref-p-spirit'); baseline.pZodiac = getVal('ref-p-zodiac'); baseline.pBaseBuff = getVal('ref-p-basebuff');
+        baseline.wMatk = getVal('ref-w-matk'); baseline.mEquip = getVal('ref-m-equip'); baseline.mEncyc = getVal('ref-m-encyc');
+        baseline.mSpirit = getVal('ref-m-spirit'); baseline.mZodiac = getVal('ref-m-zodiac'); baseline.mBaseBuff = getVal('ref-m-basebuff');
+        baseline.defBaseBuff = getVal('ref-def-buff'); baseline.bHp = getVal('ref-b-hp'); baseline.bMp = getVal('ref-b-mp');
+        baseline.pStr = getVal('ref-p-str'); baseline.pDex = getVal('ref-p-dex'); baseline.pCon = getVal('ref-p-con'); baseline.pInt = getVal('ref-p-int');
+
+        setVal('live-p-str', baseline.pStr); setVal('live-p-dex', baseline.pDex);
+        setVal('live-p-con', baseline.pCon); setVal('live-p-int', baseline.pInt);
+
+        autoSave(); 
+        closeModal();
+        autoCalculate();
+        alert('✅ ซิงค์ฐานข้อมูล DNA สำเร็จและบันทึกเรียบร้อย!');
     }
 
     function autoCalculate() {
@@ -1212,7 +1344,8 @@
             savedItemBuffs: { atk: {...activeItemBuffs.atk}, def: {...activeItemBuffs.def} },
             savedHpBuffs: { ...activeHpBuffs },
             vipPvpAtk: getVal('vip-pvp-atk'), vipPvpDef: getVal('vip-pvp-def'), 
-            ourPotion: activeOurPvpPotion
+            ourPotion: activeOurPvpPotion,
+            baseline: baseline // ✅ แนบข้อมูลกล่อง DNA ลงไปในเซฟ
         };
         localStorage.setItem('ghostm_save', JSON.stringify(snapshot));
     }
@@ -1220,9 +1353,10 @@
     function manualSave() { autoSave(); alert('💾 บันทึกข้อมูลลงในเครื่องของคุณเรียบร้อยแล้ว!'); }
 
     function resetDefaults() {
-        if(confirm('⚠️ ต้องการล้างข้อมูลทั้งหมดหรือไม่?')) {
+        if(confirm('⚠️ ต้องการล้างข้อมูลทั้งหมดหรือไม่? (ข้อมูลที่เซฟไว้จะหายไปทั้งหมด)')) {
             localStorage.removeItem('ghostm_save');
-            localStorage.removeItem('ghostm_vip'); 
+            localStorage.removeItem('ghostm_vip');
+            localStorage.removeItem('ghostm_vip_yt');
             location.reload();
         }
     }
@@ -1232,6 +1366,25 @@
             let saved = localStorage.getItem('ghostm_save');
             if (saved) {
                 let data = JSON.parse(saved);
+                
+                // ✅ โหลดและเติมข้อมูลลงในกล่อง DNA อัตโนมัติ (กันบั๊กกล่องเปล่า)
+                if (data.baseline) {
+                    baseline = data.baseline;
+                    setVal('ref-base-str', baseline.baseStr); setVal('ref-plus-str', baseline.plusStr);
+                    setVal('ref-base-dex', baseline.baseDex); setVal('ref-plus-dex', baseline.plusDex);
+                    setVal('ref-base-con', baseline.baseCon); setVal('ref-plus-con', baseline.plusCon);
+                    setVal('ref-base-int', baseline.baseInt); setVal('ref-plus-int', baseline.plusInt);
+                    setVal('ref-patk-min', baseline.patkMin); setVal('ref-patk-max', baseline.patkMax);
+                    setVal('ref-matk-min', baseline.matkMin); setVal('ref-matk-max', baseline.matkMax);
+                    setVal('ref-def', baseline.def); setVal('ref-hp', baseline.hp); setVal('ref-mp', baseline.mp);
+                    setVal('ref-w-atk', baseline.wAtk); setVal('ref-p-equip', baseline.pEquip); setVal('ref-p-encyc', baseline.pEncyc);
+                    setVal('ref-p-spirit', baseline.pSpirit); setVal('ref-p-zodiac', baseline.pZodiac); setVal('ref-p-basebuff', baseline.pBaseBuff);
+                    setVal('ref-w-matk', baseline.wMatk); setVal('ref-m-equip', baseline.mEquip); setVal('ref-m-encyc', baseline.mEncyc);
+                    setVal('ref-m-spirit', baseline.mSpirit); setVal('ref-m-zodiac', baseline.mZodiac); setVal('ref-m-basebuff', baseline.mBaseBuff);
+                    setVal('ref-def-buff', baseline.defBaseBuff); setVal('ref-b-hp', baseline.bHp); setVal('ref-b-mp', baseline.bMp);
+                    setVal('ref-p-str', baseline.pStr); setVal('ref-p-dex', baseline.pDex); setVal('ref-p-con', baseline.pCon); setVal('ref-p-int', baseline.pInt);
+                }
+
                 document.getElementById('char-name-box').value = data.charName || 'soicex';
                 if(data.charLevel) document.getElementById('char-lv-box').value = data.charLevel;
                 document.getElementById('char-pin-box').value = data.pin || '';
@@ -1274,7 +1427,6 @@
                 const overlay = document.getElementById('pvp-lock-overlay');
                 if(overlay) overlay.style.display = 'none';
             }
-
         } catch (e) {
             console.error("เกิดข้อผิดพลาดในการโหลดเซฟ:", e);
             localStorage.removeItem('ghostm_save');
@@ -1331,8 +1483,13 @@
                 });
                 if(data.leaderboard.length === 0) html = '<div style="text-align:center; padding:20px; color:#7f8fa6;">ยังไม่มีผู้กล้าส่งผลทดสอบ</div>';
                 document.getElementById('lb-body').innerHTML = html;
+            } else {
+                document.getElementById('global-acc').innerText = 'ERROR';
+                document.getElementById('lb-body').innerHTML = '<div style="text-align:center; padding:20px; color:#e74c3c;">โครงสร้างฐานข้อมูลผิดพลาด</div>';
             }
         }).catch(e => {
+            console.error("Leaderboard fetch error:", e);
+            document.getElementById('global-acc').innerText = 'OFFLINE';
             document.getElementById('lb-body').innerHTML = '<div style="text-align:center; padding:20px; color:#e74c3c;">เชื่อมต่อเซิร์ฟเวอร์ล้มเหลว โปรดตรวจสอบชีทหลังบ้าน</div>';
         });
     }
@@ -1372,6 +1529,7 @@
         document.getElementById('val-result-box').style.display = 'block';
 
         let params = new URLSearchParams();
+        params.append('action', 'submitData'); 
         params.append('name', name);
         params.append('pin', pin);
         params.append('job', document.getElementById('class-select').options[document.getElementById('class-select').selectedIndex].text);
@@ -1401,76 +1559,19 @@
         });
     }
 
-    // 🧮 ระบบเครื่องคิดเลข 
-    let calcTarget = '';
-    function openCalc(targetId) { 
-        calcTarget = targetId; 
-        document.getElementById('calc-input').value = ''; 
-        document.getElementById('calc-modal').style.display = 'flex'; 
-    }
-    function closeCalc() { 
-        document.getElementById('calc-modal').style.display = 'none'; 
-    }
-    function applyCalc() { 
-        try { 
-            let result = eval(document.getElementById('calc-input').value);
-            if(!isNaN(result) && calcTarget) {
-                setVal(calcTarget, result);
-                updateDnaSums();
-            }
-            closeCalc(); 
-        } catch(e) { 
-            alert("รูปแบบสมการไม่ถูกต้องครับ"); 
-        } 
-    }
-
-    // 💾 ระบบ Sync ค่าฐาน DNA
-    function setNewBaseline() {
-        baseline.baseStr = getVal('ref-base-str');
-        baseline.plusStr = getVal('ref-plus-str');
-        baseline.baseDex = getVal('ref-base-dex');
-        baseline.plusDex = getVal('ref-plus-dex');
-        baseline.baseCon = getVal('ref-base-con');
-        baseline.plusCon = getVal('ref-plus-con');
-        baseline.baseInt = getVal('ref-base-int');
-        baseline.plusInt = getVal('ref-plus-int');
-        
-        baseline.patkMin = getVal('ref-patk-min');
-        baseline.patkMax = getVal('ref-patk-max');
-        baseline.matkMin = getVal('ref-matk-min');
-        baseline.matkMax = getVal('ref-matk-max');
-        baseline.def = getVal('ref-def');
-        baseline.hp = getVal('ref-hp');
-        baseline.mp = getVal('ref-mp');
-
-        baseline.wAtk = getVal('ref-w-atk');
-        baseline.pEquip = getVal('ref-p-equip');
-        baseline.pEncyc = getVal('ref-p-encyc');
-        baseline.pSpirit = getVal('ref-p-spirit');
-        baseline.pZodiac = getVal('ref-p-zodiac');
-        baseline.pBaseBuff = getVal('ref-p-basebuff');
-
-        baseline.wMatk = getVal('ref-w-matk');
-        baseline.mEquip = getVal('ref-m-equip');
-        baseline.mEncyc = getVal('ref-m-encyc');
-        baseline.mSpirit = getVal('ref-m-spirit');
-        baseline.mZodiac = getVal('ref-m-zodiac');
-        baseline.mBaseBuff = getVal('ref-m-basebuff');
-
-        baseline.defBaseBuff = getVal('ref-def-buff');
-        baseline.bHp = getVal('ref-b-hp');
-        baseline.bMp = getVal('ref-b-mp');
-        baseline.pStr = getVal('ref-p-str');
-        baseline.pDex = getVal('ref-p-dex');
-        baseline.pCon = getVal('ref-p-con');
-        baseline.pInt = getVal('ref-p-int');
-
-        alert('✅ ซิงค์ข้อมูลตั้งฐาน DNA สำเร็จ!');
-        closeModal();
-        autoCalculate();
+    function closeTutorial() {
+        if (document.getElementById('tut-dont-show').checked) {
+            localStorage.setItem('ghostm_hide_tut', 'true');
+        }
+        document.getElementById('tutorial-modal').style.display = 'none';
     }
 
     window.onload = function() { 
+        const classSelect = document.getElementById('class-select');
+        if(classSelect) {
+            classSelect.addEventListener('change', handleDropdownChange);
+        }
+
         loadSavedStats(); 
         autoCalculate(); 
         updateDnaSums(); 
