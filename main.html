@@ -1612,32 +1612,32 @@
         document.getElementById('tutorial-modal').style.display = 'none';
     }
 
-    window.onload = function() { 
-// ==========================================
-    // 📌 [NEW] ระบบดักรับค่าจากหน้า Setup (Welcome) ทะลุมิติมาหยอดกล่อง
-    // ==========================================
+window.onload = function() { 
+    // สเตป 1: สั่งโหลดฐานข้อมูลเซฟเก่า (รวมถึงข้อมูล DNA เปอร์เซ็นต์ลึกๆ ทั้งหมด) ขึ้นมาแสตนด์บายก่อน
+    loadSavedStats();
+
+    // สเตป 2: ดักรับค่าจากหน้า Welcome ถ้ามีข้อมูลส่งมา ให้เขียนทับเฉพาะกล่องข้อมูลตัวละครทันที
     const urlParams = new URLSearchParams(window.location.search);
     
-    // ประกาศตัวแปรแฝงหลังบ้านสำหรับเก็บ "ฝ่าย" และ "ชื่อคลาส" เพื่อใช้ทำระบบสมุดสกิลในอนาคต
     window.currentFaction = urlParams.get('faction') || 'ธรรมะ';
-    window.currentSubClassName = 'ชาวบ้าน'; // ค่าเริ่มต้นป้องกันเอ๋อ
+    window.currentSubClassName = 'ชาวบ้าน'; 
 
     if (urlParams.has('name')) {
-        // 1. หยอดค่า ชื่อ และ เลเวล ด้านบนสุด
+        // หยอดค่า ชื่อ และ เลเวล
         if (document.getElementById('char-name-box')) document.getElementById('char-name-box').value = urlParams.get('name');
         if (document.getElementById('char-lv-box')) document.getElementById('char-lv-box').value = urlParams.get('lv');
         
-        // 2. หยอดค่า อาชีพหลัก
+        // หยอดค่า อาชีพหลัก
         const jobParam = urlParams.get('job');
         if (document.getElementById('class-select')) document.getElementById('class-select').value = jobParam;
         
-        // 3. หยอดแต้มสเตตัสดิบช่องซ้ายมือ (Base Stats)
+        // หยอดแต้มสเตตัสดิบช่องซ้ายมือ (Base Stats)
         if (document.getElementById('base-str')) document.getElementById('base-str').value = urlParams.get('str');
         if (document.getElementById('base-dex')) document.getElementById('base-dex').value = urlParams.get('dex');
         if (document.getElementById('base-con')) document.getElementById('base-con').value = urlParams.get('con');
         if (document.getElementById('base-int')) document.getElementById('base-int').value = urlParams.get('int');
 
-        // 4. 🧠 ระบบวิเคราะห์แมปชื่อ "คลาสระดับสูง" ตามตารางฝ่ายในเกม
+        // ระบบแมปชื่อ "คลาสระดับสูง" ตามตารางฝ่ายในเกม เก็บไว้รอดึงสกิลในอนาคต
         const faction = window.currentFaction;
         if (jobParam === 'knight') {
             window.currentSubClassName = (faction === 'ธรรมะ') ? 'อัศวินองครักษ์' : (faction === 'อธรรม') ? 'อัศวินทมิฬคลั่ง' : 'อัศวินราชันย์อมตะ';
@@ -1648,32 +1648,32 @@
         } else if (jobParam === 'ninja') {
             window.currentSubClassName = (faction === 'อธรรม') ? 'นินจาเทพเงา' : 'ชิโนบิเทพทมิฬ';
         } else if (jobParam === 'assassin') {
-            window.currentSubClassName = 'มือสังหาร'; // มารเท่านั้น
+            window.currentSubClassName = 'มือสังหาร';
         } else if (jobParam === 'fighter') {
             window.currentSubClassName = (faction === 'อธรรม') ? 'ขุนพลเทวะ' : 'ขุนพลโลหิตสังหาร';
         } else if (jobParam === 'mamluk') {
-            window.currentSubClassName = 'อัศวินราชันย์อมตะ'; // มารเท่านั้น
+            window.currentSubClassName = 'อัศวินราชันย์อมตะ';
         } else if (jobParam === 'police') {
             window.currentSubClassName = (faction === 'อธรรม') ? 'มือปราบอธรรม' : 'มือปราบธรรมะ';
         }
     }
-    // ==========================================
-    // 📌 จบระบบดักรับค่าข้ามไฟล์
-    // ==========================================
-        const classSelect = document.getElementById('class-select');
-        if(classSelect) {
-            classSelect.addEventListener('change', handleDropdownChange);
-        }
 
-        loadSavedStats(); 
-        autoCalculate(); 
-        updateDnaSums(); 
-        fetchLeaderboard(); 
-        
-        if (localStorage.getItem('ghostm_hide_tut') !== 'true') {
-            document.getElementById('tutorial-modal').style.display = 'flex';
-        }
-    };
-</script>
+    // สเตป 3: ผูก Event Listener ของกล่องเลือกอาชีพ
+    const classSelect = document.getElementById('class-select');
+    if(classSelect) {
+        classSelect.addEventListener('change', handleDropdownChange);
+    }
+
+    // สเตป 4: สั่งรันระบบคำนวณและอัปเดต UI ให้ซิงค์กับค่าใหม่ทันที ตัวเลขจะกลับมาเป๊ะนิ่งสนิท!
+    refreshClassUI(); 
+    updateLivePctBoxes(); 
+    autoCalculate(); 
+    updateDnaSums(); 
+    fetchLeaderboard(); 
+    
+    if (localStorage.getItem('ghostm_hide_tut') !== 'true') {
+        document.getElementById('tutorial-modal').style.display = 'flex';
+    }
+};</script>
 </body>
 </html>
