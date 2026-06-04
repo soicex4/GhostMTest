@@ -171,13 +171,6 @@
             <input type="number" id="level" value="126" min="1" max="200">
         </div>
 
-        <div style="height: 1px; background: #485460; margin: 15px 0;"></div>
-
-        <div class="form-group"><label>✊ STR:</label><input type="number" id="str" value="91"></div>
-        <div class="form-group"><label>🏹 DEX:</label><input type="number" id="dex" value="1138"></div>
-        <div class="form-group"><label>🏋️‍♂️ CON:</label><input type="number" id="con" value="105"></div>
-        <div class="form-group"><label>💡 INT:</label><input type="number" id="int" value="53"></div>
-
         <button class="btn-submit" onclick="goToMainApp()">เข้าสู่ระบบจำลองสเตตัส 🚀</button>
     </div>
 </div>
@@ -190,7 +183,6 @@
 </div>
 
 <script>
-    // ดึงลิงก์ API เดียวกับหน้าหลักของลูกพี่มาใช้ดึงคะแนนบอร์ด
     const API_URL = 'https://script.google.com/macros/s/AKfycbyvwccGHLs0QMxmURLy-2KVzzB8oSN3mjgcO1hFq8qpjLqrcc5vHLuhRWxIQsZ3vPRP/exec';
 
     function updateFactionState() {
@@ -211,21 +203,15 @@
         params.append('job', document.getElementById('jobClass').value);
         params.append('faction', document.getElementById('faction').value);
         params.append('lv', document.getElementById('level').value);
-        params.append('str', document.getElementById('str').value);
-        params.append('dex', document.getElementById('dex').value);
-        params.append('con', document.getElementById('con').value);
-        params.append('int', document.getElementById('int').value);
 
         // เปลี่ยนหน้าลิงก์ไปยังไฟล์แผงควบคุมหลัก (main.html)
         window.location.href = 'main.html?' + params.toString();
     }
 
-    // ฟังก์ชันเชื่อมบอร์ดหลังบ้านดึงคะแนนมาโชว์หน้าแรก
     function fetchLeaderboard() {
         fetch(API_URL).then(r => r.json()).then(data => {
             if(data.status === 'success') {
                 let html = '';
-                // ดึงมาโชว์แค่ Top 5 ขิงเรียกน้ำย่อยในหน้าแรกพอครับ จะได้ไม่ยาวเกินไป
                 const top5 = data.leaderboard.slice(0, 5);
                 
                 top5.forEach((user, index) => {
@@ -257,7 +243,7 @@
 
     window.onload = function() {
         updateFactionState();
-        fetchLeaderboard(); // สั่งให้ดึงคะแนนขึ้นมาโชว์ทันทีตอนเปิดหน้าเว็บ
+        fetchLeaderboard();
     };
 </script>
 </body>
