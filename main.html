@@ -921,7 +921,7 @@
         if (!btn || btn.disabled) return;
         activeClassBuffs[type] = !activeClassBuffs[type];
         if (activeClassBuffs[type]) btn.classList.add('active'); else btn.classList.remove('active');
-        updateLivePctBoxes(); // อัปเดต % เมื่อบัฟเปลี่ยน
+        updateLivePctBoxes(); 
         autoCalculate();
     }
 
@@ -930,7 +930,7 @@
         if (!btn) return;
         activeItemBuffs[type][val] = !activeItemBuffs[type][val];
         if (activeItemBuffs[type][val]) btn.classList.add('active'); else btn.classList.remove('active');
-        updateLivePctBoxes(); // อัปเดต % เมื่อบัฟเปลี่ยน
+        updateLivePctBoxes(); 
         autoCalculate();
     }
 
@@ -952,7 +952,7 @@
             activeHpBuffs[val] = !activeHpBuffs[val];
             if (activeHpBuffs[val]) btn.classList.add('active'); else btn.classList.remove('active');
         }
-        updateLivePctBoxes(); // อัปเดต % เมื่อบัฟเปลี่ยน
+        updateLivePctBoxes(); 
         autoCalculate();
     }
 
@@ -1015,45 +1015,36 @@
     }
 
     function calculateStats() {
-
-        // 1. ค่า Base (สีขาว) และ ค่า Plus (สีเขียว)
         const rawBaseStr = getVal('base-str'); const plusStr = getVal('plus-str');
         const rawBaseDex = getVal('base-dex'); const plusDex = getVal('plus-dex');
         const rawBaseCon = getVal('base-con'); const plusCon = getVal('plus-con');
         const rawBaseInt = getVal('base-int'); const plusInt = getVal('plus-int');
 
-        // ผลรวมดิบๆ ตรงไปตรงมา (เช่น 1138 + 1304 = 2442)
         const sumStr = rawBaseStr + plusStr;
         const sumDex = rawBaseDex + plusDex;
         const sumCon = rawBaseCon + plusCon;
         const sumInt = rawBaseInt + plusInt;
 
-        // โหลดค่า % ที่กำลังโชว์อยู่บนหน้าจอ (live)
         const pctStr = getVal('live-p-str') || 0;
         const pctDex = getVal('live-p-dex') || 0;
         const pctCon = getVal('live-p-con') || 0;
         const pctInt = getVal('live-p-int') || 0;
 
-        // ดึงค่า % ดั้งเดิมที่คุณเคยกดเซฟตอนตั้งฐานข้อมูล (ref)
         const refPctStr = baseline.pStr || 0;
         const refPctDex = baseline.pDex || 0;
         const refPctCon = baseline.pCon || 0;
         const refPctInt = baseline.pInt || 0;
 
-        // 🌟 จุดไคลแมกซ์: คำนวณสเตตัสสุทธิโดยบวกเพิ่มเฉพาะ "ส่วนต่าง %" ที่จำลองเพิ่ม/ลด 
-        // ทำแบบนี้จะไม่มีการเบิ้ล % ตอนโหลดหน้าครั้งแรกแน่นอนครับ
         const effectiveStr = sumStr + Math.floor(rawBaseStr * (pctStr - refPctStr) / 100);
         const effectiveDex = sumDex + Math.floor(rawBaseDex * (pctDex - refPctDex) / 100);
         const effectiveCon = sumCon + Math.floor(rawBaseCon * (pctCon - refPctCon) / 100);
         const effectiveInt = sumInt + Math.floor(rawBaseInt * (pctInt - refPctInt) / 100);
 
-        // 2. แสดงผลที่หน้าจอกล่องสรุป (ค่าที่แสดงจะขยับเมื่อคุณเปลี่ยน % ทันทีครับ)
         setTxt('total-str', effectiveStr); 
         setTxt('total-dex', effectiveDex);
         setTxt('total-con', effectiveCon); 
         setTxt('total-int', effectiveInt);
 
-        // 3. คำนวณตัวคูณ DNA หมวดอื่นๆ
         const dnaTotalAtkPct = (baseline.pEquip||0) + (baseline.pEncyc||0) + (baseline.pSpirit||0) + (baseline.pZodiac||0) + (baseline.pBaseBuff||0);
         const dnaTotalMatkPct = (baseline.mEquip||0) + (baseline.mEncyc||0) + (baseline.mSpirit||0) + (baseline.mZodiac||0) + (baseline.mBaseBuff||0);
         
@@ -1061,7 +1052,6 @@
         const dnaMatkMult = (1 + (baseline.wAtk||0)/100) * (1 + dnaTotalMatkPct/100); 
         const dnaDefMult = 1 + (baseline.defBaseBuff||0)/100;
 
-        // 4. ถอดรหัสค่า Base ดิบจาก DNA
         const oldRawPatkMin = (baseline.patkMin||0) / (dnaMult || 1);
         const oldRawPatkMax = (baseline.patkMax||0) / (dnaMult || 1);
         const oldRawMatkMin = (baseline.matkMin||0) / (dnaMatkMult || 1);
@@ -1070,7 +1060,6 @@
         const oldRawHp = (baseline.hp||0) / (1 + (baseline.bHp||0) / 100);
         const oldRawMp = (baseline.mp||0) / (1 + (baseline.bMp||0) / 100);
 
-        // 5. หาค่าส่วนต่างเพื่อปรับดาเมจ (เอาค่าสเตตัส Effective ที่คำนวณข้างบน มาลบกับผลรวมดิบตอนตั้งฐาน)
         const refSumStr = (baseline.baseStr||0) + (baseline.plusStr||0);
         const refSumDex = (baseline.baseDex||0) + (baseline.plusDex||0);
         const refSumCon = (baseline.baseCon||0) + (baseline.plusCon||0);
@@ -1081,7 +1070,6 @@
         const dCon = effectiveCon - refSumCon;
         const dInt = effectiveInt - refSumInt;
 
-        // 6. ขยายสเกลค่า Raw ตามส่วนต่าง
         const scaleMinPatk = oldRawPatkMin + (dStr * 2.0) + (dDex * 4.71);
         const scaleMaxPatk = oldRawPatkMax + (dStr * 2.0) + (dDex * 6.78);
         const scaleMinMatk = oldRawMatkMin + (dInt * 25.8);
@@ -1091,7 +1079,6 @@
         const scaleHp = oldRawHp + (dCon * 575.4); 
         const scaleMp = oldRawMp + (dInt * 103.6); 
 
-        // 7. คูณด้วยบัฟปัจจุบัน
         const currentMult = (1 + (baseline.wAtk||0)/100) * (1 + getVal('live-p-patk')/100);
         const currentMatkMult = (1 + (baseline.wAtk||0)/100) * (1 + getVal('live-p-matk')/100); 
         const totalDefMultiplier = 1 + getVal('live-p-def')/100;
@@ -1106,7 +1093,6 @@
         const finalHp = Math.max(1, Math.round(scaleHp * (1 + getVal('live-p-hp')/100)));
         const finalMp = Math.max(1, Math.round(scaleMp * (1 + getVal('live-p-mp')/100)));
 
-        // 8. นำไปโชว์ที่หน้าจอ
         setTxt('view-patk', `${currentSimulatedStats.patkMin.toLocaleString()} ~ ${currentSimulatedStats.patkMax.toLocaleString()}`);
         setTxt('view-matk', `${finalMinMatk.toLocaleString()} ~ ${finalMaxMatk.toLocaleString()}`);
         setTxt('view-def', currentSimulatedStats.def.toLocaleString());
@@ -1357,7 +1343,7 @@
 
         autoSave(); 
         closeModal();
-        updateLivePctBoxes(); // ซิงค์ % กับค่ากล่องบัฟหน้าจอใหม่
+        updateLivePctBoxes(); 
         autoCalculate();
         alert('✅ ซิงค์ฐานข้อมูล DNA สำเร็จและบันทึกเรียบร้อย!');
     }
@@ -1377,7 +1363,6 @@
             baseCon: getVal('base-con'), plusCon: getVal('plus-con'), livePCon: getVal('live-p-con'),
             baseInt: getVal('base-int'), plusInt: getVal('plus-int'), livePInt: getVal('live-p-int'),
             
-            // เพิ่มการ Save ค่า % ที่ผู้ใช้พิมพ์แก้เอง
             livePPatk: getVal('live-p-patk'), livePMatk: getVal('live-p-matk'), 
             livePDef: getVal('live-p-def'), livePHp: getVal('live-p-hp'), livePMp: getVal('live-p-mp'),
 
@@ -1434,7 +1419,6 @@
                 setVal('base-con', data.baseCon); setVal('plus-con', data.plusCon); setVal('live-p-con', data.livePCon);
                 setVal('base-int', data.baseInt); setVal('plus-int', data.plusInt); setVal('live-p-int', data.livePInt);
 
-                // โหลดค่า % ที่ผู้ใช้พิมพ์แก้ค้างไว้
                 if(data.livePPatk !== undefined) setVal('live-p-patk', data.livePPatk);
                 if(data.livePMatk !== undefined) setVal('live-p-matk', data.livePMatk);
                 if(data.livePDef !== undefined) setVal('live-p-def', data.livePDef);
@@ -1465,7 +1449,7 @@
                     if(data.ourPotion !== undefined) setOurPvpPotion(data.ourPotion);
                 }, 50);
 
-                refreshClassUI(); // อัปเดตหน้าตาปุ่มบัฟอาชีพหลังโหลดเสร็จ
+                refreshClassUI(); 
             }
 
             if (localStorage.getItem('ghostm_vip') === 'true') {
@@ -1612,68 +1596,63 @@
         document.getElementById('tutorial-modal').style.display = 'none';
     }
 
-window.onload = function() { 
-    // สเตป 1: สั่งโหลดฐานข้อมูลเซฟเก่า (รวมถึงข้อมูล DNA เปอร์เซ็นต์ลึกๆ ทั้งหมด) ขึ้นมาแสตนด์บายก่อน
-    loadSavedStats();
+    window.onload = function() { 
+        // สเตป 1: สั่งโหลดฐานข้อมูลเซฟเก่า (รวมถึงข้อมูล DNA เปอร์เซ็นต์ลึกๆ ทั้งหมด) ขึ้นมาแสตนด์บายก่อน
+        loadSavedStats();
 
-    // สเตป 2: ดักรับค่าจากหน้า Welcome ถ้ามีข้อมูลส่งมา ให้เขียนทับเฉพาะกล่องข้อมูลตัวละครทันที
-    const urlParams = new URLSearchParams(window.location.search);
-    
-    window.currentFaction = urlParams.get('faction') || 'ธรรมะ';
-    window.currentSubClassName = 'ชาวบ้าน'; 
-
-    if (urlParams.has('name')) {
-        // หยอดค่า ชื่อ และ เลเวล
-        if (document.getElementById('char-name-box')) document.getElementById('char-name-box').value = urlParams.get('name');
-        if (document.getElementById('char-lv-box')) document.getElementById('char-lv-box').value = urlParams.get('lv');
+        // สเตป 2: ดักรับค่าจากหน้า Welcome ถ้ามีข้อมูลส่งมา ให้เขียนทับเฉพาะกล่องข้อมูลตัวละครหลัก
+        const urlParams = new URLSearchParams(window.location.search);
         
-        // หยอดค่า อาชีพหลัก
-        const jobParam = urlParams.get('job');
-        if (document.getElementById('class-select')) document.getElementById('class-select').value = jobParam;
-        
-        // หยอดแต้มสเตตัสดิบช่องซ้ายมือ (Base Stats)
-        if (document.getElementById('base-str')) document.getElementById('base-str').value = urlParams.get('str');
-        if (document.getElementById('base-dex')) document.getElementById('base-dex').value = urlParams.get('dex');
-        if (document.getElementById('base-con')) document.getElementById('base-con').value = urlParams.get('con');
-        if (document.getElementById('base-int')) document.getElementById('base-int').value = urlParams.get('int');
+        window.currentFaction = urlParams.get('faction') || 'ธรรมะ';
+        window.currentSubClassName = 'ชาวบ้าน'; 
 
-        // ระบบแมปชื่อ "คลาสระดับสูง" ตามตารางฝ่ายในเกม เก็บไว้รอดึงสกิลในอนาคต
-        const faction = window.currentFaction;
-        if (jobParam === 'knight') {
-            window.currentSubClassName = (faction === 'ธรรมะ') ? 'อัศวินองครักษ์' : (faction === 'อธรรม') ? 'อัศวินทมิฬคลั่ง' : 'อัศวินราชันย์อมตะ';
-        } else if (jobParam === 'hero') {
-            window.currentSubClassName = (faction === 'อธรรม') ? 'เทพยุทธหายนะ' : 'ปรมาจารย์เทพยุทธ';
-        } else if (jobParam === 'mage') {
-            window.currentSubClassName = (faction === 'อธรรม') ? 'เซียนเทพมาร' : 'เซียนเทพเมฆา';
-        } else if (jobParam === 'ninja') {
-            window.currentSubClassName = (faction === 'อธรรม') ? 'นินจาเทพเงา' : 'ชิโนบิเทพทมิฬ';
-        } else if (jobParam === 'assassin') {
-            window.currentSubClassName = 'มือสังหาร';
-        } else if (jobParam === 'fighter') {
-            window.currentSubClassName = (faction === 'อธรรม') ? 'ขุนพลเทวะ' : 'ขุนพลโลหิตสังหาร';
-        } else if (jobParam === 'mamluk') {
-            window.currentSubClassName = 'อัศวินราชันย์อมตะ';
-        } else if (jobParam === 'police') {
-            window.currentSubClassName = (faction === 'อธรรม') ? 'มือปราบอธรรม' : 'มือปราบธรรมะ';
+        if (urlParams.has('name')) {
+            // หยอดค่า ชื่อ และ เลเวล
+            if (document.getElementById('char-name-box')) document.getElementById('char-name-box').value = urlParams.get('name');
+            if (document.getElementById('char-lv-box')) document.getElementById('char-lv-box').value = urlParams.get('lv');
+            
+            // หยอดค่า อาชีพหลัก
+            const jobParam = urlParams.get('job');
+            if (document.getElementById('class-select')) document.getElementById('class-select').value = jobParam;
+
+            // ระบบแมปชื่อ "คลาสระดับสูง" ตามตารางฝ่ายในเกม เก็บไว้รอดึงสกิลในอนาคต
+            const faction = window.currentFaction;
+            if (jobParam === 'knight') {
+                window.currentSubClassName = (faction === 'ธรรมะ') ? 'อัศวินองครักษ์' : (faction === 'อธรรม') ? 'อัศวินทมิฬคลั่ง' : 'อัศวินราชันย์อมตะ';
+            } else if (jobParam === 'hero') {
+                window.currentSubClassName = (faction === 'อธรรม') ? 'เทพยุทธหายนะ' : 'ปรมาจารย์เทพยุทธ';
+            } else if (jobParam === 'mage') {
+                window.currentSubClassName = (faction === 'อธรรม') ? 'เซียนเทพมาร' : 'เซียนเทพเมฆา';
+            } else if (jobParam === 'ninja') {
+                window.currentSubClassName = (faction === 'อธรรม') ? 'นินจาเทพเงา' : 'ชิโนบิเทพทมิฬ';
+            } else if (jobParam === 'assassin') {
+                window.currentSubClassName = 'มือสังหาร';
+            } else if (jobParam === 'fighter') {
+                window.currentSubClassName = (faction === 'อธรรม') ? 'ขุนพลเทวะ' : 'ขุนพลโลหิตสังหาร';
+            } else if (jobParam === 'mamluk') {
+                window.currentSubClassName = 'อัศวินราชันย์อมตะ';
+            } else if (jobParam === 'police') {
+                window.currentSubClassName = (faction === 'อธรรม') ? 'มือปราบอธรรม' : 'มือปราบธรรมะ';
+            }
         }
-    }
 
-    // สเตป 3: ผูก Event Listener ของกล่องเลือกอาชีพ
-    const classSelect = document.getElementById('class-select');
-    if(classSelect) {
-        classSelect.addEventListener('change', handleDropdownChange);
-    }
+        // สเตป 3: ผูก Event Listener ของกล่องเลือกอาชีพ
+        const classSelect = document.getElementById('class-select');
+        if(classSelect) {
+            classSelect.addEventListener('change', handleDropdownChange);
+        }
 
-    // สเตป 4: สั่งรันระบบคำนวณและอัปเดต UI ให้ซิงค์กับค่าใหม่ทันที ตัวเลขจะกลับมาเป๊ะนิ่งสนิท!
-    refreshClassUI(); 
-    updateLivePctBoxes(); 
-    autoCalculate(); 
-    updateDnaSums(); 
-    fetchLeaderboard(); 
-    
-    if (localStorage.getItem('ghostm_hide_tut') !== 'true') {
-        document.getElementById('tutorial-modal').style.display = 'flex';
-    }
-};</script>
+        // สเตป 4: สั่งรันระบบคำนวณและอัปเดต UI ให้ซิงค์กับค่าใหม่ทันที ตัวเลขจะกลับมาเป๊ะนิ่งสนิท!
+        refreshClassUI(); 
+        updateLivePctBoxes(); 
+        autoCalculate(); 
+        updateDnaSums(); 
+        fetchLeaderboard(); 
+        
+        if (localStorage.getItem('ghostm_hide_tut') !== 'true') {
+            document.getElementById('tutorial-modal').style.display = 'flex';
+        }
+    };
+</script>
 </body>
 </html>
