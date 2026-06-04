@@ -1,144 +1,264 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Welcome - Ghost Online Simulator</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap');
-    
-    body {
-      background-color: #121212;
-      color: #f0f0f0;
-      font-family: 'Kanit', sans-serif;
-      margin: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      flex-direction: column;
-    }
-    .panel {
-      background-color: #1e1e24;
-      border-radius: 12px;
-      padding: 25px;
-      width: 100%;
-      max-width: 450px;
-      box-shadow: 0 8px 16px rgba(0,0,0,0.5);
-    }
-    h2 { text-align: center; margin-top: 0; }
-    .form-group {
-      margin-bottom: 15px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    label { font-weight: 600; width: 30%; font-size: 14px; }
-    input, select {
-      width: 65%;
-      padding: 10px;
-      border-radius: 6px;
-      border: 1px solid #444;
-      background-color: #2a2a35;
-      color: white;
-      font-family: 'Kanit', sans-serif;
-      box-sizing: border-box;
-    }
-    input:focus, select:focus { outline: none; border-color: #4caf50; }
-    .btn-start {
-      width: 100%;
-      padding: 12px;
-      margin-top: 15px;
-      border: none;
-      border-radius: 6px;
-      background: linear-gradient(90deg, #4caf50, #2e7d32);
-      color: white;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-    .btn-start:hover { filter: brightness(1.2); }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Welcome - Ghost M Stats Simulator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Tahoma', 'Segoe UI', sans-serif;
+            background-color: #0b0c10;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px 10px;
+        }
+        .game-window {
+            background-color: #2a2d32;
+            border: 3px solid #ff3838;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 480px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        .header-bar {
+            background: linear-gradient(135deg, #b31010 0%, #1e272e 100%);
+            padding: 15px;
+            text-align: center;
+            font-weight: bold;
+            border-bottom: 2px solid #ff3838;
+            font-size: 15px;
+            letter-spacing: 0.5px;
+        }
+        .panel-content {
+            padding: 20px;
+            background-color: #1f2226;
+        }
+        .form-group {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            background-color: rgba(0,0,0,0.3);
+            padding: 8px 12px;
+            border-radius: 5px;
+        }
+        .form-group label {
+            font-size: 13px;
+            color: #f1c40f;
+            font-weight: bold;
+            width: 35%;
+        }
+        .form-group input, .form-group select {
+            width: 62%;
+            background-color: #0b0c10;
+            border: 1px solid #485460;
+            color: #fff;
+            padding: 6px 10px;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: bold;
+            outline: none;
+            height: 34px;
+        }
+        .form-group input:focus, .form-group select:focus {
+            border-color: #ff3838;
+        }
+        .btn-submit {
+            background-color: #2ecc71;
+            color: white;
+            border: none;
+            padding: 12px;
+            width: 100%;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: center;
+            box-shadow: 0 4px #27ae60;
+            font-size: 14px;
+            margin-top: 15px;
+            transition: all 0.1s;
+        }
+        .btn-submit:active {
+            box-shadow: 0 1px #27ae60;
+            transform: translateY(2px);
+        }
+        
+        /* 🏆 สไตล์บอร์ดจัดอันดับ (ถอดแบบจากหน้าหลักมาเป๊ะๆ) */
+        .leaderboard-container {
+            background: #141619;
+            border: 2px solid #ff793f;
+            border-radius: 8px;
+            padding: 15px;
+            width: 100%;
+            max-width: 480px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.7);
+        }
+        .lb-header {
+            text-align: center;
+            color: #ff793f;
+            font-size: 11px;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(255,121,63,0.5);
+            margin-bottom: 12px;
+            font-family: 'Press Start 2P', monospace;
+        }
+        .lb-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 8px;
+            font-size: 13px;
+            border-bottom: 1px solid #2c3a47;
+        }
+        .lb-row:last-child { border-bottom: none; }
+        .lb-rank { width: 35px; font-weight: bold; color: #dcdde1; font-family: 'Press Start 2P', monospace; font-size: 9px; text-align: center; }
+        .lb-name { flex: 2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-left: 5px; font-weight: bold; }
+        .lb-job { width: 80px; text-align: center; color: #a55eea; font-size: 12px; font-weight: bold; }
+        .lb-score { width: 100px; font-weight: bold; text-align: right; color: #f1c40f; }
+
+        /* สีพิเศษ Top 3 */
+        .rank-1 { background: rgba(255, 56, 56, 0.15); border: 1px solid #ff3838; border-radius: 4px; }
+        .rank-1 .lb-name { color: #ff3838; }
+        .rank-2 { background: rgba(241, 196, 15, 0.1); border: 1px solid #f1c40f; border-radius: 4px; }
+        .rank-2 .lb-name { color: #f1c40f; }
+        .rank-3 { background: rgba(52, 152, 219, 0.1); border: 1px solid #3498db; border-radius: 4px; }
+        .rank-3 .lb-name { color: #3498db; }
+    </style>
 </head>
 <body>
 
-  <h1 style="text-align:center;">👻 Ghost Online Simulator</h1>
-  
-  <div class="panel">
-    <h2>อัปสเตตัสตัวละคร (เริ่มต้น)</h2>
-    
-    <div class="form-group">
-      <label>ชื่อตัวละคร:</label>
-      <input type="text" id="charName" placeholder="ใส่ชื่อสุดเท่...">
+<div class="game-window">
+    <div class="header-bar">
+        👻 GHOST M : SIMULATOR SETUP
     </div>
-    <div class="form-group">
-      <label>อาชีพ:</label>
-      <select id="jobClass" onchange="updateFactionState()">
-        <option value="mamluk">มัมลุค</option>
-        <option value="hero">จอมยุทธ</option>
-        <option value="mage">นักพรต</option>
-        <option value="fighter">จอมพลัง</option>
-        <option value="ninja">นินจา</option>
-        <option value="police">มือปราบ</option>
-        <option value="knight">นักรบ</option>
-        <option value="assassin">มือสังหาร</option>
-      </select>
+    <div class="panel-content">
+        <div class="form-group">
+            <label>👤 ชื่อตัวละคร:</label>
+            <input type="text" id="charName" value="soicex">
+        </div>
+        <div class="form-group">
+            <label>👥 อาชีพ:</label>
+            <select id="jobClass" onchange="updateFactionState()">
+                <option value="mamluk" selected>มัมลุค</option>
+                <option value="hero">จอมยุทธ</option>
+                <option value="mage">นักพรต</option>
+                <option value="fighter">จอมพลัง</option>
+                <option value="ninja">นินจา</option>
+                <option value="police">มือปราบ</option>
+                <option value="knight">นักรบ</option>
+                <option value="assassin">มือสังหาร</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>⚔️ ฝ่าย:</label>
+            <select id="faction">
+                <option value="ธรรมะ">ธรรมะ (Justice)</option>
+                <option value="อธรรม">อธรรม (Chaos)</option>
+                <option value="มาร">มาร (Evil)</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>🌟 เลเวล (Lv):</label>
+            <input type="number" id="level" value="126" min="1" max="200">
+        </div>
+
+        <div style="height: 1px; background: #485460; margin: 15px 0;"></div>
+
+        <div class="form-group"><label>✊ STR:</label><input type="number" id="str" value="91"></div>
+        <div class="form-group"><label>🏹 DEX:</label><input type="number" id="dex" value="1138"></div>
+        <div class="form-group"><label>🏋️‍♂️ CON:</label><input type="number" id="con" value="105"></div>
+        <div class="form-group"><label>💡 INT:</label><input type="number" id="int" value="53"></div>
+
+        <button class="btn-submit" onclick="goToMainApp()">เข้าสู่ระบบจำลองสเตตัส 🚀</button>
     </div>
-    <div class="form-group">
-      <label>ฝ่าย:</label>
-      <select id="faction">
-        <option value="ธรรมะ">ธรรมะ (Justice)</option>
-        <option value="อธรรม">อธรรม (Chaos)</option>
-        <option value="มาร">มาร (Evil)</option>
-      </select>
+</div>
+
+<div class="leaderboard-container">
+    <div class="lb-header">🏆 TOP 100 RANKING (RAW BASE ATK)</div>
+    <div id="lb-body">
+        <div style="text-align:center; padding:15px; color:#7f8fa6; font-weight:bold; font-size:12px;">📡 กำลังเชื่อมต่อข้อมูลเซิร์ฟเวอร์...</div>
     </div>
-    <div class="form-group">
-      <label>เลเวล (Lv):</label>
-      <input type="number" id="level" value="1" min="1" max="200">
-    </div>
+</div>
 
-    <hr style="border-color:#444; margin:20px 0;">
+<script>
+    // ดึงลิงก์ API เดียวกับหน้าหลักของลูกพี่มาใช้ดึงคะแนนบอร์ด
+    const API_URL = 'https://script.google.com/macros/s/AKfycbyvwccGHLs0QMxmURLy-2KVzzB8oSN3mjgcO1hFq8qpjLqrcc5vHLuhRWxIQsZ3vPRP/exec';
 
-    <div class="form-group"><label>STR:</label><input type="number" id="str" value="3"></div>
-    <div class="form-group"><label>DEX:</label><input type="number" id="dex" value="3"></div>
-    <div class="form-group"><label>CON:</label><input type="number" id="con" value="3"></div>
-    <div class="form-group"><label>INT:</label><input type="number" id="int" value="3"></div>
-
-    <button class="btn-start" onclick="goToMainApp()">เข้าสู่ระบบจำลองสเตตัส 🚀</button>
-  </div>
-
-  <script>
-    // ล็อกฝ่ายมารให้อัตโนมัติถ้าเป็นมัมลุค/มือสังหาร
     function updateFactionState() {
-      const job = document.getElementById('jobClass').value;
-      const factionSelect = document.getElementById('faction');
-      if (job === 'mamluk' || job === 'assassin') {
-        factionSelect.value = 'มาร';
-        factionSelect.disabled = true;
-      } else {
-        factionSelect.disabled = false;
-        if(factionSelect.value === 'มาร') factionSelect.value = 'ธรรมะ';
-      }
+        const job = document.getElementById('jobClass').value;
+        const factionSelect = document.getElementById('faction');
+        if (job === 'mamluk' || job === 'assassin') {
+            factionSelect.value = 'มาร';
+            factionSelect.disabled = true;
+        } else {
+            factionSelect.disabled = false;
+            if (factionSelect.value === 'มาร') factionSelect.value = 'ธรรมะ';
+        }
     }
 
-    // ฟังก์ชันรวบรวมข้อมูลแล้วส่งทะลุมิติไปไฟล์ index.html
     function goToMainApp() {
-      const params = new URLSearchParams();
-      params.append('name', document.getElementById('charName').value);
-      params.append('job', document.getElementById('jobClass').value);
-      params.append('faction', document.getElementById('faction').value); // ดึงค่าฝ่ายไปด้วย
-      params.append('lv', document.getElementById('level').value);
-      params.append('str', document.getElementById('str').value);
-      params.append('dex', document.getElementById('dex').value);
-      params.append('con', document.getElementById('con').value);
-      params.append('int', document.getElementById('int').value);
+        const params = new URLSearchParams();
+        params.append('name', document.getElementById('charName').value);
+        params.append('job', document.getElementById('jobClass').value);
+        params.append('faction', document.getElementById('faction').value);
+        params.append('lv', document.getElementById('level').value);
+        params.append('str', document.getElementById('str').value);
+        params.append('dex', document.getElementById('dex').value);
+        params.append('con', document.getElementById('con').value);
+        params.append('int', document.getElementById('int').value);
 
-      // สั่งเปลี่ยนหน้าต่างไปยัง index.html พร้อมพ่วงข้อมูลไปใน URL
-      window.location.href = 'main.html?' + params.toString();
+        // เปลี่ยนหน้าลิงก์ไปยังไฟล์แผงควบคุมหลัก (main.html)
+        window.location.href = 'main.html?' + params.toString();
     }
 
-    window.onload = updateFactionState;
-  </script>
+    // ฟังก์ชันเชื่อมบอร์ดหลังบ้านดึงคะแนนมาโชว์หน้าแรก
+    function fetchLeaderboard() {
+        fetch(API_URL).then(r => r.json()).then(data => {
+            if(data.status === 'success') {
+                let html = '';
+                // ดึงมาโชว์แค่ Top 5 ขิงเรียกน้ำย่อยในหน้าแรกพอครับ จะได้ไม่ยาวเกินไป
+                const top5 = data.leaderboard.slice(0, 5);
+                
+                top5.forEach((user, index) => {
+                    let rank = index + 1;
+                    let bgClass = rank <= 3 ? `rank-${rank}` : '';
+                    let scoreStr = Math.floor(parseFloat(user.rawAtk) || 0).toString();
+                    let maskedScore = scoreStr[0] + "X".repeat(scoreStr.length - 1);
+                    if (maskedScore.length > 3) {
+                        maskedScore = maskedScore.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    }
+
+                    html += `
+                    <div class="lb-row ${bgClass}">
+                        <span class="lb-rank">${rank}</span>
+                        <span class="lb-name">${user.name}</span>
+                        <span class="lb-job">${user.job}</span>
+                        <span class="lb-score">⚔️ ${maskedScore}</span>
+                    </div>`;
+                });
+                
+                if(data.leaderboard.length === 0) html = '<div style="text-align:center; padding:15px; color:#7f8fa6;">ยังไม่มีผู้กล้าส่งผลทดสอบ</div>';
+                document.getElementById('lb-body').innerHTML = html;
+            }
+        }).catch(e => {
+            console.error("Error:", e);
+            document.getElementById('lb-body').innerHTML = '<div style="text-align:center; padding:15px; color:#e74c3c; font-size:12px;">เชื่อมต่อบอร์ดจัดอันดับล้มเหลว (Offline)</div>';
+        });
+    }
+
+    window.onload = function() {
+        updateFactionState();
+        fetchLeaderboard(); // สั่งให้ดึงคะแนนขึ้นมาโชว์ทันทีตอนเปิดหน้าเว็บ
+    };
+</script>
 </body>
 </html>
